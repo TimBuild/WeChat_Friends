@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/group_item"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:padding="6dp" >
+
+    <com.matrix.wechat.customview.RoundImageView
+        android:id="@+id/group_head_portrait_IMG"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        android:src="@drawable/test" >
+    </com.matrix.wechat.customview.RoundImageView>
+
+    <TextView
+        android:id="@+id/group_nick_name_TV"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"
+        android:layout_marginLeft="10dp"
+        android:layout_toRightOf="@+id/group_head_portrait_IMG"
+        android:text="@string/nick_name"
+        android:textSize="@dimen/neic_name_text_size" />
+
+    <CheckBox
+        android:id="@+id/group_check"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentRight="true" />
+
+</RelativeLayout>

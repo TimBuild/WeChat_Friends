@@ -1,0 +1,133 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#eee"
+    android:orientation="vertical" >
+    
+    <LinearLayout
+        android:id="@+id/title"
+        android:layout_width="fill_parent"
+        android:layout_height="45dp"
+        android:background="@drawable/title_bar"
+        android:gravity="center_horizontal|center_vertical" >
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Personal Info"
+            android:textColor="#ffffff"
+            android:textSize="20sp" />
+    </LinearLayout>
+
+    <RelativeLayout
+        android:id="@+id/personal_icon_item"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="14dp"
+        android:background="@drawable/preference_first_item"
+        android:clickable="true"
+        android:gravity="center_vertical" >
+        
+        <TextView
+	        android:layout_width="wrap_content"
+	        android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:padding="8dp"
+            android:textSize="17sp"
+            android:textColor="#000"
+	        android:text="Old password" />
+
+    </RelativeLayout>
+
+    <EditText
+        android:id="@+id/old_pwd"
+        android:padding="18dp"
+        android:textSize="17sp"
+        android:textColor="#000"
+        android:inputType="textPassword"
+        android:background="@drawable/preference_last_item"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" />
+
+
+    <RelativeLayout
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="14dp"
+        android:background="@drawable/preference_first_item"
+        android:clickable="true"
+        android:gravity="center_vertical" >
+        
+        <TextView
+	        android:layout_width="wrap_content"
+	        android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:padding="8dp"
+            android:textSize="17sp"
+            android:textColor="#000"
+	        android:text="New password" />
+
+    </RelativeLayout>
+        
+    <EditText
+        android:id="@+id/new_pwd"
+        android:padding="18dp"
+        android:textSize="17sp"
+        android:textColor="#000"
+        android:inputType="textPassword"
+        android:background="@drawable/preference_last_item"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" />
+    
+    <RelativeLayout
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="14dp"
+        android:background="@drawable/preference_first_item"
+        android:clickable="true"
+        android:gravity="center_vertical" >
+        
+        <TextView
+	        android:layout_width="wrap_content"
+	        android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:padding="8dp"
+            android:textSize="17sp"
+            android:textColor="#000"
+	        android:text="Repeat password" />
+
+    </RelativeLayout>
+        
+    <EditText
+        android:id="@+id/pwd_repeat"
+        android:padding="18dp"
+        android:textSize="17sp"
+        android:textColor="#000"
+        android:inputType="textPassword"
+        android:background="@drawable/preference_last_item"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" />
+
+    <TextView
+        android:id="@+id/alert_info"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textColor="@android:color/holo_red_light" />
+    
+    <Button
+        android:id="@+id/btn_change_pwd"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="14dp"
+        android:layout_marginLeft="12dp"
+        android:layout_marginRight="12dp"
+        android:layout_marginTop="14dp"
+        android:background="@drawable/btn_style_red"
+        android:gravity="center"
+        android:padding="4dp"
+        android:text="OK"
+        android:textColor="#fff"
+        android:textSize="18sp" />
+
+</LinearLayout>

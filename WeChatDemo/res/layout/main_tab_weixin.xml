@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    android:background="#fcfcfc"
+    android:orientation="vertical" >
+
+    <RelativeLayout
+        android:id="@+id/title"
+        android:layout_width="fill_parent"
+        android:layout_height="45dp"
+        android:background="@drawable/title_bar"
+        android:gravity="center_vertical" >
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+            android:text="WeChat"
+            android:textColor="#ffffff"
+            android:textSize="20sp" />
+
+        <Button
+            android:id="@+id/btn_add_new_friend_weixin"
+            android:layout_width="67dp"
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true"
+            android:layout_alignParentRight="true"
+            android:background="@drawable/title_btn_right"
+            android:text="@string/btn_add_friend"
+            android:textColor="#fff"
+            android:textSize="15sp" />
+    </RelativeLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@drawable/search_bar_bg"
+        android:gravity="center" >
+
+        <EditText
+            android:id="@+id/find_contact_filter"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:background="@drawable/search_bar_edit_bg"
+            android:drawableLeft="@drawable/search_bar_icon_normal"
+            android:focusable="true"
+            android:focusableInTouchMode="true"
+            android:hint="Search"
+            android:singleLine="true"
+            android:textColor="#000" >
+        </EditText>
+    </LinearLayout>
+
+    <com.handmark.pulltorefresh.library.PullToRefreshSwipeListView
+        xmlns:ptr="http://schemas.android.com/apk/res-auto"
+        xmlns:swipe="http://schemas.android.com/apk/res-auto"
+        android:id="@+id/contacts_history_listview"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:listSelector="#00000000"
+        ptr:ptrDrawable="@drawable/loading"
+        swipe:swipeActionLeft="reveal"
+        swipe:swipeAnimationTime="0"
+        swipe:swipeBackView="@+id/contacts_back"
+        swipe:swipeCloseAllItemsWhenMoveList="true"
+        swipe:swipeFrontView="@+id/contacts_front"
+        swipe:swipeMode="left"
+        swipe:swipeOffsetLeft="0dp"
+        swipe:swipeOpenOnLongPress="false" >
+    </com.handmark.pulltorefresh.library.PullToRefreshSwipeListView>
+
+</LinearLayout>

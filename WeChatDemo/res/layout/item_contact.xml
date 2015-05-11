@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="#eee"
+    android:padding="6dp"
+    android:id="@+id/item" >
+
+    <com.matrix.wechat.customview.RoundImageView
+        android:id="@+id/head_portrait_IMG"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        android:maxWidth="50dp"
+        android:adjustViewBounds="true"
+        android:src="@drawable/test" >
+    </com.matrix.wechat.customview.RoundImageView>
+
+    <RelativeLayout
+        android:id="@+id/off_RL"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignBottom="@+id/head_portrait_IMG"
+        android:layout_alignLeft="@+id/head_portrait_IMG"
+        android:layout_alignRight="@+id/head_portrait_IMG"
+        android:layout_alignTop="@+id/head_portrait_IMG"
+        android:background="@color/semitransparent_grey"
+        android:visibility="visible" >
+    </RelativeLayout>
+
+    <TextView
+        android:id="@+id/nick_name_TV"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"
+        android:layout_marginLeft="10dp"
+        android:layout_toRightOf="@+id/head_portrait_IMG"
+        android:text="@string/nick_name"
+        android:textSize="@dimen/neic_name_text_size" />
+
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignBottom="@+id/head_portrait_IMG"
+        android:layout_alignLeft="@+id/nick_name_TV"
+        android:layout_marginTop="-3dp"
+        android:orientation="horizontal" 
+        >
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="["
+            android:textSize="15sp" />
+
+        <TextView
+            android:id="@+id/status_TV"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="离线"
+            android:textSize="15sp" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="]"
+            android:textSize="15sp" />
+    </LinearLayout>
+
+</RelativeLayout>

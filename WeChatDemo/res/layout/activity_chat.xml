@@ -1,0 +1,177 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    android:background="@drawable/chat_bg_default" >
+
+    <RelativeLayout
+        android:id="@+id/rl_layout"
+        android:layout_width="fill_parent"
+        android:layout_height="45dp"
+        android:background="@drawable/title_bar"
+        android:gravity="center_vertical" >
+
+        <Button
+            android:id="@+id/btn_back"
+            android:layout_width="70dp"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:background="@drawable/title_btn_back"
+            android:onClick="chat_back"
+            android:text="Return"
+            android:textColor="#fff"
+            android:textSize="14sp" />
+
+        <TextView
+            android:id="@+id/chat_with_name"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+            android:textColor="#ffffff"
+            android:textSize="20sp" />
+        <TextView
+            android:id="@+id/chat_with_name_group"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+            android:textColor="#ffffff"
+            android:textSize="20sp"
+            android:visibility="invisible" />
+        <Button
+            android:id="@+id/btn_add_group"
+            android:layout_width="70dp"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:layout_centerVertical="true"
+            android:background="@drawable/title_btn_back"
+            android:onClick="add_group"
+            android:text="Add"
+            android:textColor="#fff"
+            android:textSize="14sp" />
+        
+        <!--
+        <ImageButton
+            android:id="@+id/right_btn"
+            android:layout_width="67dp"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:layout_centerVertical="true"
+            android:layout_marginRight="5dp"
+            android:background="@drawable/title_btn_right"
+            android:src="@drawable/mm_title_btn_contact_normal" />
+        -->
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:id="@+id/rl_bottom"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:background="@drawable/chat_footer_bg" >
+
+        <RelativeLayout
+            android:id="@+id/rl_bottom_controler"
+            android:layout_width="fill_parent"
+            android:layout_height="50dp"
+            android:layout_alignParentTop="true" >
+
+            <ImageView
+                android:id="@+id/team_singlechat_id_expression"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentLeft="true"
+                android:layout_centerVertical="true"
+                android:src="@drawable/chat_icon_smiles" />
+
+            <com.matrix.wechat.customview.RoundImageView
+                android:id="@+id/img_bt_pic"
+                android:layout_width="26dp"
+                android:layout_height="26dp"
+                android:layout_centerVertical="true"
+                android:layout_marginRight="10dp"
+                android:layout_toRightOf="@+id/team_singlechat_id_expression"
+                android:src="@drawable/send_picture" >
+            </com.matrix.wechat.customview.RoundImageView>
+
+            <EditText
+                android:id="@+id/et_sendmessage"
+                android:layout_width="220dp"
+                android:layout_height="40dp"
+                android:layout_centerVertical="true"
+                android:layout_marginRight="10dp"
+                android:layout_toLeftOf="@+id/btn_send"
+                android:layout_toRightOf="@id/img_bt_pic"
+                android:background="@drawable/login_edit_normal"
+                android:singleLine="true"
+                android:textSize="18sp" />
+
+            <Button
+                android:id="@+id/btn_send"
+                android:layout_width="60dp"
+                android:layout_height="40dp"
+                android:layout_alignParentRight="true"
+                android:layout_centerVertical="true"
+                android:background="@drawable/chat_send_btn"
+                android:text="Send" />
+
+            <ImageButton
+                android:id="@+id/btn_send_voice"
+                android:layout_width="60dp"
+                android:layout_height="40dp"
+                android:layout_alignParentRight="true"
+                android:layout_centerVertical="true"
+                android:adjustViewBounds="true"
+                android:maxHeight="40dp"
+                android:src="@drawable/send_voice"
+                android:visibility="invisible" />
+        </RelativeLayout>
+
+        <RelativeLayout
+            android:id="@+id/rl_bottom_media"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/rl_bottom_controler"
+            android:visibility="gone"
+            >
+
+            <ImageButton
+                android:id="@+id/voiceBT"
+                android:layout_width="100dp"
+                android:layout_height="100dp"
+                android:layout_centerHorizontal="true"
+                style="@style/ButtonMicrophone" />
+
+        </RelativeLayout>
+    </RelativeLayout>
+
+    <ListView
+        android:id="@+id/listview"
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
+        android:layout_above="@id/rl_bottom"
+        android:layout_below="@id/rl_layout"
+        android:cacheColorHint="#0000"
+        android:divider="@null"
+        android:dividerHeight="5dp"
+        android:scrollbarStyle="outsideOverlay"
+        android:stackFromBottom="true" />
+
+    <LinearLayout
+        android:id="@+id/zoomView"
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
+        android:background="@android:color/black"
+        android:clickable="true"
+        android:orientation="vertical"
+        android:visibility="gone" >
+
+        <ImageView
+            android:id="@+id/imageView"
+            android:layout_width="fill_parent"
+            android:layout_height="fill_parent"
+            android:scaleType="center"
+            android:src="@drawable/xiaohei_big" />
+        <!-- 指定为matrix类型 -->
+    </LinearLayout>
+
+</RelativeLayout>

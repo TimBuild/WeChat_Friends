@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="#eee"
+    android:padding="6dp"
+    android:id="@+id/item_request" >
+
+    <com.matrix.wechat.customview.RoundImageView
+        android:id="@+id/request_head_portrait_IMG"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        android:src="@drawable/test" 
+        android:visibility="gone">
+    </com.matrix.wechat.customview.RoundImageView>
+
+    <RelativeLayout
+        android:id="@+id/request_off_RL"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignBottom="@+id/request_head_portrait_IMG"
+        android:layout_alignLeft="@+id/request_head_portrait_IMG"
+        android:layout_alignRight="@+id/request_head_portrait_IMG"
+        android:layout_alignTop="@+id/request_head_portrait_IMG"
+        android:background="@color/semitransparent_grey"
+        android:visibility="gone" >
+    </RelativeLayout>
+
+    <TextView
+        android:id="@+id/request_nick_name_TV"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"
+        android:layout_centerVertical="true"
+        android:layout_marginLeft="10dp"
+        android:layout_toRightOf="@+id/request_head_portrait_IMG"
+        android:text="@string/nick_name"
+        android:textSize="@dimen/neic_name_text_size" />
+
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignBottom="@+id/request_head_portrait_IMG"
+        android:layout_alignLeft="@+id/request_nick_name_TV"
+        android:layout_below="@+id/request_nick_name_TV"
+        android:layout_marginTop="-3dp"
+        android:orientation="horizontal" 
+        android:visibility="gone"
+        >
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="["
+            android:textSize="15sp" />
+
+        <TextView
+            android:id="@+id/request_status_TV"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="离线"
+            android:textSize="15sp" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="]"
+            android:textSize="15sp" />
+    </LinearLayout>
+    <TextView
+        android:id="@+id/respone_status_TV"
+        android:layout_width="90dp"
+        android:layout_height="wrap_content"
+        android:layout_centerVertical="true"
+        android:layout_alignParentRight="true"
+        android:background="@drawable/btn_access"
+        android:text="Access"
+        android:clickable="true"
+        android:gravity="center"
+        android:textColor="#fff"
+        android:textSize="23sp" />
+</RelativeLayout>

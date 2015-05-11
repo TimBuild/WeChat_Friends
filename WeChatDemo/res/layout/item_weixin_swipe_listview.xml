@@ -1,0 +1,111 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="60dp" >
+
+    <LinearLayout
+        android:id="@+id/contacts_back"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="#ffcccccc"
+        android:gravity="center|right" >
+
+        <TextView
+            android:id="@+id/contacts_remove"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="#f00"
+            android:gravity="center"
+            android:text="Delete"
+            android:textColor="#fff" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/contacts_front"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="#ffffffff" >
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="60dp"
+            android:background="@drawable/mm_listitem"
+            android:clickable="true"
+            android:gravity="center_vertical"
+            android:onClick="startChat" >
+
+            <ImageView
+                android:id="@+id/history_contact_head"
+                android:layout_width="55dp"
+                android:layout_height="55dp"
+                android:layout_alignParentLeft="true"
+                android:layout_centerVertical="true"
+                android:contentDescription="@string/hello_world"
+                android:paddingLeft="5dp"
+                android:src="@drawable/xiaohei" />
+
+            <TextView
+                android:id="@+id/history_contact_name"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_toRightOf="@id/history_contact_head"
+                android:padding="7dp"
+                android:textColor="#000" />
+            
+            <TextView
+                android:id="@+id/group_name"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_toRightOf="@id/history_contact_head"
+                android:padding="7dp"
+                android:textColor="#000"
+                android:visibility="invisible" />
+
+            <TextView
+                android:id="@+id/history_contact_date"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentRight="true"
+                android:padding="7dp"
+                android:textColor="#666" />
+
+            <TextView
+                android:id="@+id/history_contact_message"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentBottom="true"
+                android:layout_toRightOf="@id/history_contact_head"
+                android:padding="7dp"
+                android:textColor="#666" />
+
+            <TextView
+                android:id="@+id/history_contact_userid"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignBaseline="@+id/history_contact_message"
+                android:layout_alignBottom="@+id/history_contact_message"
+                android:layout_alignParentRight="true"
+                android:visibility="gone" />
+
+            <TextView
+                android:id="@+id/history_contact_username"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignBaseline="@+id/history_contact_userid"
+                android:layout_alignBottom="@+id/history_contact_userid"
+                android:layout_marginRight="16dp"
+                android:layout_toLeftOf="@+id/history_contact_userid"
+                android:visibility="gone" />
+            <TextView
+                android:id="@+id/isGroup_TV"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignBaseline="@+id/history_contact_userid"
+                android:layout_alignBottom="@+id/history_contact_userid"
+                android:layout_marginRight="16dp"
+                android:layout_toLeftOf="@+id/history_contact_userid"
+                android:visibility="gone" />
+        </RelativeLayout>
+    </LinearLayout>
+
+</FrameLayout>

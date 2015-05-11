@@ -1,0 +1,164 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    style="@style/BackgroundDarkGreenDialog"
+    android:layout_width="@dimen/width_info_dialog"
+    android:layout_height="wrap_content" >
+
+    <ScrollView
+        android:id="@+id/dialog_request_info_SV"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:scrollbarStyle="outsideOverlay" >
+
+        <LinearLayout
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical" >
+
+            <RelativeLayout
+                android:id="@+id/dialog_request_icon_RL"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="14dp"
+                android:background="@drawable/preference_first_item"
+                android:clickable="true"
+                android:gravity="center_vertical" >
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerVertical="true"
+                    android:padding="8dp"
+                    android:text="Icon"
+                    android:textColor="#000"
+                    android:textSize="17sp" />
+
+                <ImageView
+                    android:id="@+id/dialog_request_icon_IMG"
+                    android:layout_width="50dp"
+                    android:layout_height="50dp"
+                    android:layout_alignParentRight="true"
+                    android:layout_centerVertical="true"
+                    android:padding="10dp"
+                    android:scaleType="centerInside"
+                    android:src="@drawable/test" />
+            </RelativeLayout>
+
+            <RelativeLayout
+                android:id="@+id/dialog_request_username_RL"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:background="@drawable/preference_item"
+                android:clickable="true"
+                android:gravity="center_vertical" >
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:padding="8dp"
+                    android:text="Username"
+                    android:textColor="#000"
+                    android:textSize="17sp" />
+
+                <TextView
+                    android:id="@+id/dialog_request_username_TV"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentRight="true"
+                    android:layout_centerVertical="true"
+                    android:padding="10dp"
+                    android:text="Sam"
+                    android:textColor="#000"
+                    android:textSize="17sp" />
+            </RelativeLayout>
+
+            <RelativeLayout
+                android:id="@+id/dialog_request_nickname_RL"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:background="@drawable/preference_item"
+                android:clickable="true"
+                android:gravity="center_vertical" >
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:padding="8dp"
+                    android:text="Nick name"
+                    android:textColor="#000"
+                    android:textSize="17sp" />
+
+                <TextView
+                    android:id="@+id/dialog_request_nick_name_TV"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentRight="true"
+                    android:layout_centerVertical="true"
+                    android:padding="10dp"
+                    android:text="Sam"
+                    android:textColor="#000"
+                    android:textSize="17sp" />
+            </RelativeLayout>
+            
+            <RelativeLayout
+                android:id="@+id/dialog_request_date_RL"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:background="@drawable/preference_last_item"
+                android:clickable="true"
+                android:gravity="center_vertical" >
+
+                <TextView
+                    android:id="@+id/dialog_request_date"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:padding="8dp"
+                    android:text="Request date:"
+                    android:textColor="#000"
+                    android:textSize="17sp" />
+
+                <TextView
+                    android:id="@+id/dialog_request_date_TV"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentRight="true"
+                    android:layout_below="@+id/dialog_request_date"
+                    android:padding="10dp"
+                    android:paddingTop="0dp"
+                    android:layout_marginTop="-9dp"
+                    android:text="1999-01-01"
+                    android:textColor="#000"
+                    android:textSize="17sp" />
+            </RelativeLayout>
+        </LinearLayout>
+    </ScrollView>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal" 
+        android:layout_below="@+id/dialog_request_info_SV">
+
+        <Button
+            android:id="@+id/btn_dialog_access_new_friend"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginRight="5dp"
+            android:background="@drawable/title_btn_right"
+            android:text="Accept"
+            android:textColor="#fff"
+            android:textSize="15sp" 
+            android:layout_weight="1"/>
+
+        <Button
+            android:id="@+id/btn_dialog_reject_new_friend"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="@drawable/title_btn_right"
+            android:text="Reject"
+            android:textColor="#fff"
+            android:textSize="15sp" 
+            android:layout_weight="1"/>
+    </LinearLayout>
+
+</RelativeLayout>

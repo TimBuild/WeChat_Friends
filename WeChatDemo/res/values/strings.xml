@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string name="app_name">WeChat</string>
+    <string name="hello_world">Hello world!</string>
+    <string name="menu_settings">Settings</string>
+    <string name="title_activity_main">Wechat</string>
+    <string name="nick_name">Nickname</string>
+    <string name="title_activity_personal_info">PersonalInfoActivity</string>
+    <string name="action_settings">Settings</string>
+    <string name="title_activity_change_pwd">ChangePwdActivity</string>
+    <string name="btn_add_friend">Add</string>
+    <string name="btn_search">search</string>
+    <string name="title_address_book">Address Book</string>
+    <string name="title_add_new_friend">New Friend</string>
+    <string name="ok">OK</string>
+    <string name="cancel">Cancel</string>
+    <string name="title_activity_friend_request">FriendRequestActivity</string>
+    <string name="title_activity_photos">PhotosActivity</string>
+
+</resources>
