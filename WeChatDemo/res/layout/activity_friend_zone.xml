@@ -8,7 +8,7 @@
         android:id="@+id/friend_zone_title"
         android:layout_width="fill_parent"
         android:layout_height="45dp"
-        android:background="@drawable/title_bar">
+        android:background="@drawable/title_bar" >
 
         <Button
             android:id="@+id/add_moment"
@@ -17,24 +17,23 @@
             android:layout_height="40dp"
             android:layout_alignParentRight="true"
             android:background="#00000000"
-            android:text="+" 
-            android:textSize="30sp"
-            android:textColor="#ffffff"/>
+            android:text="+"
+            android:textColor="#ffffff"
+            android:textSize="30sp" />
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="fill_parent"
-            android:text="Friend Zone"
-            android:textColor="#ffffff"
             android:layout_centerHorizontal="true"
             android:gravity="center"
+            android:text="Friend Zone"
+            android:textColor="#ffffff"
             android:textSize="20sp" />
-
     </RelativeLayout>
-    
+
     <include layout="@layout/activity_friend_zone_head" />
-   
-    <ListView
+
+    <com.matrix.wechat.customview.FriendsListView
         android:id="@+id/friend_zone"
         android:layout_width="fill_parent"
         android:layout_height="fill_parent"
@@ -43,7 +42,7 @@
         android:divider="@drawable/line"
         android:footerDividersEnabled="false"
         android:headerDividersEnabled="false"
-        android:scrollbars="none"  >
-    </ListView>
+        android:scrollbars="none" >
+    </com.matrix.wechat.customview.FriendsListView>
 
 </LinearLayout>

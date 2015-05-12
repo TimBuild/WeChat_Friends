@@ -30,7 +30,7 @@ public class FriendZoneAdapter extends BaseAdapter{
 	
 	@Override
 	public int getCount() {
-		return mList.size();
+		return 20;
 	}
 
 	@Override
@@ -52,21 +52,17 @@ public class FriendZoneAdapter extends BaseAdapter{
 			holder = new ViewHolder();		
 			
 			holder.tv_username=(TextView) convertView.findViewById(R.id.moment_username);
-			holder.tv_username.setText(mList.get(position).getUserName());
-			
 			holder.tv_content_text=(TextView) convertView.findViewById(R.id.moment_content);
-			holder.tv_content_text.setText(mList.get(position).getContent_text());
-			
-			holder.tv_location=(TextView) convertView.findViewById(R.id.moment_location);
-			holder.tv_location.setText(mList.get(position).getLocation());
-			
 			holder.tv_date=(TextView) convertView.findViewById(R.id.moment_date);
-			holder.tv_date.setText(mList.get(position).getDate());
 			
 			convertView.setTag(holder);
 		}else{
 			holder = (ViewHolder) convertView.getTag();
 		}
+		
+//		holder.tv_username.setText(mList.get(position).getUserName());
+//		holder.tv_content_text.setText(mList.get(position).getContent_text());
+//		holder.tv_date.setText(mList.get(position).getDate());
 
 		return convertView;
 	}
@@ -74,7 +70,6 @@ public class FriendZoneAdapter extends BaseAdapter{
 	static class ViewHolder{
 		public TextView tv_username;
 		public TextView tv_content_text;
-		public TextView tv_location;
 		public TextView tv_date;
 	}
 }

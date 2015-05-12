@@ -2,20 +2,19 @@ package com.matrix.wechat.model;
 
 public class Moment {
 	private String picture;// 发布者的头像
-	private String userName; //发布者的用户名
-	private String content_text;//发布的内容
-	private String location; //地点
-	private String date; //发表时间
-	
-	public Moment(){}
-	
+	private String userName; // 发布者的用户名
+	private String content_text;// 发布的内容
+	private String date; // 发表时间
+
+	public Moment() {
+	}
+
 	public Moment(String picture, String userName, String content_text,
-			String location, String date) {
+			String date) {
 		super();
 		this.picture = picture;
 		this.userName = userName;
 		this.content_text = content_text;
-		this.location = location;
 		this.date = date;
 	}
 
@@ -43,19 +42,12 @@ public class Moment {
 		this.content_text = content_text;
 	}
 
-	public String getLocation() {
-		return location;
-	}
-
-	public void setLocation(String location) {
-		this.location = location;
-	}
-
 	public String getDate() {
 		return date;
 	}
 
 	public void setDate(String date) {
 		this.date = date;
-	}	
+	}
+
 }

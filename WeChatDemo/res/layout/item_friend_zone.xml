@@ -56,14 +56,6 @@
            android:verticalSpacing="1dp"
            android:visibility="gone" />
        
-        <TextView
-            android:id="@+id/moment_location"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginLeft="2dip"
-            android:text="常州"
-            android:textColor="#7888a9"
-            android:textSize="14.0sp" />
 
         <FrameLayout
             android:layout_width="fill_parent"

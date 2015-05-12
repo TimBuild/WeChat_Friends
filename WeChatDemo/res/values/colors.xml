@@ -7,4 +7,6 @@
     <color name="dark_green">#00eeeeee</color>
     <color name="bgrnd_dark_green">#00000000</color>
     <color name="gray">#808080</color>
+    <color name="fragment_picture_bg">#f6f6f6</color>
+    <color name="fragment_head_gray">#2d2c2c</color>
 </resources>

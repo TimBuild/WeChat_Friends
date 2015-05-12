@@ -9,6 +9,7 @@ import android.content.ContentResolver;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.Matrix;
 import android.graphics.Bitmap.CompressFormat;
 import android.net.Uri;
 import android.util.Base64;
@@ -122,5 +123,45 @@ public class BitmapUtil {
 			e.printStackTrace();
 			return null;
 		}
+	}
+	
+	/**
+	 * 调整正方形图片适应正方形盒子大小(图片为正方形图片)
+	 * @param width
+	 * @param bitmap
+	 * @return
+	 */
+	public static Bitmap resizeSquareBitmap(int width, Bitmap bitmap) {
+		float scale = ((float) width) / ((float) bitmap.getWidth());
+		Matrix matrix = new Matrix();
+		matrix.postScale(scale, scale);
+		Bitmap newBitmap = Bitmap.createBitmap(bitmap, 0, 0, bitmap.getWidth(), bitmap.getHeight(), matrix, true);
+		return newBitmap;
+	}
+	
+	/**
+	 * 旋转图片(旋转中心为图片的正中心)
+	 * @param degree
+	 * @param bitmap
+	 * @return
+	 */
+	public static Bitmap rotateBitmap(float degree, Bitmap bitmap) {
+		Matrix matrix = new Matrix();
+		matrix.postRotate(degree, bitmap.getWidth() / 2, bitmap.getHeight() / 2);
+		Bitmap newBitmap = Bitmap.createBitmap(bitmap, 0, 0, bitmap.getWidth(), bitmap.getHeight(), matrix, true);
+		return newBitmap;
+	}
+	
+	/**
+	 * 放大或者缩小图片
+	 * @param scale
+	 * @param bitmap
+	 * @return
+	 */
+	public static Bitmap zoomBitmap(float scale, Bitmap bitmap) {
+		Matrix matrix = new Matrix();
+		matrix.postScale(scale, scale);
+		Bitmap newBitmap = Bitmap.createBitmap(bitmap, 0, 0, bitmap.getWidth(), bitmap.getHeight(), matrix, true);
+		return newBitmap;
 	}
 }
