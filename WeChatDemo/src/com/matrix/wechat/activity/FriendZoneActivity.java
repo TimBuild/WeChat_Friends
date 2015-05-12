@@ -12,13 +12,17 @@ import com.matrix.wechat.model.Moment;
 
 import android.app.Activity;
 import android.os.Bundle;
+
+
 import android.os.Handler;
 import android.os.Message;
 import android.widget.ListView;
 import android.widget.RelativeLayout;
 
+public class FriendZoneActivity extends Activity{
 public class FriendZoneActivity extends Activity implements OnRefreshListener,onLoadListener{
 
+	private ListView mListView = null;
 	private FriendsListView mListView;
 	private RelativeLayout frl_header_hidden;
 	private FriendZoneAdapter mfriendZoneAdapter;
@@ -31,6 +35,8 @@ public class FriendZoneActivity extends Activity implements OnRefreshListener,on
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_friend_zone);	
+		mListView = (ListView) findViewById(R.id.friend_zone);
+		setData();
 		mListView = (FriendsListView) findViewById(R.id.friend_zone);
 //		setData();
 		mfriendZoneAdapter = new FriendZoneAdapter(this);
@@ -42,6 +48,14 @@ public class FriendZoneActivity extends Activity implements OnRefreshListener,on
 		
 	}
 	
+	private void setData(){
+		List<Moment> monentList=new ArrayList<Moment>();
+		Moment moment1=new Moment();
+		moment1.setUserName("test1");
+		moment1.setContent_text("12355测试，今天天气不好");
+		moment1.setLocation("武进区");
+		moment1.setDate("1小时前");
+		monentList.add(moment1);
 	private void loadData(int refresh) {
 		new Thread(new Runnable() {
 			
@@ -80,6 +94,16 @@ public class FriendZoneActivity extends Activity implements OnRefreshListener,on
 	public void onRefresh() {
 		loadData(FriendsListView.REFRESH);
 		
+		Moment moment2=new Moment();
+		moment2.setUserName("test2");
+		moment2.setContent_text("12355测试，今天天气不好，5555555");
+		moment2.setLocation("钟楼区");
+		moment2.setDate("4小时前");
+		monentList.add(moment2);
+		
+		FriendZoneAdapter mfriendZoneAdapter = new FriendZoneAdapter(this);
+		mfriendZoneAdapter.setData(monentList);
+		mListView.setAdapter(mfriendZoneAdapter);
 	}
 
 }
