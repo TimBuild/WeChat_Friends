@@ -64,7 +64,7 @@ public class MainWeixin extends Activity {
 	private boolean menu_display = false;
 	private PopupWindow menuWindow;
 	private LayoutInflater inflater;
-	private RelativeLayout personalInfoLayout;
+	private RelativeLayout personalInfoLayout,friendZoneLayout;
 
 	private Button btnAddNewFriend;
 	final ArrayList<View> views = new ArrayList<View>();
@@ -179,6 +179,17 @@ public class MainWeixin extends Activity {
 			}
 		});
 
+		friendZoneLayout=(RelativeLayout) view4.findViewById(R.id.setting_friend_zone);
+		friendZoneLayout.setOnClickListener(new View.OnClickListener() {
+			
+			@Override
+			public void onClick(View v) {
+				Intent intent = new Intent(MainWeixin.this,
+						FriendZoneActivity.class);
+				startActivity(intent);				
+			}
+		});
+		
 		// 每个页面的view数据
 		// final ArrayList<View> views = new ArrayList<View>();
 		views.add(view1);

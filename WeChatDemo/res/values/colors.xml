@@ -6,4 +6,5 @@
     <color name="semitransparent_grey">#c8eeeeee</color>
     <color name="dark_green">#00eeeeee</color>
     <color name="bgrnd_dark_green">#00000000</color>
+    <color name="gray">#808080</color>
 </resources>

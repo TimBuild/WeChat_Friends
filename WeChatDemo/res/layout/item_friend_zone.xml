@@ -1,0 +1,90 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#ffffff"
+    android:descendantFocusability="blocksDescendants"
+    android:orientation="horizontal" >
+
+    <ImageView
+        android:id="@+id/moment_icon"
+        android:layout_width="50dip"
+        android:layout_height="50dip"
+        android:layout_marginLeft="10dip"
+        android:layout_marginTop="5dip"
+        android:background="@drawable/friend_zone_icon"
+        android:scaleType="fitXY" />
+
+    <LinearLayout
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="10dip"
+        android:layout_marginLeft="12dip"
+        android:layout_marginRight="10dip"
+        android:orientation="vertical" >
+
+        <TextView
+            android:id="@+id/moment_username"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textColor="#7888a9"
+            android:textSize="18.0sp"
+            android:textStyle="bold" />
+
+        <RelativeLayout
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="5dip" >
+
+            <TextView
+                android:id="@+id/moment_content"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="朋友圈测试，朋友圈测试朋友圈测试朋友圈测试朋友圈测试朋友圈测试朋友圈测试"
+                android:textColor="#404040"
+                android:textSize="16.0sp" />
+        </RelativeLayout>
+
+       <com.matrix.wechat.widget.NoScrollGridView
+           android:id="@+id/gridView"
+           android:layout_width="fill_parent"
+           android:layout_height="wrap_content"
+           android:layout_marginLeft="10dp"
+           android:horizontalSpacing="1dp"
+           android:numColumns="3"
+           android:stretchMode="columnWidth"
+           android:verticalSpacing="1dp"
+           android:visibility="gone" />
+       
+        <TextView
+            android:id="@+id/moment_location"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="2dip"
+            android:text="常州"
+            android:textColor="#7888a9"
+            android:textSize="14.0sp" />
+
+        <FrameLayout
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="12dip" >
+
+            <RelativeLayout
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content" >
+
+                <TextView
+                    android:id="@+id/moment_date"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerVertical="true"
+                    android:layout_marginLeft="2dip"
+                    android:layout_marginRight="10dip"
+                    android:text="昨天"
+                    android:textColor="#808080"
+                    android:textSize="14.0sp" />
+            </RelativeLayout>
+        </FrameLayout>
+    </LinearLayout>
+</LinearLayout>

@@ -1,0 +1,39 @@
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/container"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="#ffffff" >
+    
+    <ImageView
+        android:id="@+id/friend_zone_head_bg"
+        android:layout_width="fill_parent"
+        android:layout_height="220dip"
+        android:scaleType="fitXY"
+        android:src="@drawable/friend_zone_head_bg" />
+
+    <RelativeLayout
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content" >
+
+        <com.matrix.wechat.widget.SquareImageView
+            android:id="@+id/friend_zone_icon"
+            android:layout_width="80dp"
+            android:layout_height="80dp"
+            android:layout_alignParentRight="true"
+            android:layout_marginRight="40dp"
+            android:layout_marginTop="180dp"
+            android:scaleType="fitXY"
+            android:src="@drawable/friend_zone_icon" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginRight="6dip"
+            android:layout_marginTop="215dip"
+            android:layout_toLeftOf="@id/friend_zone_icon"
+            android:text="Gracie"
+            android:textColor="#fff"
+            android:textSize="18sp" />
+    </RelativeLayout>
+</FrameLayout>

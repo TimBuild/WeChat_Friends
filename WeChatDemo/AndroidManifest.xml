@@ -100,6 +100,10 @@
             android:name="com.matrix.wechat.activity.GroupActivity"
             android:theme="@android:style/Theme.NoTitleBar" >
         </activity>
+        <activity
+            android:name="com.matrix.wechat.activity.FriendZoneActivity"
+            android:theme="@android:style/Theme.NoTitleBar" >
+        </activity>
 
         <!-- Required SDK 核心功能 -->
         <service

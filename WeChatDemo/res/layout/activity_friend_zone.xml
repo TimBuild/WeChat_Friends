@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical" >
+
+    <RelativeLayout
+        android:id="@+id/friend_zone_title"
+        android:layout_width="fill_parent"
+        android:layout_height="45dp"
+        android:background="@drawable/title_bar">
+
+        <Button
+            android:id="@+id/add_moment"
+            style="?android:attr/buttonStyleSmall"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:layout_alignParentRight="true"
+            android:background="#00000000"
+            android:text="+" 
+            android:textSize="30sp"
+            android:textColor="#ffffff"/>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="fill_parent"
+            android:text="Friend Zone"
+            android:textColor="#ffffff"
+            android:layout_centerHorizontal="true"
+            android:gravity="center"
+            android:textSize="20sp" />
+
+    </RelativeLayout>
+    
+    <include layout="@layout/activity_friend_zone_head" />
+   
+    <ListView
+        android:id="@+id/friend_zone"
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
+        android:background="#fcfcfc"
+        android:cacheColorHint="#00000000"
+        android:divider="@drawable/line"
+        android:footerDividersEnabled="false"
+        android:headerDividersEnabled="false"
+        android:scrollbars="none"  >
+    </ListView>
+
+</LinearLayout>
