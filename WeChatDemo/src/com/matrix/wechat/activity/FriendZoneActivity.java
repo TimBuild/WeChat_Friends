@@ -6,21 +6,40 @@ import java.util.List;
 import com.matrix.wechat.R;
 import com.matrix.wechat.adapter.FriendZoneAdapter;
 import com.matrix.wechat.model.Moment;
+import com.matrix.wechat.widget.SquareImageView;
 
 import android.app.Activity;
+import android.content.Intent;
 import android.os.Bundle;
+import android.view.View;
+import android.view.View.OnClickListener;
 import android.widget.ListView;
 
 public class FriendZoneActivity extends Activity{
 
 	private ListView mListView = null;
+	private SquareImageView iv_myMonent=null;
 	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_friend_zone);	
-		mListView = (ListView) findViewById(R.id.friend_zone);
+		setUpView();
 		setData();
+	}
+	
+	private void setUpView(){
+		mListView = (ListView) findViewById(R.id.friend_zone);
+		iv_myMonent=(SquareImageView) findViewById(R.id.friend_zone_icon);
+		iv_myMonent.setOnClickListener(new OnClickListener() {
+			
+			@Override
+			public void onClick(View v) {
+				Intent intent=new Intent();
+				intent.setClass(FriendZoneActivity.this, MyMomentActivity.class);
+				startActivity(intent);				
+			}
+		});
 	}
 	
 	private void setData(){

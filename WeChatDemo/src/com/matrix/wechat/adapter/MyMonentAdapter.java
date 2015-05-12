@@ -13,12 +13,13 @@ import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.TextView;
 
-public class FriendZoneAdapter extends BaseAdapter{
+public class MyMonentAdapter extends BaseAdapter{
 
 	private List<Moment> mList = new ArrayList<Moment>();
 	private LayoutInflater mInflater;
+
 	
-	public FriendZoneAdapter(Context context) {
+	public MyMonentAdapter(Context context) {
 		this.mInflater = LayoutInflater.from(context);
 	}
 
@@ -30,7 +31,7 @@ public class FriendZoneAdapter extends BaseAdapter{
 	public int getCount() {
 		return mList.size();
 	}
-
+	
 	@Override
 	public Object getItem(int position) {
 		return mList.get(position);
@@ -46,20 +47,14 @@ public class FriendZoneAdapter extends BaseAdapter{
 		ViewHolder holder = null;
 		
 		if(convertView==null){
-			convertView=mInflater.inflate(R.layout.item_friend_zone, null);
+			convertView=mInflater.inflate(R.layout.item_my_moment, null);
 			holder = new ViewHolder();		
 			
-			holder.tv_username=(TextView) convertView.findViewById(R.id.moment_username);
-			holder.tv_username.setText(mList.get(position).getUserName());
+			holder.tv_moment_date=(TextView) convertView.findViewById(R.id.my_moment_date);
+			holder.tv_moment_date.setText(mList.get(position).getDate());
 			
-			holder.tv_content_text=(TextView) convertView.findViewById(R.id.moment_content);
-			holder.tv_content_text.setText(mList.get(position).getContent_text());
-			
-			holder.tv_location=(TextView) convertView.findViewById(R.id.moment_location);
-			holder.tv_location.setText(mList.get(position).getLocation());
-			
-			holder.tv_date=(TextView) convertView.findViewById(R.id.moment_date);
-			holder.tv_date.setText(mList.get(position).getDate());
+			holder.tv_moment_content=(TextView) convertView.findViewById(R.id.my_moment_content);
+			holder.tv_moment_content.setText(mList.get(position).getContent_text());
 			
 			convertView.setTag(holder);
 		}else{
@@ -70,9 +65,8 @@ public class FriendZoneAdapter extends BaseAdapter{
 	}
 	
 	static class ViewHolder{
-		public TextView tv_username;
-		public TextView tv_content_text;
-		public TextView tv_location;
-		public TextView tv_date;
+		public TextView tv_moment_date;
+		public TextView tv_moment_content;
 	}
+
 }
