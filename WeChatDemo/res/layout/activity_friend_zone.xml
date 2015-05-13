@@ -42,7 +42,7 @@
         android:divider="@drawable/line"
         android:footerDividersEnabled="false"
         android:headerDividersEnabled="false"
-        android:scrollbars="none" >
+         >
     </com.matrix.wechat.customview.FriendsListView>
 
 </LinearLayout>

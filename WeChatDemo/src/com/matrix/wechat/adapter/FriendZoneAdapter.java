@@ -5,12 +5,15 @@ import java.util.List;
 
 import com.matrix.wechat.R;
 import com.matrix.wechat.model.Moment;
+import com.matrix.wechat.utils.BitmapUtil;
 
 import android.content.Context;
+import android.graphics.Bitmap;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 public class FriendZoneAdapter extends BaseAdapter{
@@ -28,7 +31,7 @@ public class FriendZoneAdapter extends BaseAdapter{
 	
 	@Override
 	public int getCount() {
-		return 20;
+		return mList.size();
 	}
 
 	@Override
@@ -48,7 +51,7 @@ public class FriendZoneAdapter extends BaseAdapter{
 		if(convertView==null){
 			convertView=mInflater.inflate(R.layout.item_friend_zone, null);
 			holder = new ViewHolder();		
-			
+			holder.img_icon = (ImageView) convertView.findViewById(R.id.moment_icon);
 			holder.tv_username=(TextView) convertView.findViewById(R.id.moment_username);
 			holder.tv_content_text=(TextView) convertView.findViewById(R.id.moment_content);
 			holder.tv_date=(TextView) convertView.findViewById(R.id.moment_date);
@@ -57,15 +60,16 @@ public class FriendZoneAdapter extends BaseAdapter{
 		}else{
 			holder = (ViewHolder) convertView.getTag();
 		}
-		
-//		holder.tv_username.setText(mList.get(position).getUserName());
-//		holder.tv_content_text.setText(mList.get(position).getContent_text());
-//		holder.tv_date.setText(mList.get(position).getDate());
+		holder.img_icon.setImageBitmap(BitmapUtil.getBitmap(mList.get(position).getPicture()));
+		holder.tv_username.setText(mList.get(position).getUserName());
+		holder.tv_content_text.setText(mList.get(position).getContent_text());
+		holder.tv_date.setText(mList.get(position).getDate());
 
 		return convertView;
 	}
 	
 	static class ViewHolder{
+		public ImageView img_icon;
 		public TextView tv_username;
 		public TextView tv_content_text;
 		public TextView tv_date;

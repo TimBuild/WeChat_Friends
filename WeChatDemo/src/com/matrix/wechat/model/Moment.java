@@ -50,4 +50,12 @@ public class Moment {
 		this.date = date;
 	}
 
+	@Override
+	public String toString() {
+		return "Moment [picture=" + picture + ", userName=" + userName
+				+ ", content_text=" + content_text + ", date=" + date + "]";
+	}
+	
+	
+
 }

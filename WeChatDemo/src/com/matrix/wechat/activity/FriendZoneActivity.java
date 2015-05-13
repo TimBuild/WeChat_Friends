@@ -12,8 +12,11 @@ import com.matrix.wechat.customview.FriendsListView.OnRefreshListener;
 import com.matrix.wechat.customview.FriendsListView.onLoadListener;
 import com.matrix.wechat.model.Moment;
 import com.matrix.wechat.model.Share;
+import com.matrix.wechat.model.ShareFriend;
 import com.matrix.wechat.model.ShareWithComment;
+import com.matrix.wechat.model.User;
 import com.matrix.wechat.utils.CacheUtil;
+import com.matrix.wechat.utils.DateUtil;
 import com.matrix.wechat.web.service.FriendsZoneService;
 import com.matrix.wechat.web.service.factory.FriendsZoneFactory;
 import com.matrix.wechat.widget.SquareImageView;
@@ -45,7 +48,8 @@ public class FriendZoneActivity extends Activity implements OnRefreshListener,on
 	private int friend_count = FriendsListView.pageSize;
 	
 	
-	private List<Moment> listMoments;
+	private List<Moment> listMoments = new ArrayList<Moment>();
+	private List<Moment> listResult = new ArrayList<Moment>();
 	private static final String TAG = "FriendZoneActivity";
 	
 	
@@ -61,7 +65,6 @@ public class FriendZoneActivity extends Activity implements OnRefreshListener,on
 		
 		
 //		loadData(FriendsListView.REFRESH);
-		new FriendsZone().execute(FriendsListView.REFRESH);
 		iv_mymoment=(SquareImageView) findViewById(R.id.friend_zone_icon);
 		iv_mymoment.setOnClickListener(new OnClickListener() {
 			
@@ -83,28 +86,28 @@ public class FriendZoneActivity extends Activity implements OnRefreshListener,on
 				startActivity(intent);					
 			}
 		});
+		new FriendsZone().execute(FriendsListView.REFRESH);
 
-		iv_mymoment=(SquareImageView) findViewById(R.id.friend_zone_icon);
-				iv_mymoment.setOnClickListener(new OnClickListener() {
-			
-			@Override
-			public void onClick(View v) {
-				Intent intent=new Intent();
-				intent.setClass(FriendZoneActivity.this, MyMomentActivity.class);
-				startActivity(intent);				
-			}
-		});
+	}
+	
+	private List<Moment> getListMoments(Share share){
 		
-		bt_addMoment=(Button) findViewById(R.id.add_moment);
-		bt_addMoment.setOnClickListener(new OnClickListener() {
+		List<Moment> lists = new ArrayList<Moment>();
+		
+		for(ShareWithComment shaWithComment:share.shareWithComment){
+			Moment moment = new Moment();
+		//	moment.setPicture(shaWithComment.getUser().getPicture());
+			String date = shaWithComment.getShareFriend().getDate();
+			String time = DateUtil.getParseTime(date);
+			moment.setUserName(shaWithComment.getUser().getNickname());
+			moment.setDate(time);
+			moment.setContent_text(shaWithComment.getShareFriend().getContent());
 			
-			@Override
-			public void onClick(View v) {
-				Intent intent=new Intent();
-				intent.setClass(FriendZoneActivity.this, AddMomentActivity.class);
-				startActivity(intent);					
-			}
-		});		
+			lists.add(moment);
+		}
+		
+		return lists;
+		
 	}
 	
 	private class FriendsZone extends AsyncTask<Integer, Void, String>{
@@ -115,19 +118,83 @@ public class FriendZoneActivity extends Activity implements OnRefreshListener,on
 		protected String doInBackground(Integer... params) {
 			
 			fZoneService = FriendsZoneFactory.getInstance();
-			Log.d(TAG, fZoneService.toString());
-			listMoments = new ArrayList<Moment>();
-			Share lists = null;
+			Share share = null;
+			String result = null;
 			if(params[0].equals(FriendsListView.REFRESH)){
 				Log.d(TAG,"OnRefresh");
-				lists = fZoneService.getAllZoneList(CacheUtil.getUser(CacheUtil.context).getUserid());
-//				lists.shareWithComment.get(0)
-			}
-			else if(params[0].equals(FriendsListView.LOAD)){
+				
+				friend_count = friend_count+friend_start;
+				friend_start = 0;
+				Log.d(TAG, "onRefresh-->start:"+friend_start+"--count:"+friend_count);
+				
+				share = fZoneService.getAllZoneList(CacheUtil.getUser(CacheUtil.context).getUserid(),friend_start,friend_count);
+//				Log.d(TAG, "onRefresh:share.toString:"+share.toString());
+				if(share!=null){
+					result = "REFRESH";
+					listMoments = getListMoments(share);
+//					mListView.onRefreshComplete();
+					
+				}
+				else{
+					result = "RefreshError";
+				}
 				
 			}
-			Log.d(TAG, lists.toString());
-			return null;
+			else if(params[0].equals(FriendsListView.LOAD)){
+				Log.d(TAG,"OnLoad");
+				friend_count = FriendsListView.pageSize;
+				friend_start = friend_start+friend_count;
+				Log.d(TAG, "onLoad-->start:"+friend_start+"--count:"+friend_count);
+				
+				share = fZoneService.getAllZoneList(CacheUtil.getUser(CacheUtil.context).getUserid(),friend_start,friend_count);
+//				Log.d(TAG, "onLoad:share.toString:"+share.toString());
+				if(share!=null){
+					result = "LOAD";
+					listMoments = getListMoments(share);
+//					mListView.onLoadComplete();
+				}
+				else{
+					result = "LoadError";
+				}
+				
+			}
+			
+//			result[1] = listMoments+"";
+//			Log.d(TAG, "result:"+result);
+//			Log.d(TAG, listMoments.toString());
+			return result;
+		}
+		
+		@Override
+		protected void onPostExecute(String result) {
+			super.onPostExecute(result);
+
+			// List<Moment> lists = listMoments;
+
+			// mListView.setResultSize(listMoments.size());
+//			Log.d(TAG, "lists:--->" + listMoments.toString());
+//			Log.d(TAG, "size--->" + listMoments.size());
+			if (result.equals("RefreshError")) {
+//				mListView.setResultSize(0);
+				mListView.onRefreshComplete();
+			} else if (result.equals("LoadError")) {
+				mListView.setResultSize(0);
+				return;
+				// mListView.onLoadComplete();
+			} else if (result.equals("REFRESH")) {
+				mListView.setResultSize(listMoments.size());
+				mListView.onRefreshComplete();
+				listResult.clear();
+				listResult.addAll(0, listMoments);
+
+			} else if (result.equals("LOAD")) {
+				mListView.setResultSize(listMoments.size());
+				mListView.onLoadComplete();
+				listResult.addAll(listMoments);
+			}
+
+			mfriendZoneAdapter.setData(listResult);
+			mfriendZoneAdapter.notifyDataSetChanged();
 		}
 
 		
@@ -135,50 +202,13 @@ public class FriendZoneActivity extends Activity implements OnRefreshListener,on
 	}
 	
 	
-	
-	
-	
-	private void loadData(int refresh) {
-		new Thread(new Runnable() {
-			
-			@Override
-			public void run() {
-				try {
-					Thread.sleep(700);
-				} catch (InterruptedException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-				}
-			}
-		}).start();
-	}
-	
-
-	
-	
-	/*private Handler friendHandler = new Handler(){
-		public void handleMessage(Message msg) {
-			switch (msg.what) {
-			case :
-				break;
-
-			default:
-				break;
-			}
-		};
-	};*/
-
 	@Override
 	public void onLoad() {
-		
-//		loadData(FriendsListView.LOAD);
 		new FriendsZone().execute(FriendsListView.LOAD);
 	}
 
 	@Override
 	public void onRefresh() {
-		
-//		loadData(FriendsListView.REFRESH);
 		new FriendsZone().execute(FriendsListView.REFRESH);
 		
 	}

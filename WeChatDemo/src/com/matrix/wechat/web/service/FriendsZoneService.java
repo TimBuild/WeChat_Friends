@@ -11,6 +11,6 @@ import com.matrix.wechat.model.ShareWithComment;
 
 public interface FriendsZoneService {
 
-	@GET("/getAllFreindShares")
-	Share getAllZoneList(@Query("userid") long userid);
+	@GET("/getFreindSharesByOffsetAndNum")
+	Share getAllZoneList(@Query("userid") long userid,@Query("offset") Integer offset,@Query("num") Integer num);
 }
