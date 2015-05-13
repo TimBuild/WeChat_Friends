@@ -85,12 +85,7 @@ public class FriendZoneActivity extends Activity implements OnRefreshListener,on
 				intent.setClass(FriendZoneActivity.this, AddMomentActivity.class);
 				startActivity(intent);					
 			}
-		});
-		new FriendsZone().execute(FriendsListView.REFRESH);
-
-	}
-	
-	private List<Moment> getListMoments(Share share){
+		private List<Moment> getListMoments(Share share){
 		
 		List<Moment> lists = new ArrayList<Moment>();
 		
@@ -108,7 +103,7 @@ public class FriendZoneActivity extends Activity implements OnRefreshListener,on
 		
 		return lists;
 		
-	}
+	}	}
 	
 	private class FriendsZone extends AsyncTask<Integer, Void, String>{
 		
