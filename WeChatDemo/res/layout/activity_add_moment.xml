@@ -37,8 +37,10 @@
         android:id="@+id/add_moment_content"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
-        android:layout_marginLeft="15dp"
-        android:layout_marginRight="15dp"
+        android:layout_marginTop="3dp"
+        android:layout_marginLeft="5dp"
+        android:layout_marginRight="5dp"
+        android:background="@drawable/edittext"
         android:ems="10"/>
 
 </LinearLayout>

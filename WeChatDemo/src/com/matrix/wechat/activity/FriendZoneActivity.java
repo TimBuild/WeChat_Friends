@@ -84,23 +84,25 @@ public class FriendZoneActivity extends Activity implements OnRefreshListener,
 				startActivity(intent);
 			}
 		});
+		new FriendsZone().execute(FriendsListView.REFRESH);
 	}
 
 	private List<Moment> getListMoments(Share share) {
 
 		List<Moment> lists = new ArrayList<Moment>();
-
-		for (ShareWithComment shaWithComment : share.shareWithComment) {
+//		ShareWithComment shaWithComment : share.shareWithComment
+		for (int i = 0;i<share.shareWithComment.size()-1;i++) {
+			ShareWithComment shaWithComment = share.shareWithComment.get(i);
 			Moment moment = new Moment();
-			// moment.setPicture(shaWithComment.getUser().getPicture());
+			moment.setPicture(shaWithComment.getUser().getPicture());
 			String date = shaWithComment.getShareFriend().getDate();
 			String time = DateUtil.getParseTime(date);
 			moment.setUserName(shaWithComment.getUser().getNickname());
 			moment.setDate(time);
 			moment.setContent_text(shaWithComment.getShareFriend().getContent());
-
 			lists.add(moment);
 		}
+		Log.d(TAG, "share.shareWithComment.size():"+share.shareWithComment.size());
 
 		return lists;
 	}
@@ -126,7 +128,6 @@ public class FriendZoneActivity extends Activity implements OnRefreshListener,
 				share = fZoneService.getAllZoneList(
 						CacheUtil.getUser(CacheUtil.context).getUserid(),
 						friend_start, friend_count);
-				// Log.d(TAG, "onRefresh:share.toString:"+share.toString());
 				if (share != null) {
 					result = "REFRESH";
 					listMoments = getListMoments(share);
