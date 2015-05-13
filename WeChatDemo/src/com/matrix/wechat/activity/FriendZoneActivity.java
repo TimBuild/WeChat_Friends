@@ -20,6 +20,7 @@ import android.os.Handler;
 import android.os.Message;
 import android.view.View;
 import android.view.View.OnClickListener;
+import android.widget.Button;
 import android.widget.ListView;
 import android.widget.RelativeLayout;
 
@@ -29,6 +30,7 @@ public class FriendZoneActivity extends Activity implements OnRefreshListener,on
 	private RelativeLayout frl_header_hidden;
 	private FriendZoneAdapter mfriendZoneAdapter;
 	private SquareImageView iv_mymoment;
+	private Button bt_addMoment;
 	
 	private int friend_start = 0;
 	private int friend_count = FriendsListView.pageSize;
@@ -54,6 +56,18 @@ public class FriendZoneActivity extends Activity implements OnRefreshListener,on
 				startActivity(intent);				
 			}
 		});
+		
+		bt_addMoment=(Button) findViewById(R.id.add_moment);
+		bt_addMoment.setOnClickListener(new OnClickListener() {
+			
+			@Override
+			public void onClick(View v) {
+				Intent intent=new Intent();
+				intent.setClass(FriendZoneActivity.this, AddMomentActivity.class);
+				startActivity(intent);					
+			}
+		});
+		
 		loadData(FriendsListView.REFRESH);
 		
 	}

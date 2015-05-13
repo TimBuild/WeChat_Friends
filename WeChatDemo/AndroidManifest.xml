@@ -108,6 +108,10 @@
             android:name="com.matrix.wechat.activity.MyMomentActivity"
             android:theme="@android:style/Theme.NoTitleBar" >
         </activity>
+        <activity
+            android:name="com.matrix.wechat.activity.AddMomentActivity"
+            android:theme="@android:style/Theme.NoTitleBar" >
+        </activity>
 
         <!-- Required SDK 核心功能 -->
         <service
