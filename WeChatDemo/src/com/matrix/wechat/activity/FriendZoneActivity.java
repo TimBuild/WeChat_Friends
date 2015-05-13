@@ -60,7 +60,8 @@ public class FriendZoneActivity extends Activity implements OnRefreshListener,
 		mListView.setonRefreshListener(this);
 		mListView.setOnLoadListener(this);
 		mListView.setAdapter(mfriendZoneAdapter);
-
+		
+		
 		// loadData(FriendsListView.REFRESH);
 		iv_mymoment = (SquareImageView) findViewById(R.id.friend_zone_icon);
 		iv_mymoment.setOnClickListener(new OnClickListener() {
@@ -85,6 +86,7 @@ public class FriendZoneActivity extends Activity implements OnRefreshListener,
 			}
 		});
 		new FriendsZone().execute(FriendsListView.REFRESH);
+		
 	}
 
 	private List<Moment> getListMoments(Share share) {

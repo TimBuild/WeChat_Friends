@@ -113,7 +113,13 @@ public class FriendsListView extends ListView implements OnScrollListener {
 		noDate = (TextView) footerView.findViewById(R.id.character_noData);
 		more = (TextView) footerView.findViewById(R.id.character_more);
 		loading = (ProgressBar) footerView.findViewById(R.id.character_loading);
+		
+		View iconView = inflater.inflate(R.layout.activity_friend_zone_head,
+				null);
+		iconView.setPadding(0, -1 * headContentHeight,0,0);
 		addHeaderView(headView);
+		addHeaderView(iconView);
+		
 		addFooterView(footerView, null, false);
 
 		setOnScrollListener(this);

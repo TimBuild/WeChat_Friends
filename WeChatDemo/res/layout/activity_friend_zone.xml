@@ -31,8 +31,6 @@
             android:textSize="20sp" />
     </RelativeLayout>
 
-    <include layout="@layout/activity_friend_zone_head" />
-
     <com.matrix.wechat.customview.FriendsListView
         android:id="@+id/friend_zone"
         android:layout_width="fill_parent"
