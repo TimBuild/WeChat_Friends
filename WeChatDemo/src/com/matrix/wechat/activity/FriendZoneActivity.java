@@ -25,7 +25,6 @@ import android.app.Activity;
 import android.os.AsyncTask;
 import android.os.Bundle;
 
-
 import android.os.Handler;
 import android.os.Message;
 import android.content.Intent;
@@ -36,130 +35,134 @@ import android.widget.Button;
 import android.widget.ListView;
 import android.widget.RelativeLayout;
 
-public class FriendZoneActivity extends Activity implements OnRefreshListener,onLoadListener{
+public class FriendZoneActivity extends Activity implements OnRefreshListener,
+		onLoadListener {
 
 	private FriendsListView mListView;
 	private RelativeLayout frl_header_hidden;
 	private FriendZoneAdapter mfriendZoneAdapter;
 	private SquareImageView iv_mymoment;
 	private Button bt_addMoment;
-	
+
 	private int friend_start = 0;
 	private int friend_count = FriendsListView.pageSize;
-	
-	
+
 	private List<Moment> listMoments = new ArrayList<Moment>();
 	private List<Moment> listResult = new ArrayList<Moment>();
 	private static final String TAG = "FriendZoneActivity";
-	
-	
+
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		setContentView(R.layout.activity_friend_zone);	
+		setContentView(R.layout.activity_friend_zone);
 		mListView = (FriendsListView) findViewById(R.id.friend_zone);
 		mfriendZoneAdapter = new FriendZoneAdapter(this);
 		mListView.setonRefreshListener(this);
 		mListView.setOnLoadListener(this);
 		mListView.setAdapter(mfriendZoneAdapter);
-		
-		
-//		loadData(FriendsListView.REFRESH);
-		iv_mymoment=(SquareImageView) findViewById(R.id.friend_zone_icon);
+
+		// loadData(FriendsListView.REFRESH);
+		iv_mymoment = (SquareImageView) findViewById(R.id.friend_zone_icon);
 		iv_mymoment.setOnClickListener(new OnClickListener() {
-			
+
 			@Override
 			public void onClick(View v) {
-				Intent intent=new Intent();
+				Intent intent = new Intent();
 				intent.setClass(FriendZoneActivity.this, MyMomentActivity.class);
-				startActivity(intent);				
+				startActivity(intent);
 			}
 		});
-		
-		bt_addMoment=(Button) findViewById(R.id.add_moment);
+
+		bt_addMoment = (Button) findViewById(R.id.add_moment);
 		bt_addMoment.setOnClickListener(new OnClickListener() {
-			
+
 			@Override
 			public void onClick(View v) {
-				Intent intent=new Intent();
-				intent.setClass(FriendZoneActivity.this, AddMomentActivity.class);
-				startActivity(intent);					
+				Intent intent = new Intent();
+				intent.setClass(FriendZoneActivity.this,
+						AddMomentActivity.class);
+				startActivity(intent);
 			}
-		private List<Moment> getListMoments(Share share){
-		
+		});
+	}
+
+	private List<Moment> getListMoments(Share share) {
+
 		List<Moment> lists = new ArrayList<Moment>();
-		
-		for(ShareWithComment shaWithComment:share.shareWithComment){
+
+		for (ShareWithComment shaWithComment : share.shareWithComment) {
 			Moment moment = new Moment();
-		//	moment.setPicture(shaWithComment.getUser().getPicture());
+			// moment.setPicture(shaWithComment.getUser().getPicture());
 			String date = shaWithComment.getShareFriend().getDate();
 			String time = DateUtil.getParseTime(date);
 			moment.setUserName(shaWithComment.getUser().getNickname());
 			moment.setDate(time);
 			moment.setContent_text(shaWithComment.getShareFriend().getContent());
-			
+
 			lists.add(moment);
 		}
-		
+
 		return lists;
-		
-	}	}
-	
-	private class FriendsZone extends AsyncTask<Integer, Void, String>{
-		
+	}
+
+	private class FriendsZone extends AsyncTask<Integer, Void, String> {
+
 		private FriendsZoneService fZoneService;
 
 		@Override
 		protected String doInBackground(Integer... params) {
-			
+
 			fZoneService = FriendsZoneFactory.getInstance();
 			Share share = null;
 			String result = null;
-			if(params[0].equals(FriendsListView.REFRESH)){
-				Log.d(TAG,"OnRefresh");
-				
-				friend_count = friend_count+friend_start;
+			if (params[0].equals(FriendsListView.REFRESH)) {
+				Log.d(TAG, "OnRefresh");
+
+				friend_count = friend_count + friend_start;
 				friend_start = 0;
-				Log.d(TAG, "onRefresh-->start:"+friend_start+"--count:"+friend_count);
-				
-				share = fZoneService.getAllZoneList(CacheUtil.getUser(CacheUtil.context).getUserid(),friend_start,friend_count);
-//				Log.d(TAG, "onRefresh:share.toString:"+share.toString());
-				if(share!=null){
+				Log.d(TAG, "onRefresh-->start:" + friend_start + "--count:"
+						+ friend_count);
+
+				share = fZoneService.getAllZoneList(
+						CacheUtil.getUser(CacheUtil.context).getUserid(),
+						friend_start, friend_count);
+				// Log.d(TAG, "onRefresh:share.toString:"+share.toString());
+				if (share != null) {
 					result = "REFRESH";
 					listMoments = getListMoments(share);
-//					mListView.onRefreshComplete();
-					
-				}
-				else{
+					// mListView.onRefreshComplete();
+
+				} else {
 					result = "RefreshError";
 				}
-				
-			}
-			else if(params[0].equals(FriendsListView.LOAD)){
-				Log.d(TAG,"OnLoad");
+
+			} else if (params[0].equals(FriendsListView.LOAD)) {
+				Log.d(TAG, "OnLoad");
 				friend_count = FriendsListView.pageSize;
-				friend_start = friend_start+friend_count;
-				Log.d(TAG, "onLoad-->start:"+friend_start+"--count:"+friend_count);
-				
-				share = fZoneService.getAllZoneList(CacheUtil.getUser(CacheUtil.context).getUserid(),friend_start,friend_count);
-//				Log.d(TAG, "onLoad:share.toString:"+share.toString());
-				if(share!=null){
+				friend_start = friend_start + friend_count;
+				Log.d(TAG, "onLoad-->start:" + friend_start + "--count:"
+						+ friend_count);
+
+				share = fZoneService.getAllZoneList(
+						CacheUtil.getUser(CacheUtil.context).getUserid(),
+						friend_start, friend_count);
+				// Log.d(TAG, "onLoad:share.toString:"+share.toString());
+				if (share != null) {
 					result = "LOAD";
 					listMoments = getListMoments(share);
-//					mListView.onLoadComplete();
-				}
-				else{
+					// mListView.onLoadComplete();
+				} else {
 					result = "LoadError";
 				}
-				
+
 			}
-			
-//			result[1] = listMoments+"";
-//			Log.d(TAG, "result:"+result);
-//			Log.d(TAG, listMoments.toString());
+
+			// result[1] = listMoments+"";
+			// Log.d(TAG, "result:"+result);
+			// Log.d(TAG, listMoments.toString());
 			return result;
 		}
-		
+
 		@Override
 		protected void onPostExecute(String result) {
 			super.onPostExecute(result);
@@ -167,10 +170,10 @@ public class FriendZoneActivity extends Activity implements OnRefreshListener,on
 			// List<Moment> lists = listMoments;
 
 			// mListView.setResultSize(listMoments.size());
-//			Log.d(TAG, "lists:--->" + listMoments.toString());
-//			Log.d(TAG, "size--->" + listMoments.size());
+			// Log.d(TAG, "lists:--->" + listMoments.toString());
+			// Log.d(TAG, "size--->" + listMoments.size());
 			if (result.equals("RefreshError")) {
-//				mListView.setResultSize(0);
+				// mListView.setResultSize(0);
 				mListView.onRefreshComplete();
 			} else if (result.equals("LoadError")) {
 				mListView.setResultSize(0);
@@ -192,11 +195,8 @@ public class FriendZoneActivity extends Activity implements OnRefreshListener,on
 			mfriendZoneAdapter.notifyDataSetChanged();
 		}
 
-		
-		
 	}
-	
-	
+
 	@Override
 	public void onLoad() {
 		new FriendsZone().execute(FriendsListView.LOAD);
@@ -205,7 +205,5 @@ public class FriendZoneActivity extends Activity implements OnRefreshListener,on
 	@Override
 	public void onRefresh() {
 		new FriendsZone().execute(FriendsListView.REFRESH);
-		
 	}
-
 }
