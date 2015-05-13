@@ -6,6 +6,7 @@ import com.matrix.wechat.web.service.FriendsZoneService;
 import com.matrix.wechat.web.service.factory.FriendsZoneFactory;
 
 import android.app.Activity;
+import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.util.Log;
@@ -36,8 +37,7 @@ public class AddMomentActivity extends Activity{
 			public void onClick(View v) {
 				new AddMoment().execute("share_text");				
 			}
-		});
-		
+		});		
 	}
 	
 	private class AddMoment extends AsyncTask<String, Void, Integer>{
@@ -65,6 +65,10 @@ public class AddMomentActivity extends Activity{
 				Toast.makeText(AddMomentActivity.this, "发布失败", Toast.LENGTH_SHORT).show();
 			}else{
 				Toast.makeText(AddMomentActivity.this, "发布成功"+result, Toast.LENGTH_SHORT).show();
+				et_moment_content.setText("");
+				Intent intent=new Intent();
+				intent.setClass(AddMomentActivity.this, FriendZoneActivity.class);
+				startActivity(intent);
 			}
 		}	
 	}
