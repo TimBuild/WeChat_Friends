@@ -9,13 +9,17 @@ import com.matrix.wechat.customview.FriendsListView;
 import com.matrix.wechat.customview.FriendsListView.OnRefreshListener;
 import com.matrix.wechat.customview.FriendsListView.onLoadListener;
 import com.matrix.wechat.model.Moment;
+import com.matrix.wechat.widget.SquareImageView;
 
 import android.app.Activity;
+import android.content.Intent;
 import android.os.Bundle;
 
 
 import android.os.Handler;
 import android.os.Message;
+import android.view.View;
+import android.view.View.OnClickListener;
 import android.widget.ListView;
 import android.widget.RelativeLayout;
 
@@ -24,6 +28,7 @@ public class FriendZoneActivity extends Activity implements OnRefreshListener,on
 	private FriendsListView mListView;
 	private RelativeLayout frl_header_hidden;
 	private FriendZoneAdapter mfriendZoneAdapter;
+	private SquareImageView iv_mymoment;
 	
 	private int friend_start = 0;
 	private int friend_count = FriendsListView.pageSize;
@@ -39,6 +44,16 @@ public class FriendZoneActivity extends Activity implements OnRefreshListener,on
 		mListView.setOnLoadListener(this);
 		mListView.setAdapter(mfriendZoneAdapter);
 		
+		iv_mymoment=(SquareImageView) findViewById(R.id.friend_zone_icon);
+		iv_mymoment.setOnClickListener(new OnClickListener() {
+			
+			@Override
+			public void onClick(View v) {
+				Intent intent=new Intent();
+				intent.setClass(FriendZoneActivity.this, MyMomentActivity.class);
+				startActivity(intent);				
+			}
+		});
 		loadData(FriendsListView.REFRESH);
 		
 	}
