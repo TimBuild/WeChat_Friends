@@ -11,6 +11,8 @@ public class Constants {
 	public final static String API_PUSH = API_BASE_URL + "/api1/message/jpush/examples";
 	public final static String API_GROUPS = API_BASE_URL + "/api1/group";
 	public final static String UPLOAD_Url = API_BASE_URL + "/api1/upload.php"; // 处理POST请求的页面
+	public final static String API_Zone = "http://192.168.1.73:8080/FriendZoomServer/rest/friendzoom";
+	
 
 	public final static String API_FIND_FRIEND = "find friend";
 	public final static String API_ADD_FRIEND_REQUEST = "post request";
