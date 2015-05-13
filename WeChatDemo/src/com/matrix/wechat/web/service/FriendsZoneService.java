@@ -13,4 +13,7 @@ public interface FriendsZoneService {
 
 	@GET("/getAllFreindShares")
 	Share getAllZoneList(@Query("userid") long userid);
+	
+	@GET("/share")
+	Integer share(@Query("userid") long userid,@Query("content") String content);
 }

@@ -82,28 +82,6 @@ public class FriendZoneActivity extends Activity implements OnRefreshListener,on
 				intent.setClass(FriendZoneActivity.this, AddMomentActivity.class);
 				startActivity(intent);					
 			}
-		});
-
-		iv_mymoment=(SquareImageView) findViewById(R.id.friend_zone_icon);
-				iv_mymoment.setOnClickListener(new OnClickListener() {
-			
-			@Override
-			public void onClick(View v) {
-				Intent intent=new Intent();
-				intent.setClass(FriendZoneActivity.this, MyMomentActivity.class);
-				startActivity(intent);				
-			}
-		});
-		
-		bt_addMoment=(Button) findViewById(R.id.add_moment);
-		bt_addMoment.setOnClickListener(new OnClickListener() {
-			
-			@Override
-			public void onClick(View v) {
-				Intent intent=new Intent();
-				intent.setClass(FriendZoneActivity.this, AddMomentActivity.class);
-				startActivity(intent);					
-			}
 		});		
 	}
 	
