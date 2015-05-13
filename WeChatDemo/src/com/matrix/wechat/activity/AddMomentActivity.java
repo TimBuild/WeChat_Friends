@@ -1,5 +1,7 @@
 package com.matrix.wechat.activity;
 
+import com.matrix.wechat.R;
+
 import android.app.Activity;
 import android.os.Bundle;
 
@@ -7,7 +9,7 @@ public class AddMomentActivity extends Activity{
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
-		// TODO Auto-generated method stub
 		super.onCreate(savedInstanceState);
+		setContentView(R.layout.activity_add_moment);
 	}
 }
