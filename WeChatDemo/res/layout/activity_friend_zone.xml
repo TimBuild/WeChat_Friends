@@ -9,6 +9,18 @@
         android:layout_width="fill_parent"
         android:layout_height="45dp"
         android:background="@drawable/title_bar" >
+        <RelativeLayout
+            android:id="@+id/friend_zone_back"
+            android:layout_width="60dp"
+            android:layout_height="45dp"
+            android:background="@drawable/rel_bg" >
+
+            <ImageView
+                android:layout_width="30dp"
+                android:layout_height="30dp"
+                android:layout_centerInParent="true"
+                android:src="@drawable/pt_title_back" />
+        </RelativeLayout>
 
         <Button
             android:id="@+id/add_moment"

@@ -8,21 +8,21 @@
 
     <TextView
         android:id="@+id/my_moment_date"
-        android:layout_width="50dp"
+        android:layout_width="70dp"
         android:layout_height="wrap_content"
-        android:text="10.4"
+        android:layout_marginTop="10dp"
+        android:text="10-04"
         android:textColor="#000000"
-        android:textSize="25sp" 
-        android:layout_marginTop="10dp"/>
+        android:textSize="25sp" />
 
     <TextView
         android:id="@+id/my_moment_content"
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginLeft="20dp"
-        android:layout_marginRight="10dp"
-        android:text="ContentContentContentContentContentContentContentContentContentContent"
-        android:textColor="#000000" 
-        android:background="#CCCCCC"/>
+        android:layout_marginLeft="10dp"
+        android:layout_marginRight="5dp"
+        android:background="#EFEDED"
+        android:text="Content"
+        android:textColor="#000000" />
 
 </LinearLayout>

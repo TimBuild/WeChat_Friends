@@ -4,17 +4,44 @@
     android:layout_height="match_parent"
     android:orientation="vertical" >
     
-    <include layout="@layout/activity_friend_zone_head" />
-    
-    <ListView
+    <RelativeLayout
+        android:id="@+id/friend_current_title"
+        android:layout_width="fill_parent"
+        android:layout_height="45dp"
+        android:background="@drawable/title_bar" >
+        <RelativeLayout
+            android:id="@+id/friend_current_back"
+            android:layout_width="60dp"
+            android:layout_height="45dp"
+            android:background="@drawable/rel_bg" >
+
+            <ImageView
+                android:layout_width="30dp"
+                android:layout_height="30dp"
+                android:layout_centerInParent="true"
+                android:src="@drawable/pt_title_back" />
+        </RelativeLayout>
+
+       
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="fill_parent"
+            android:layout_centerHorizontal="true"
+            android:gravity="center"
+            android:text="Friend Zone"
+            android:textColor="#ffffff"
+            android:textSize="20sp" />
+    </RelativeLayout>
+
+    <com.matrix.wechat.customview.FriendsListView
         android:id="@+id/my_moment"
         android:layout_width="fill_parent"
         android:layout_height="fill_parent"
         android:background="#fcfcfc"
         android:cacheColorHint="#00000000"
         android:footerDividersEnabled="false"
-        android:headerDividersEnabled="false"
-        android:scrollbars="none"  >
-    </ListView>
+        android:headerDividersEnabled="false" >
+    </com.matrix.wechat.customview.FriendsListView>
 
 </LinearLayout>

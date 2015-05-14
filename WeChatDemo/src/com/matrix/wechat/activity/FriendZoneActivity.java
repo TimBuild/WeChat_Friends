@@ -35,7 +35,7 @@ import android.widget.Button;
 import android.widget.ListView;
 import android.widget.RelativeLayout;
 
-public class FriendZoneActivity extends Activity implements OnRefreshListener,
+public class FriendZoneActivity extends Activity implements OnClickListener,OnRefreshListener,
 		onLoadListener {
 
 	private FriendsListView mListView;
@@ -43,6 +43,8 @@ public class FriendZoneActivity extends Activity implements OnRefreshListener,
 	private FriendZoneAdapter mfriendZoneAdapter;
 	private SquareImageView iv_mymoment;
 	private Button bt_addMoment;
+	
+	private RelativeLayout relBack;
 
 	private int friend_start = 0;
 	private int friend_count = FriendsListView.pageSize;
@@ -61,30 +63,13 @@ public class FriendZoneActivity extends Activity implements OnRefreshListener,
 		mListView.setOnLoadListener(this);
 		mListView.setAdapter(mfriendZoneAdapter);
 		
-		
-		// loadData(FriendsListView.REFRESH);
+		relBack = (RelativeLayout) findViewById(R.id.friend_zone_back);
 		iv_mymoment = (SquareImageView) findViewById(R.id.friend_zone_icon);
-		iv_mymoment.setOnClickListener(new OnClickListener() {
-
-			@Override
-			public void onClick(View v) {
-				Intent intent = new Intent();
-				intent.setClass(FriendZoneActivity.this, MyMomentActivity.class);
-				startActivity(intent);
-			}
-		});
-
 		bt_addMoment = (Button) findViewById(R.id.add_moment);
-		bt_addMoment.setOnClickListener(new OnClickListener() {
-
-			@Override
-			public void onClick(View v) {
-				Intent intent = new Intent();
-				intent.setClass(FriendZoneActivity.this,
-						AddMomentActivity.class);
-				startActivity(intent);
-			}
-		});
+		
+		relBack.setOnClickListener(this);
+		iv_mymoment.setOnClickListener(this);
+		bt_addMoment.setOnClickListener(this);
 		new FriendsZone().execute(FriendsListView.REFRESH);
 		
 	}
@@ -208,5 +193,26 @@ public class FriendZoneActivity extends Activity implements OnRefreshListener,
 	@Override
 	public void onRefresh() {
 		new FriendsZone().execute(FriendsListView.REFRESH);
+	}
+
+	@Override
+	public void onClick(View v) {
+		Intent intent;
+		switch (v.getId()) {
+		case R.id.friend_zone_back:
+			intent = new Intent(FriendZoneActivity.this, MainWeixin.class);
+			startActivity(intent);
+			finish();
+			break;
+		case R.id.friend_zone_icon:
+			intent = new Intent(FriendZoneActivity.this, MyMomentActivity.class);
+			startActivity(intent);
+			break;
+		case R.id.add_moment:
+			intent = new Intent(FriendZoneActivity.this,
+					AddMomentActivity.class);
+			startActivity(intent);
+			break;
+		}
 	}
 }

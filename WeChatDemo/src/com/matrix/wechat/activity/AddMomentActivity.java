@@ -14,13 +14,14 @@ import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.RelativeLayout;
 import android.widget.Toast;
 
 public class AddMomentActivity extends Activity{
 
 	private EditText et_moment_content=null;
 	private Button bt_send_moment=null;
-	
+	private RelativeLayout relback;
 	
 	private static final String TAG = "AddMomentActivity";
 	
@@ -31,13 +32,23 @@ public class AddMomentActivity extends Activity{
 		
 		et_moment_content=(EditText) findViewById(R.id.add_moment_content);
 		bt_send_moment=(Button) findViewById(R.id.add_moment_send);
+		relback = (RelativeLayout) findViewById(R.id.friend_add_moment_back);
 		bt_send_moment.setOnClickListener(new OnClickListener() {
 			
 			@Override
 			public void onClick(View v) {
 				new AddMoment().execute("share_text");				
 			}
-		});		
+		});
+		relback.setOnClickListener(new OnClickListener() {
+			
+			@Override
+			public void onClick(View v) {
+				Intent intent = new Intent(AddMomentActivity.this,FriendZoneActivity.class);
+				startActivity(intent);
+				finish();
+			}
+		});
 	}
 	
 	private class AddMoment extends AsyncTask<String, Void, Integer>{

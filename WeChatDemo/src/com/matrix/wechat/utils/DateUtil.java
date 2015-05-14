@@ -24,12 +24,26 @@ public class DateUtil {
 		return getCurrentTime(format);
 	}
 	
+	/**
+	 * @param date
+	 * @return yyyy-MM-dd HH:mm:ss
+	 */
 	public static String getParseTime(String date){
 		String year = date.substring(0, 10);
 		String daytime = date.substring(11,19);
 		String time = year+" "+daytime;
 		
 		return time;
+	}
+	//2015-05-12T11:19:26+08:00
+	/**
+	 * @param date
+	 * @return MM-dd
+	 */
+	public static String getDateTime(String date){
+		
+		String day = date.substring(5, 10);
+		return day;
 	}
 	
 	

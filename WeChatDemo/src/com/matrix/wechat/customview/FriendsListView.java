@@ -70,7 +70,7 @@ public class FriendsListView extends ListView implements OnScrollListener {
 	private boolean isLoading;
 	private boolean isLoadFull;
 
-	public static int pageSize = 10;
+	public static int pageSize = 6;
 
 	public FriendsListView(Context context) {
 		super(context);

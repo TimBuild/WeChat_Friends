@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import com.matrix.wechat.R;
+import com.matrix.wechat.model.CurrentMoment;
 import com.matrix.wechat.model.Moment;
 
 import android.content.Context;
@@ -15,7 +16,7 @@ import android.widget.TextView;
 
 public class MyMonentAdapter extends BaseAdapter{
 
-	private List<Moment> mList = new ArrayList<Moment>();
+	private List<CurrentMoment> mList = new ArrayList<CurrentMoment>();
 	private LayoutInflater mInflater;
 
 	
@@ -23,7 +24,7 @@ public class MyMonentAdapter extends BaseAdapter{
 		this.mInflater = LayoutInflater.from(context);
 	}
 
-	public void setData(List<Moment> list) {
+	public void setData(List<CurrentMoment> list) {
 		this.mList = list;
 	}
 	
@@ -51,16 +52,15 @@ public class MyMonentAdapter extends BaseAdapter{
 			holder = new ViewHolder();		
 			
 			holder.tv_moment_date=(TextView) convertView.findViewById(R.id.my_moment_date);
-			holder.tv_moment_date.setText(mList.get(position).getDate());
-			
 			holder.tv_moment_content=(TextView) convertView.findViewById(R.id.my_moment_content);
-			holder.tv_moment_content.setText(mList.get(position).getContent_text());
 			
 			convertView.setTag(holder);
 		}else{
 			holder = (ViewHolder) convertView.getTag();
 		}
 
+		holder.tv_moment_date.setText(mList.get(position).getDate());
+		holder.tv_moment_content.setText(mList.get(position).getContext());
 		return convertView;
 	}
 	
