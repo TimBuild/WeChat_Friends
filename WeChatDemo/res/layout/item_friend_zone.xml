@@ -76,6 +76,15 @@
                     android:text="昨天"
                     android:textColor="#808080"
                     android:textSize="14.0sp" />
+
+               <ImageView
+                    android:id="@+id/add_comment_img"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentRight="true"
+                    android:layout_marginRight="10dip"
+                    android:background="@drawable/feed_more"/>
+
             </RelativeLayout>
         </FrameLayout>
     </LinearLayout>

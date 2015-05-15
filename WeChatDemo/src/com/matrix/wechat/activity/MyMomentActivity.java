@@ -9,7 +9,6 @@ import com.matrix.wechat.customview.FriendsListView;
 import com.matrix.wechat.customview.FriendsListView.OnRefreshListener;
 import com.matrix.wechat.customview.FriendsListView.onLoadListener;
 import com.matrix.wechat.model.CurrentMoment;
-import com.matrix.wechat.model.Moment;
 import com.matrix.wechat.model.Share;
 import com.matrix.wechat.model.ShareWithComment;
 import com.matrix.wechat.utils.CacheUtil;
@@ -24,7 +23,6 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.view.View.OnClickListener;
-import android.widget.ListView;
 import android.widget.RelativeLayout;
 
 public class MyMomentActivity extends Activity implements OnRefreshListener,onLoadListener{

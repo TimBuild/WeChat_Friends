@@ -9,17 +9,22 @@ import com.matrix.wechat.utils.BitmapUtil;
 
 import android.content.Context;
 import android.graphics.Bitmap;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 public class FriendZoneAdapter extends BaseAdapter{
 
 	private List<Moment> mList = new ArrayList<Moment>();
 	private LayoutInflater mInflater;
+	private static String TAG = "FriendZoneAdapter";
 	
 	public FriendZoneAdapter(Context context) {
 		this.mInflater = LayoutInflater.from(context);
@@ -45,7 +50,7 @@ public class FriendZoneAdapter extends BaseAdapter{
 	}
 
 	@Override
-	public View getView(int position, View convertView, ViewGroup parent) {
+	public View getView(final int position, View convertView, ViewGroup parent) {
 		ViewHolder holder = null;
 		
 		if(convertView==null){
@@ -55,6 +60,7 @@ public class FriendZoneAdapter extends BaseAdapter{
 			holder.tv_username=(TextView) convertView.findViewById(R.id.moment_username);
 			holder.tv_content_text=(TextView) convertView.findViewById(R.id.moment_content);
 			holder.tv_date=(TextView) convertView.findViewById(R.id.moment_date);
+			holder.iv_addComment=(ImageView) convertView.findViewById(R.id.add_comment_img);
 			
 			convertView.setTag(holder);
 		}else{
@@ -64,6 +70,14 @@ public class FriendZoneAdapter extends BaseAdapter{
 		holder.tv_username.setText(mList.get(position).getUserName());
 		holder.tv_content_text.setText(mList.get(position).getContent_text());
 		holder.tv_date.setText(mList.get(position).getDate());
+		holder.iv_addComment.setOnClickListener(new OnClickListener() {
+			
+			@Override
+			public void onClick(View v) {
+				System.out.println("Add Comment");
+				Log.d(TAG, "position:"+position);
+			}
+		});
 
 		return convertView;
 	}
@@ -73,5 +87,6 @@ public class FriendZoneAdapter extends BaseAdapter{
 		public TextView tv_username;
 		public TextView tv_content_text;
 		public TextView tv_date;
+		public ImageView iv_addComment;
 	}
 }

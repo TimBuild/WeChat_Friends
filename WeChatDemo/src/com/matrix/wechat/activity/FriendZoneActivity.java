@@ -24,7 +24,6 @@ import com.matrix.wechat.widget.SquareImageView;
 import android.app.Activity;
 import android.os.AsyncTask;
 import android.os.Bundle;
-
 import android.os.Handler;
 import android.os.Message;
 import android.content.Intent;
@@ -32,8 +31,11 @@ import android.util.Log;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
+import android.widget.ImageButton;
+import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.RelativeLayout;
+import android.widget.Toast;
 
 public class FriendZoneActivity extends Activity implements OnClickListener,OnRefreshListener,
 		onLoadListener {
@@ -70,6 +72,7 @@ public class FriendZoneActivity extends Activity implements OnClickListener,OnRe
 		relBack.setOnClickListener(this);
 		iv_mymoment.setOnClickListener(this);
 		bt_addMoment.setOnClickListener(this);
+		
 		new FriendsZone().execute(FriendsListView.REFRESH);
 		
 	}
