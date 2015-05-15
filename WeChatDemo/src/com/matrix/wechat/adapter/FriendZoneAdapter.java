@@ -17,6 +17,7 @@ import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.ImageButton;
 import android.widget.ImageView;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -52,6 +53,7 @@ public class FriendZoneAdapter extends BaseAdapter{
 	@Override
 	public View getView(final int position, View convertView, ViewGroup parent) {
 		ViewHolder holder = null;
+//		final RelativeLayout frl_comment=(RelativeLayout) parent.findViewById(R.id.comment_layout);
 		
 		if(convertView==null){
 			convertView=mInflater.inflate(R.layout.item_friend_zone, null);
@@ -74,8 +76,9 @@ public class FriendZoneAdapter extends BaseAdapter{
 			
 			@Override
 			public void onClick(View v) {
-				System.out.println("Add Comment");
 				Log.d(TAG, "position:"+position);
+//				
+//				frl_comment.setVisibility(View.VISIBLE);
 			}
 		});
 
@@ -88,5 +91,6 @@ public class FriendZoneAdapter extends BaseAdapter{
 		public TextView tv_content_text;
 		public TextView tv_date;
 		public ImageView iv_addComment;
+		
 	}
 }

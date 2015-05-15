@@ -20,5 +20,5 @@
     <string name="character_load_full">Full Load</string>
     <string name="character_no_date">Full load</string>
     <string name="character_more">Loading</string>
-
+	<string name="send">Send</string>
 </resources>

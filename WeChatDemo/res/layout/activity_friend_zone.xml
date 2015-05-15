@@ -42,17 +42,35 @@
             android:textColor="#ffffff"
             android:textSize="20sp" />
     </RelativeLayout>
-
+    
+    
     <com.matrix.wechat.customview.FriendsListView
         android:id="@+id/friend_zone"
         android:layout_width="fill_parent"
-        android:layout_height="fill_parent"
+        android:layout_height="wrap_content"
         android:background="#fcfcfc"
         android:cacheColorHint="#00000000"
         android:divider="@drawable/line"
         android:footerDividersEnabled="false"
         android:headerDividersEnabled="false"
+        
+        android:layout_weight="1"
          >
     </com.matrix.wechat.customview.FriendsListView>
-
+   
+    <include layout="@layout/test_footer" />
+<!--<LinearLayout android:layout_height="0dp" 
+        android:layout_width="match_parent"
+        android:orientation="vertical"
+        android:background="#000000"
+        android:layout_weight="1" >
+        <Button
+            android:id="@+id/btregist"
+            android:layout_height="wrap_content"
+            android:layout_width="match_parent"
+            android:background="#000000"
+            android:layout_gravity="bottom"
+            android:text="Send"
+            android:textColor="#ffffff"/>
+        </LinearLayout>  -->    
 </LinearLayout>

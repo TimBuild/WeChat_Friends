@@ -41,7 +41,7 @@ public class FriendZoneActivity extends Activity implements OnClickListener,OnRe
 		onLoadListener {
 
 	private FriendsListView mListView;
-	private RelativeLayout frl_header_hidden;
+	private RelativeLayout frl_header_hidden,frl_comment;
 	private FriendZoneAdapter mfriendZoneAdapter;
 	private SquareImageView iv_mymoment;
 	private Button bt_addMoment;
@@ -68,6 +68,9 @@ public class FriendZoneActivity extends Activity implements OnClickListener,OnRe
 		relBack = (RelativeLayout) findViewById(R.id.friend_zone_back);
 		iv_mymoment = (SquareImageView) findViewById(R.id.friend_zone_icon);
 		bt_addMoment = (Button) findViewById(R.id.add_moment);
+		
+		frl_comment=(RelativeLayout) findViewById(R.id.comment_layout);
+		frl_comment.setVisibility(View.GONE);
 		
 		relBack.setOnClickListener(this);
 		iv_mymoment.setOnClickListener(this);
