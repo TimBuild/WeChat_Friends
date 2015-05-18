@@ -81,9 +81,7 @@ public class FriendZoneAdapter extends BaseAdapter{
 			@Override
 			public void onClick(View v) {
 				Log.d(TAG, "position:"+position);
-//				Button but = (Button) frl_comment.findViewById(R.id.custom_send);
-//				but.setText("aaaaaaaa");
-//				
+				
 				frl_comment.setVisibility(View.VISIBLE);
 			}
 		});

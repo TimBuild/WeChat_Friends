@@ -30,6 +30,7 @@ import android.content.Intent;
 import android.util.Log;
 import android.view.View;
 import android.view.View.OnClickListener;
+import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.ImageView;
@@ -59,6 +60,10 @@ public class FriendZoneActivity extends Activity implements OnClickListener,OnRe
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_friend_zone);
+		getWindow().setSoftInputMode(
+				WindowManager.LayoutParams.SOFT_INPUT_ADJUST_RESIZE
+				| WindowManager.LayoutParams.SOFT_INPUT_STATE_HIDDEN);
+		
 		mListView = (FriendsListView) findViewById(R.id.friend_zone);
 		mfriendZoneAdapter = new FriendZoneAdapter(this);
 		mListView.setonRefreshListener(this);
@@ -69,7 +74,7 @@ public class FriendZoneActivity extends Activity implements OnClickListener,OnRe
 		iv_mymoment = (SquareImageView) findViewById(R.id.friend_zone_icon);
 		bt_addMoment = (Button) findViewById(R.id.add_moment);
 		
-		frl_comment=(RelativeLayout) findViewById(R.id.comment_layout);
+		frl_comment=(RelativeLayout) findViewById(R.id.rl_friend_zone_bottom);
 		frl_comment.setVisibility(View.GONE);
 		mfriendZoneAdapter.setFooterView(frl_comment);
 		
