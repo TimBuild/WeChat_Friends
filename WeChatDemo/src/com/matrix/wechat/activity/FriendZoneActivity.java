@@ -30,8 +30,14 @@ import android.content.Intent;
 import android.util.Log;
 import android.view.View;
 import android.view.View.OnClickListener;
+import android.view.View.OnFocusChangeListener;
 import android.view.WindowManager;
+import android.widget.AbsListView.OnScrollListener;
+import android.widget.AdapterView;
+import android.widget.AdapterView.OnItemClickListener;
+import android.widget.AbsListView;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.ListView;
@@ -46,7 +52,7 @@ public class FriendZoneActivity extends Activity implements OnClickListener,OnRe
 	private FriendZoneAdapter mfriendZoneAdapter;
 	private SquareImageView iv_mymoment;
 	private Button bt_addMoment;
-	
+	private EditText ed_comment_content;
 	private RelativeLayout relBack;
 
 	private int friend_start = 0;
@@ -77,7 +83,33 @@ public class FriendZoneActivity extends Activity implements OnClickListener,OnRe
 		frl_comment=(RelativeLayout) findViewById(R.id.rl_friend_zone_bottom);
 		frl_comment.setVisibility(View.GONE);
 		mfriendZoneAdapter.setFooterView(frl_comment);
+		ed_comment_content=(EditText) findViewById(R.id.et_comment_content);
 		
+		mListView.setOnItemClickListener(new OnItemClickListener() {
+
+			@Override
+			public void onItemClick(AdapterView<?> parent, View view,
+					int position, long id) {
+				frl_comment.setVisibility(View.GONE);
+				ed_comment_content.setText("");
+			}
+		});
+		
+		mListView.setOnScrollListener(new OnScrollListener() {
+			
+			@Override
+			public void onScrollStateChanged(AbsListView view, int scrollState) {
+				frl_comment.setVisibility(View.GONE);
+				ed_comment_content.setText("");
+			}
+			
+			@Override
+			public void onScroll(AbsListView view, int firstVisibleItem,
+					int visibleItemCount, int totalItemCount) {
+
+			}
+		});
+
 		relBack.setOnClickListener(this);
 		iv_mymoment.setOnClickListener(this);
 		bt_addMoment.setOnClickListener(this);
