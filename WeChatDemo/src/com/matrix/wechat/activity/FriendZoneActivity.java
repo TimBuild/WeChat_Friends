@@ -71,6 +71,7 @@ public class FriendZoneActivity extends Activity implements OnClickListener,OnRe
 		
 		frl_comment=(RelativeLayout) findViewById(R.id.comment_layout);
 		frl_comment.setVisibility(View.GONE);
+		mfriendZoneAdapter.setFooterView(frl_comment);
 		
 		relBack.setOnClickListener(this);
 		iv_mymoment.setOnClickListener(this);

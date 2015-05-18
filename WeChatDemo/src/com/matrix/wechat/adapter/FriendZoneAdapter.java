@@ -15,6 +15,7 @@ import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
+import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
@@ -26,6 +27,7 @@ public class FriendZoneAdapter extends BaseAdapter{
 	private List<Moment> mList = new ArrayList<Moment>();
 	private LayoutInflater mInflater;
 	private static String TAG = "FriendZoneAdapter";
+	private RelativeLayout frl_comment;
 	
 	public FriendZoneAdapter(Context context) {
 		this.mInflater = LayoutInflater.from(context);
@@ -49,12 +51,14 @@ public class FriendZoneAdapter extends BaseAdapter{
 	public long getItemId(int position) {
 		return position;
 	}
+	
+	public void setFooterView(RelativeLayout layout){
+		this.frl_comment = layout;
+	}
 
 	@Override
 	public View getView(final int position, View convertView, ViewGroup parent) {
 		ViewHolder holder = null;
-//		final RelativeLayout frl_comment=(RelativeLayout) parent.findViewById(R.id.comment_layout);
-		
 		if(convertView==null){
 			convertView=mInflater.inflate(R.layout.item_friend_zone, null);
 			holder = new ViewHolder();		
@@ -77,8 +81,10 @@ public class FriendZoneAdapter extends BaseAdapter{
 			@Override
 			public void onClick(View v) {
 				Log.d(TAG, "position:"+position);
+//				Button but = (Button) frl_comment.findViewById(R.id.custom_send);
+//				but.setText("aaaaaaaa");
 //				
-//				frl_comment.setVisibility(View.VISIBLE);
+				frl_comment.setVisibility(View.VISIBLE);
 			}
 		});
 
