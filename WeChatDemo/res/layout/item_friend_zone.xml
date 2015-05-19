@@ -1,7 +1,7 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
+    android:layout_height="wrap_content"
     android:background="#ffffff"
     android:descendantFocusability="blocksDescendants"
     android:orientation="horizontal" >
@@ -43,19 +43,7 @@
                 android:text="朋友圈测试，朋友圈测试朋友圈测试朋友圈测试朋友圈测试朋友圈测试朋友圈测试"
                 android:textColor="#404040"
                 android:textSize="16.0sp" />
-        </RelativeLayout>
-
-       <com.matrix.wechat.widget.NoScrollGridView
-           android:id="@+id/gridView"
-           android:layout_width="fill_parent"
-           android:layout_height="wrap_content"
-           android:layout_marginLeft="10dp"
-           android:horizontalSpacing="1dp"
-           android:numColumns="3"
-           android:stretchMode="columnWidth"
-           android:verticalSpacing="1dp"
-           android:visibility="gone" />
-       
+        </RelativeLayout>    
 
         <FrameLayout
             android:layout_width="fill_parent"
@@ -87,5 +75,16 @@
 
             </RelativeLayout>
         </FrameLayout>
+        
+    <com.matrix.wechat.customview.CommentListView
+        	android:id="@+id/lv_comments"
+        	android:layout_width="match_parent"
+        	android:layout_height="wrap_content"
+        	android:background="#e6e6e6"
+        	android:textSize="12sp"
+        	android:textColor="#000000"
+        	android:divider="@null">
+    </com.matrix.wechat.customview.CommentListView>
+        
     </LinearLayout>
 </LinearLayout>

@@ -1,9 +1,12 @@
 package com.matrix.wechat.adapter;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import com.matrix.wechat.R;
+import com.matrix.wechat.customview.CommentListView;
 import com.matrix.wechat.model.Moment;
 import com.matrix.wechat.utils.BitmapUtil;
 
@@ -14,9 +17,12 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup;
+import android.widget.ArrayAdapter;
 import android.widget.BaseAdapter;
 import android.widget.ImageView;
+import android.widget.ListView;
 import android.widget.RelativeLayout;
+import android.widget.SimpleAdapter;
 import android.widget.TextView;
 
 public class FriendZoneAdapter extends BaseAdapter{
@@ -25,9 +31,14 @@ public class FriendZoneAdapter extends BaseAdapter{
 	private LayoutInflater mInflater;
 	private static String TAG = "FriendZoneAdapter";
 	private RelativeLayout frl_comment;
+	private Context context;
+	String[] strs = new String[] {"first", "second", "third", "fourth", "fifth"};
+	String[] reply_names = new String[] {"XX", "XX回复XX", "XX", "XX回复XX"};
+	String[] reply_contents=new String[]{"aaaaaaa","bbbbb","cccc","ddd"};
 	
 	public FriendZoneAdapter(Context context) {
 		this.mInflater = LayoutInflater.from(context);
+		this.context=context;
 	}
 
 	public void setData(List<Moment> list) {
@@ -65,7 +76,8 @@ public class FriendZoneAdapter extends BaseAdapter{
 			holder.tv_content_text=(TextView) convertView.findViewById(R.id.moment_content);
 			holder.tv_date=(TextView) convertView.findViewById(R.id.moment_date);
 			holder.iv_addComment=(ImageView) convertView.findViewById(R.id.add_comment_img);
-			
+			holder.lv_comments=(CommentListView) convertView.findViewById(R.id.lv_comments);
+						
 			convertView.setTag(holder);
 		}else{
 			holder = (ViewHolder) convertView.getTag();
@@ -83,7 +95,20 @@ public class FriendZoneAdapter extends BaseAdapter{
 				frl_comment.setVisibility(View.VISIBLE);
 			}
 		});
+		
+//		holder.lv_comments.setAdapter(new ArrayAdapter<String>(context, android.R.layout.simple_list_item_1,strs));
 	
+		List<Map<String, Object>> listems = new ArrayList<Map<String, Object>>();  
+		for (int i = 0; i < reply_names.length; i++) {  
+	            Map<String, Object> listem = new HashMap<String, Object>();  
+	            listem.put("reply_names", reply_names[i]+":");  
+	            listem.put("reply_contents", reply_contents[i]);   
+	            listems.add(listem);  
+	    }  
+		SimpleAdapter adapter=new SimpleAdapter(context, listems, R.layout.item_comment, 
+				new String[]{"reply_names","reply_contents"}, new int[] {R.id.tv_comment_reply,R.id.tv_comment_content});
+		holder.lv_comments.setAdapter(adapter);
+				    
 		return convertView;
 	}
 	
@@ -93,6 +118,9 @@ public class FriendZoneAdapter extends BaseAdapter{
 		public TextView tv_content_text;
 		public TextView tv_date;
 		public ImageView iv_addComment;
+		public CommentListView lv_comments;
 		
 	}
+	
+	
 }

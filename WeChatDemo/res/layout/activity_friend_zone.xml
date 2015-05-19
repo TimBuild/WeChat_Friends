@@ -50,7 +50,7 @@
         android:layout_height="wrap_content"
         android:background="#fcfcfc"
         android:cacheColorHint="#00000000"
-        android:divider="@drawable/line"
+        android:divider="@null"
         android:footerDividersEnabled="false"
         android:headerDividersEnabled="false"
         
