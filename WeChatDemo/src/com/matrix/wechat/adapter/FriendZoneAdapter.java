@@ -8,10 +8,17 @@ import java.util.Map;
 import com.matrix.wechat.R;
 import com.matrix.wechat.customview.CommentListView;
 import com.matrix.wechat.model.Moment;
+import com.matrix.wechat.model.User;
 import com.matrix.wechat.utils.BitmapUtil;
+import com.matrix.wechat.utils.CacheUtil;
+import com.matrix.wechat.web.service.FriendsZoneService;
+import com.matrix.wechat.web.service.PersonalInfoService;
+import com.matrix.wechat.web.service.factory.FriendsZoneFactory;
+import com.matrix.wechat.web.service.factory.PersonalInfoFactory;
 
 import android.content.Context;
 import android.graphics.Bitmap;
+import android.os.AsyncTask;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -19,6 +26,8 @@ import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.BaseAdapter;
+import android.widget.Button;
+import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.RelativeLayout;
@@ -32,9 +41,9 @@ public class FriendZoneAdapter extends BaseAdapter{
 	private static String TAG = "FriendZoneAdapter";
 	private RelativeLayout frl_comment;
 	private Context context;
-	String[] strs = new String[] {"first", "second", "third", "fourth", "fifth"};
-	String[] reply_names = new String[] {"XX", "XX回复XX", "XX", "XX回复XX"};
-	String[] reply_contents=new String[]{"aaaaaaa","bbbbb","cccc","ddd"};
+	private String comment_content="";
+	private int shareid=-1;
+	private long sharetoid=-1;
 	
 	public FriendZoneAdapter(Context context) {
 		this.mInflater = LayoutInflater.from(context);
@@ -77,7 +86,9 @@ public class FriendZoneAdapter extends BaseAdapter{
 			holder.tv_date=(TextView) convertView.findViewById(R.id.moment_date);
 			holder.iv_addComment=(ImageView) convertView.findViewById(R.id.add_comment_img);
 			holder.lv_comments=(CommentListView) convertView.findViewById(R.id.lv_comments);
-						
+			holder.et_comment_content=(EditText) frl_comment.findViewById(R.id.et_comment_content);	
+			holder.comment_content_send=(Button) frl_comment.findViewById(R.id.comment_content_send);
+	
 			convertView.setTag(holder);
 		}else{
 			holder = (ViewHolder) convertView.getTag();
@@ -86,29 +97,46 @@ public class FriendZoneAdapter extends BaseAdapter{
 		holder.tv_username.setText(mList.get(position).getUserName());
 		holder.tv_content_text.setText(mList.get(position).getContent_text());
 		holder.tv_date.setText(mList.get(position).getDate());
+		
 		holder.iv_addComment.setOnClickListener(new OnClickListener() {
-			
+
 			@Override
 			public void onClick(View v) {
 				Log.d(TAG, "position:"+position);
-				
+				shareid=mList.get(position).getMomentid();
 				frl_comment.setVisibility(View.VISIBLE);
 			}
 		});
+		 
+		holder.comment_content_send.setOnClickListener(new OnClickListener() {
+			ViewHolder holder=new ViewHolder();
+			User user=null;
+			@Override
+			public void onClick(View v) {
+				//获取输入框内容
+				holder.et_comment_content=(EditText) frl_comment.findViewById(R.id.et_comment_content);	
+				holder.comment_content_send=(Button) frl_comment.findViewById(R.id.comment_content_send);
+				comment_content=holder.et_comment_content.getText().toString();
+				
+				frl_comment.setVisibility(View.GONE);
+				holder.et_comment_content.setText("");
+				
+				new Thread(new Runnable() {
+					
+					@Override
+					public void run() {						
+						PersonalInfoService perInfoService=PersonalInfoFactory.getInstance();
+						user=perInfoService.getUserByUsername(mList.get(position).getUserName());
+						sharetoid=user.getUserid();
+						new AddComment().execute(Integer.toString(shareid),Long.toString(sharetoid),comment_content);
+					}
+				}).start();				
+			}
+		});
 		
-//		holder.lv_comments.setAdapter(new ArrayAdapter<String>(context, android.R.layout.simple_list_item_1,strs));
-	
-		List<Map<String, Object>> listems = new ArrayList<Map<String, Object>>();  
-		for (int i = 0; i < reply_names.length; i++) {  
-	            Map<String, Object> listem = new HashMap<String, Object>();  
-	            listem.put("reply_names", reply_names[i]+":");  
-	            listem.put("reply_contents", reply_contents[i]);   
-	            listems.add(listem);  
-	    }  
-		SimpleAdapter adapter=new SimpleAdapter(context, listems, R.layout.item_comment, 
-				new String[]{"reply_names","reply_contents"}, new int[] {R.id.tv_comment_reply,R.id.tv_comment_content});
+		CommentAdapter adapter=new CommentAdapter(context);
+		
 		holder.lv_comments.setAdapter(adapter);
-				    
 		return convertView;
 	}
 	
@@ -118,9 +146,25 @@ public class FriendZoneAdapter extends BaseAdapter{
 		public TextView tv_content_text;
 		public TextView tv_date;
 		public ImageView iv_addComment;
-		public CommentListView lv_comments;
-		
+		public CommentListView lv_comments;		
+		public EditText et_comment_content;
+		public Button comment_content_send;
 	}
 	
-	
+	private class AddComment extends AsyncTask<String, Void, Integer>{
+
+		private FriendsZoneService fZoneService;
+
+		@Override
+		protected Integer doInBackground(String... params) {
+			fZoneService = FriendsZoneFactory.getInstance();
+			Log.d(TAG, fZoneService.toString());
+			
+			int result;
+			result=fZoneService.comment(Integer.parseInt(params[0]), CacheUtil.getUser(CacheUtil.context).getUserid(),
+					Long.parseLong(params[1]), params[2]);
+			Log.d(TAG,"result"+result);
+			return result;
+		}	
+	}	
 }
