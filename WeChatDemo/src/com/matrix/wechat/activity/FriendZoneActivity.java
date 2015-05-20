@@ -50,7 +50,6 @@ public class FriendZoneActivity extends Activity implements OnClickListener,OnRe
 
 	private List<Moment> listMoments = new ArrayList<Moment>();
 	private List<Moment> listResult = new ArrayList<Moment>();
-	private List<Comment> listcomment=new ArrayList<Comment>();
 	private static final String TAG = "FriendZoneActivity";
 
 	@Override
@@ -132,7 +131,7 @@ public class FriendZoneActivity extends Activity implements OnClickListener,OnRe
 				Comment comment=new Comment();
 				comment.setUsername_reply(CacheUtil.getUser(CacheUtil.context).getUsername());
 				comment.setSharefromid(shaWithComment.getShareFriend().getSharefrom());
-				comment.setContent(shaWithComment.getShareFriend().getContent());
+				comment.setContent(shaWithComment.getShareComments().get(j).getContent());
 				PersonalInfoService perInfoService=PersonalInfoFactory.getInstance();
 				User user=perInfoService.getUserByUsername(comment.getUsername_reply());
 				comment.setSharetoid(user.getUserid());

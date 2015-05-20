@@ -7,7 +7,10 @@ import java.util.Map;
 
 import com.matrix.wechat.R;
 import com.matrix.wechat.customview.CommentListView;
+import com.matrix.wechat.model.Comment;
 import com.matrix.wechat.model.Moment;
+import com.matrix.wechat.model.Share;
+import com.matrix.wechat.model.ShareWithComment;
 import com.matrix.wechat.model.User;
 import com.matrix.wechat.utils.BitmapUtil;
 import com.matrix.wechat.utils.CacheUtil;
@@ -44,6 +47,7 @@ public class FriendZoneAdapter extends BaseAdapter{
 	private String comment_content="";
 	private int shareid=-1;
 	private long sharetoid=-1;
+	private List<Comment> listcomment=new ArrayList<Comment>();
 	
 	public FriendZoneAdapter(Context context) {
 		this.mInflater = LayoutInflater.from(context);
@@ -135,7 +139,9 @@ public class FriendZoneAdapter extends BaseAdapter{
 		});
 		
 		CommentAdapter adapter=new CommentAdapter(context);
-		
+//		listcomment=getListComments();
+		listcomment=mList.get(position).getCommentsList();
+		adapter.setData(listcomment);
 		holder.lv_comments.setAdapter(adapter);
 		return convertView;
 	}
@@ -167,4 +173,10 @@ public class FriendZoneAdapter extends BaseAdapter{
 			return result;
 		}	
 	}	
+	
+	private List<Comment> getListComments(int momentid){
+
+		List<Comment> list=new ArrayList<Comment>();
+		return list;
+	}
 }
