@@ -48,7 +48,7 @@ public class FriendZoneAdapter extends BaseAdapter{
 	private Context context;
 	private String comment_content="";
 	private int shareid=-1;
-	private long sharetoid=-1;
+	private int sharetoid=-1;
 	private List<Comment> listcomment;
 	
 	public FriendZoneAdapter(Context context) {
@@ -135,7 +135,7 @@ public class FriendZoneAdapter extends BaseAdapter{
 					public void run() {						
 						PersonalInfoService perInfoService=PersonalInfoFactory.getInstance();
 						user=perInfoService.getUserByUsername(mList.get(position).getUserName());
-						sharetoid=user.getUserid();
+						sharetoid=(int) user.getUserid();
 						new AddComment().execute(Integer.toString(shareid),Long.toString(sharetoid),comment_content);
 					}
 				}).start();				
@@ -143,7 +143,8 @@ public class FriendZoneAdapter extends BaseAdapter{
 		});
 		listcomment = new ArrayList<Comment>();
 		
-//		listcomment=getListComments();		listcomment=mList.get(position).getCommentsList();
+//		listcomment=getListComments();		
+		listcomment=mList.get(position).getCommentsList();
 		CommentAdapter adapter = new CommentAdapter(context);
 		if (listcomment != null) {
 			adapter.setData(listcomment);
@@ -151,7 +152,9 @@ public class FriendZoneAdapter extends BaseAdapter{
 			adapter.setData(new ArrayList<Comment>());
 		}
 		holder.lv_comments.setAdapter(adapter);
-		adapter.notifyDataSetChanged();		holder.lv_comments.setOnItemClickListener(new OnItemClickListener() {
+		adapter.notifyDataSetChanged();		
+		
+		holder.lv_comments.setOnItemClickListener(new OnItemClickListener() {
 			ViewHolder holder=new ViewHolder();
 			User user=null;
 			
@@ -175,7 +178,7 @@ public class FriendZoneAdapter extends BaseAdapter{
 						// 获取评论人的名字,根据名字获得id
 						PersonalInfoService perInfoService=PersonalInfoFactory.getInstance();
 						user=perInfoService.getUserByUsername(listcomment.get(position).getSharefromname());
-						sharetoid=user.getUserid();
+						sharetoid=(int) user.getUserid();
 						new AddComment().execute(Integer.toString(shareid),Long.toString(sharetoid),comment_content);
 					}
 				}).start();
