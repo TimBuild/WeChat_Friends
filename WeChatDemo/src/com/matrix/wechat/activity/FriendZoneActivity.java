@@ -2,47 +2,38 @@ package com.matrix.wechat.activity;
 
 import java.util.ArrayList;
 import java.util.List;
-import org.w3c.dom.ls.LSInput;
 import com.matrix.wechat.R;
 import com.matrix.wechat.adapter.FriendZoneAdapter;
 import com.matrix.wechat.customview.FriendsListView;
 import com.matrix.wechat.customview.FriendsListView.OnRefreshListener;
 import com.matrix.wechat.customview.FriendsListView.onLoadListener;
+import com.matrix.wechat.model.Comment;
 import com.matrix.wechat.model.Moment;
 import com.matrix.wechat.model.Share;
-import com.matrix.wechat.model.ShareFriend;
+import com.matrix.wechat.model.ShareComment;
 import com.matrix.wechat.model.ShareWithComment;
 import com.matrix.wechat.model.User;
 import com.matrix.wechat.utils.CacheUtil;
 import com.matrix.wechat.utils.DateUtil;
 import com.matrix.wechat.web.service.FriendsZoneService;
+import com.matrix.wechat.web.service.PersonalInfoService;
 import com.matrix.wechat.web.service.factory.FriendsZoneFactory;
+import com.matrix.wechat.web.service.factory.PersonalInfoFactory;
 import com.matrix.wechat.widget.SquareImageView;
 import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.os.AsyncTask;
 import android.os.Bundle;
-import android.os.Handler;
-import android.os.Message;
 import android.content.Intent;
 import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.View.OnClickListener;
-import android.view.View.OnFocusChangeListener;
 import android.view.View.OnTouchListener;
 import android.view.WindowManager;
-import android.widget.AbsListView.OnScrollListener;
-import android.widget.AdapterView;
-import android.widget.AdapterView.OnItemClickListener;
-import android.widget.AbsListView;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.ImageButton;
-import android.widget.ImageView;
-import android.widget.ListView;
 import android.widget.RelativeLayout;
-import android.widget.Toast;
 
 public class FriendZoneActivity extends Activity implements OnClickListener,OnRefreshListener,
 		onLoadListener {
@@ -85,17 +76,8 @@ public class FriendZoneActivity extends Activity implements OnClickListener,OnRe
 		mfriendZoneAdapter.setFooterView(frl_comment);
 		ed_comment_content=(EditText) findViewById(R.id.et_comment_content);
 		
-		mListView.setOnItemClickListener(new OnItemClickListener() {
 
-			@Override
-			public void onItemClick(AdapterView<?> parent, View view,
-					int position, long id) {
-				frl_comment.setVisibility(View.GONE);
-				ed_comment_content.setText("");
-			}
-		});
-		
-		mListView.setOnTouchListener(new OnTouchListener() {
+	mListView.setOnTouchListener(new OnTouchListener() {
 			
 			@SuppressLint("ClickableViewAccessibility")
 			@Override
@@ -104,10 +86,7 @@ public class FriendZoneActivity extends Activity implements OnClickListener,OnRe
 				ed_comment_content.setText("");
 				return false;
 			}
-		});
-		
-
-		relBack.setOnClickListener(this);
+		});		relBack.setOnClickListener(this);
 		iv_mymoment.setOnClickListener(this);
 		bt_addMoment.setOnClickListener(this);
 		
@@ -118,16 +97,35 @@ public class FriendZoneActivity extends Activity implements OnClickListener,OnRe
 	private List<Moment> getListMoments(Share share) {
 
 		List<Moment> lists = new ArrayList<Moment>();
+		List<Comment> commentList=new ArrayList<Comment>();
 //		ShareWithComment shaWithComment : share.shareWithComment
+		
 		for (int i = 0;i<share.shareWithComment.size()-1;i++) {
 			ShareWithComment shaWithComment = share.shareWithComment.get(i);
 			Moment moment = new Moment();
+			moment.setMomentid(shaWithComment.getShareFriend().getShareid());
 			moment.setPicture(shaWithComment.getUser().getPicture());
 			String date = shaWithComment.getShareFriend().getDate();
 			String time = DateUtil.getParseTime(date);
-			moment.setUserName(shaWithComment.getUser().getNickname());
+			moment.setUserName(shaWithComment.getUser().getUsername());
 			moment.setDate(time);
 			moment.setContent_text(shaWithComment.getShareFriend().getContent());
+
+			List<ShareComment> commentsList=shaWithComment.getShareComments();
+			if(commentsList!=null){
+				for(int j=0;j<shaWithComment.getShareComments().size()-1;j++){
+				Comment comment=new Comment();
+				comment.setUsername_reply(CacheUtil.getUser(CacheUtil.context).getUsername());
+				comment.setSharefromid(shaWithComment.getShareFriend().getSharefrom());
+				comment.setContent(shaWithComment.getShareComments().get(j).getContent());
+				PersonalInfoService perInfoService=PersonalInfoFactory.getInstance();
+				User user=perInfoService.getUserByUsername(comment.getUsername_reply());
+				comment.setSharetoid(user.getUserid());
+				commentList.add(comment);
+				}
+			}
+							
+			moment.setCommentsList(commentList);
 			lists.add(moment);
 		}
 		Log.d(TAG, "share.shareWithComment.size():"+share.shareWithComment.size());

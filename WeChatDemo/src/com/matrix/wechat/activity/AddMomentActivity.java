@@ -73,9 +73,9 @@ public class AddMomentActivity extends Activity{
 			super.onPostExecute(result);
 			
 			if(result==-1){
-				Toast.makeText(AddMomentActivity.this, "发布失败", Toast.LENGTH_SHORT).show();
+				Toast.makeText(AddMomentActivity.this, "Failed", Toast.LENGTH_SHORT).show();
 			}else{
-				Toast.makeText(AddMomentActivity.this, "发布成功"+result, Toast.LENGTH_SHORT).show();
+				Toast.makeText(AddMomentActivity.this, "Success"+result, Toast.LENGTH_SHORT).show();
 				et_moment_content.setText("");
 				Intent intent=new Intent();
 				intent.setClass(AddMomentActivity.this, FriendZoneActivity.class);

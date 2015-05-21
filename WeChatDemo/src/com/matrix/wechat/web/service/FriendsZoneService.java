@@ -4,6 +4,7 @@ import retrofit.http.GET;
 import retrofit.http.Query;
 
 import com.matrix.wechat.model.Share;
+import com.matrix.wechat.model.User;
 
 public interface FriendsZoneService {
 
@@ -15,4 +16,7 @@ public interface FriendsZoneService {
 	
 	@GET("/getSharesByUserid")
 	Share getSharesByUserid(@Query("userid") long userid,@Query("offset") Integer offset,@Query("num") Integer num);
+
+	@GET("/comment")
+	Integer comment(@Query("shareid") int shareid,@Query("fromid") long fromid,@Query("toid") long toid,@Query("content") String content);
 }
