@@ -174,7 +174,7 @@ public class FriendZoneAdapter extends BaseAdapter{
 					public void run() {
 						// 获取评论人的名字,根据名字获得id
 						PersonalInfoService perInfoService=PersonalInfoFactory.getInstance();
-						user=perInfoService.getUserByUsername(listcomment.get(position).getUsername_reply());
+						user=perInfoService.getUserByUsername(listcomment.get(position).getSharefromname());
 						sharetoid=user.getUserid();
 						new AddComment().execute(Integer.toString(shareid),Long.toString(sharetoid),comment_content);
 					}
