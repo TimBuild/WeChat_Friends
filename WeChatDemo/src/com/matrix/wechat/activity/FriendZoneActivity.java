@@ -132,6 +132,7 @@ public class FriendZoneActivity extends Activity implements OnClickListener,OnRe
 				Log.d(TAG, "shareCommentsLists:"+shareCommentsLists.toString());
 				for(int j=0;j<shareCommentsLists.size()-1;j++){
 					Comment comment=new Comment();
+					comment.setShareid(shaWithComment.getShareComments().get(j).getShareid());
 					comment.setSharefromname(shaWithComment.getCommentUsers().get(j).getFrom_userName());
 					comment.setSharetoname(shaWithComment.getCommentUsers().get(j).getTo_userName());
 					comment.setSharefromid(shaWithComment.getShareComments().get(j).getFromid());

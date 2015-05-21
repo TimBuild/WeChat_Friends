@@ -91,6 +91,16 @@
                 android:layout_centerVertical="true"
                 android:background="@drawable/chat_send_btn"
                 android:text="Send" />
+            
+            <Button
+                android:id="@+id/comment_content_send_item"
+                android:layout_width="60dp"
+                android:layout_height="40dp"
+                android:layout_alignParentRight="true"
+                android:layout_centerVertical="true"
+                android:background="@drawable/chat_send_btn"
+                android:visibility="gone"
+                android:text="Send" />
 
             
         </RelativeLayout>
