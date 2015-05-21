@@ -27,7 +27,8 @@ public class CommentAdapter extends BaseAdapter{
 	}
 
 	public void setData(List<Comment> list) {
-		this.mList = list;
+		this.mList.clear();
+		this.mList.addAll(list);
 	}
 	
 	@Override
@@ -60,7 +61,8 @@ public class CommentAdapter extends BaseAdapter{
 			holder = (ViewHolder) convertView.getTag();
 		}
 		
-		holder.tv_comment_reply.setText(mList.get(position).getUsername_reply());
+		
+		holder.tv_comment_reply.setText(mList.get(position).getSharefromname());
 		holder.tv_comment_content.setText(mList.get(position).getContent());
 		
 		return convertView;

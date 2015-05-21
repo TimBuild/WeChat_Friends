@@ -112,7 +112,7 @@ public class FriendZoneActivity extends Activity implements OnClickListener,OnRe
 	private List<Moment> getListMoments(Share share) {
 
 		List<Moment> lists = new ArrayList<Moment>();
-		List<Comment> commentList=new ArrayList<Comment>();
+		
 //		ShareWithComment shaWithComment : share.shareWithComment
 		
 		for (int i = 0;i<share.shareWithComment.size()-1;i++) {
@@ -126,24 +126,26 @@ public class FriendZoneActivity extends Activity implements OnClickListener,OnRe
 			moment.setDate(time);
 			moment.setContent_text(shaWithComment.getShareFriend().getContent());
 
-			List<ShareComment> commentsList=shaWithComment.getShareComments();
-			if(commentsList!=null){
-				for(int j=0;j<shaWithComment.getShareComments().size()-1;j++){
-				Comment comment=new Comment();
-				comment.setUsername_reply(CacheUtil.getUser(CacheUtil.context).getUsername());
-				comment.setSharefromid(shaWithComment.getShareFriend().getSharefrom());
-				comment.setContent(shaWithComment.getShareComments().get(j).getContent());
-				PersonalInfoService perInfoService=PersonalInfoFactory.getInstance();
-				User user=perInfoService.getUserByUsername(comment.getUsername_reply());
-				comment.setSharetoid(user.getUserid());
-				commentList.add(comment);
+			List<ShareComment> shareCommentsLists=shaWithComment.getShareComments();
+			if(shareCommentsLists!=null){
+				List<Comment> commentLists=new ArrayList<Comment>();
+				Log.d(TAG, "shareCommentsLists:"+shareCommentsLists.toString());
+				for(int j=0;j<shareCommentsLists.size()-1;j++){
+					Comment comment=new Comment();
+					comment.setSharefromname(shaWithComment.getCommentUsers().get(j).getFrom_userName());
+					comment.setSharetoname(shaWithComment.getCommentUsers().get(j).getTo_userName());
+					comment.setSharefromid(shaWithComment.getShareComments().get(j).getFromid());
+					comment.setSharetoid(shaWithComment.getShareComments().get(j).getToid());
+					comment.setContent(shaWithComment.getShareComments().get(j).getContent());
+					commentLists.add(comment);
 				}
+				Log.d(TAG, i+" commentLists:"+commentLists.toString());			
+				moment.setCommentsList(commentLists);
 			}
-							
-			moment.setCommentsList(commentList);
 			lists.add(moment);
 		}
-		Log.d(TAG, "share.shareWithComment.size():"+share.shareWithComment.size());
+		Log.d(TAG, "lists:-->"+lists.toString());
+//		Log.d(TAG, "share.shareWithComment.size():"+share.shareWithComment.size());
 
 		return lists;
 	}
