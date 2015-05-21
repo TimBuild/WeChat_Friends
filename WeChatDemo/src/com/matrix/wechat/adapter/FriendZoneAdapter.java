@@ -49,7 +49,7 @@ public class FriendZoneAdapter extends BaseAdapter{
 	private String comment_content="";
 	private int shareid=-1;
 	private long sharetoid=-1;
-	private List<Comment> listcomment=new ArrayList<Comment>();
+	private List<Comment> listcomment;
 	
 	public FriendZoneAdapter(Context context) {
 		this.mInflater = LayoutInflater.from(context);
@@ -57,7 +57,8 @@ public class FriendZoneAdapter extends BaseAdapter{
 	}
 
 	public void setData(List<Moment> list) {
-		this.mList = list;
+		this.mList.clear();
+		this.mList.addAll(list);
 	}
 	
 	@Override
@@ -140,13 +141,17 @@ public class FriendZoneAdapter extends BaseAdapter{
 				}).start();				
 			}
 		});
+		listcomment = new ArrayList<Comment>();
 		
-		CommentAdapter adapter=new CommentAdapter(context);
-		listcomment=mList.get(position).getCommentsList();
-		adapter.setData(listcomment);
+//		listcomment=getListComments();		listcomment=mList.get(position).getCommentsList();
+		CommentAdapter adapter = new CommentAdapter(context);
+		if (listcomment != null) {
+			adapter.setData(listcomment);
+		} else{
+			adapter.setData(new ArrayList<Comment>());
+		}
 		holder.lv_comments.setAdapter(adapter);
-		
-		holder.lv_comments.setOnItemClickListener(new OnItemClickListener() {
+		adapter.notifyDataSetChanged();		holder.lv_comments.setOnItemClickListener(new OnItemClickListener() {
 			ViewHolder holder=new ViewHolder();
 			User user=null;
 			
@@ -175,8 +180,7 @@ public class FriendZoneAdapter extends BaseAdapter{
 					}
 				}).start();
 			}
-		});
-		return convertView;
+		});		return convertView;
 	}
 	
 	static class ViewHolder{
