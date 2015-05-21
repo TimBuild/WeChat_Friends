@@ -2,9 +2,7 @@ package com.matrix.wechat.activity;
 
 import java.util.ArrayList;
 import java.util.List;
-
 import org.w3c.dom.ls.LSInput;
-
 import com.matrix.wechat.R;
 import com.matrix.wechat.adapter.FriendZoneAdapter;
 import com.matrix.wechat.customview.FriendsListView;
@@ -20,7 +18,7 @@ import com.matrix.wechat.utils.DateUtil;
 import com.matrix.wechat.web.service.FriendsZoneService;
 import com.matrix.wechat.web.service.factory.FriendsZoneFactory;
 import com.matrix.wechat.widget.SquareImageView;
-
+import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -28,9 +26,11 @@ import android.os.Handler;
 import android.os.Message;
 import android.content.Intent;
 import android.util.Log;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.View.OnFocusChangeListener;
+import android.view.View.OnTouchListener;
 import android.view.WindowManager;
 import android.widget.AbsListView.OnScrollListener;
 import android.widget.AdapterView;
@@ -95,20 +95,17 @@ public class FriendZoneActivity extends Activity implements OnClickListener,OnRe
 			}
 		});
 		
-		mListView.setOnScrollListener(new OnScrollListener() {
+		mListView.setOnTouchListener(new OnTouchListener() {
 			
+			@SuppressLint("ClickableViewAccessibility")
 			@Override
-			public void onScrollStateChanged(AbsListView view, int scrollState) {
+			public boolean onTouch(View v, MotionEvent event) {
 				frl_comment.setVisibility(View.GONE);
 				ed_comment_content.setText("");
-			}
-			
-			@Override
-			public void onScroll(AbsListView view, int firstVisibleItem,
-					int visibleItemCount, int totalItemCount) {
-
+				return false;
 			}
 		});
+		
 
 		relBack.setOnClickListener(this);
 		iv_mymoment.setOnClickListener(this);
@@ -159,6 +156,7 @@ public class FriendZoneActivity extends Activity implements OnClickListener,OnRe
 				share = fZoneService.getAllZoneList(
 						CacheUtil.getUser(CacheUtil.context).getUserid(),
 						friend_start, friend_count);
+				Log.d(TAG, "share-->"+share);
 				if (share != null) {
 					result = "REFRESH";
 					listMoments = getListMoments(share);
@@ -178,6 +176,7 @@ public class FriendZoneActivity extends Activity implements OnClickListener,OnRe
 				share = fZoneService.getAllZoneList(
 						CacheUtil.getUser(CacheUtil.context).getUserid(),
 						friend_start, friend_count);
+				Log.d(TAG, "share-->"+share);
 				// Log.d(TAG, "onLoad:share.toString:"+share.toString());
 				if (share != null) {
 					result = "LOAD";
@@ -204,6 +203,7 @@ public class FriendZoneActivity extends Activity implements OnClickListener,OnRe
 			// mListView.setResultSize(listMoments.size());
 			// Log.d(TAG, "lists:--->" + listMoments.toString());
 			// Log.d(TAG, "size--->" + listMoments.size());
+			Log.d(TAG, "result:"+result);
 			if (result.equals("RefreshError")) {
 				// mListView.setResultSize(0);
 				mListView.onRefreshComplete();
