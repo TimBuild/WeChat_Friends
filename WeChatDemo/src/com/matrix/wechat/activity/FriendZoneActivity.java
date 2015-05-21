@@ -2,6 +2,7 @@ package com.matrix.wechat.activity;
 
 import java.util.ArrayList;
 import java.util.List;
+
 import com.matrix.wechat.R;
 import com.matrix.wechat.adapter.FriendZoneAdapter;
 import com.matrix.wechat.customview.FriendsListView;
@@ -20,6 +21,7 @@ import com.matrix.wechat.web.service.PersonalInfoService;
 import com.matrix.wechat.web.service.factory.FriendsZoneFactory;
 import com.matrix.wechat.web.service.factory.PersonalInfoFactory;
 import com.matrix.wechat.widget.SquareImageView;
+
 import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.os.AsyncTask;
@@ -31,6 +33,8 @@ import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.View.OnTouchListener;
 import android.view.WindowManager;
+import android.widget.AdapterView;
+import android.widget.AdapterView.OnItemClickListener;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.RelativeLayout;
@@ -76,9 +80,19 @@ public class FriendZoneActivity extends Activity implements OnClickListener,OnRe
 		mfriendZoneAdapter.setFooterView(frl_comment);
 		ed_comment_content=(EditText) findViewById(R.id.et_comment_content);
 		
+		mListView.setOnItemClickListener(new OnItemClickListener() {
 
-	mListView.setOnTouchListener(new OnTouchListener() {
-			
+
+			@Override
+			public void onItemClick(AdapterView<?> parent, View view,
+					int position, long id) {
+				frl_comment.setVisibility(View.GONE);
+				ed_comment_content.setText("");				
+			}
+		});
+
+		mListView.setOnTouchListener(new OnTouchListener() {
+
 			@SuppressLint("ClickableViewAccessibility")
 			@Override
 			public boolean onTouch(View v, MotionEvent event) {
@@ -86,7 +100,8 @@ public class FriendZoneActivity extends Activity implements OnClickListener,OnRe
 				ed_comment_content.setText("");
 				return false;
 			}
-		});		relBack.setOnClickListener(this);
+		});	
+		relBack.setOnClickListener(this);
 		iv_mymoment.setOnClickListener(this);
 		bt_addMoment.setOnClickListener(this);
 		
