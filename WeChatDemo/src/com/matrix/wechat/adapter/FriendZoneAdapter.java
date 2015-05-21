@@ -27,6 +27,8 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
+import android.widget.AdapterView.OnItemClickListener;
 import android.widget.ArrayAdapter;
 import android.widget.BaseAdapter;
 import android.widget.Button;
@@ -101,6 +103,7 @@ public class FriendZoneAdapter extends BaseAdapter{
 		holder.tv_username.setText(mList.get(position).getUserName());
 		holder.tv_content_text.setText(mList.get(position).getContent_text());
 		holder.tv_date.setText(mList.get(position).getDate());
+		shareid=mList.get(position).getMomentid();
 		
 		holder.iv_addComment.setOnClickListener(new OnClickListener() {
 
@@ -139,10 +142,40 @@ public class FriendZoneAdapter extends BaseAdapter{
 		});
 		
 		CommentAdapter adapter=new CommentAdapter(context);
-//		listcomment=getListComments();
 		listcomment=mList.get(position).getCommentsList();
 		adapter.setData(listcomment);
 		holder.lv_comments.setAdapter(adapter);
+		
+		holder.lv_comments.setOnItemClickListener(new OnItemClickListener() {
+			ViewHolder holder=new ViewHolder();
+			User user=null;
+			
+			@Override
+			public void onItemClick(AdapterView<?> parent, View view,
+					final int position, long id) {
+				frl_comment.setVisibility(View.VISIBLE);
+				
+				//获取输入框内容
+				holder.et_comment_content=(EditText) frl_comment.findViewById(R.id.et_comment_content);	
+				holder.comment_content_send=(Button) frl_comment.findViewById(R.id.comment_content_send);
+				comment_content=holder.et_comment_content.getText().toString();
+				
+				frl_comment.setVisibility(View.GONE);
+				holder.et_comment_content.setText("");
+				
+				new Thread(new Runnable() {
+					
+					@Override
+					public void run() {
+						// 获取评论人的名字,根据名字获得id
+						PersonalInfoService perInfoService=PersonalInfoFactory.getInstance();
+						user=perInfoService.getUserByUsername(listcomment.get(position).getUsername_reply());
+						sharetoid=user.getUserid();
+						new AddComment().execute(Integer.toString(shareid),Long.toString(sharetoid),comment_content);
+					}
+				}).start();
+			}
+		});
 		return convertView;
 	}
 	
@@ -173,10 +206,4 @@ public class FriendZoneAdapter extends BaseAdapter{
 			return result;
 		}	
 	}	
-	
-	private List<Comment> getListComments(int momentid){
-
-		List<Comment> list=new ArrayList<Comment>();
-		return list;
-	}
 }
