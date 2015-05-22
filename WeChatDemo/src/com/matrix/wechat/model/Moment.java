@@ -1,5 +1,6 @@
 package com.matrix.wechat.model;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class Moment {
@@ -65,6 +66,9 @@ public class Moment {
 	}
 
 	public List<Comment> getCommentsList() {
+		if(commentsList == null){
+			commentsList = new ArrayList<Comment>();
+		}
 		return commentsList;
 	}
 

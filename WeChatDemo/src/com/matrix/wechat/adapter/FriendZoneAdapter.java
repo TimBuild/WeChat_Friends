@@ -6,6 +6,9 @@ import java.util.List;
 import android.app.Dialog;
 import android.content.Context;
 import android.os.AsyncTask;
+import android.os.Handler;
+import android.os.Looper;
+import android.os.Message;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -45,14 +48,17 @@ public class FriendZoneAdapter extends BaseAdapter{
 	private String comment_content="";
 	private int shareid;
 	private int sharetoid=-1;
-	private List<Comment> listcomment;
-	
+	private MyHandler handler;
+	private FriendsListView friendsListView;
 	
 	public FriendZoneAdapter(Context context) {
 		this.mInflater = LayoutInflater.from(context);
 		this.context=context;
 	}
 
+	public void setFriendListView(FriendsListView listview){
+		this.friendsListView = listview;
+	}
 	public void setData(List<Moment> list) {
 		this.mList.clear();
 		this.mList.addAll(list);
@@ -114,46 +120,28 @@ public class FriendZoneAdapter extends BaseAdapter{
 			}
 		});
 		
+		List<Comment> listcomment;
 		listcomment = new ArrayList<Comment>();
-		
+		Log.d(TAG, "test  test");
 //		listcomment=getListComments();		
 		listcomment=mList.get(position).getCommentsList();
 		CommentAdapter adapter = new CommentAdapter(context);
-		if (listcomment != null) {
+//		if (listcomment != null) {
 			adapter.setData(listcomment);
-		} else{
-			adapter.setData(new ArrayList<Comment>());
-		}
+//		} else{
+//			listcomment = new ArrayList<Comment>();
+//			adapter.setData(listcomment);
+//		}
+		
 		holder.lv_comments.setAdapter(adapter);
-		adapter.notifyDataSetChanged();		
+		adapter.notifyDataSetChanged();	
+//		handler = new MyHandler(adapter, listcomment);
+		//.....................
+		holder.comment_content_send.setOnClickListener(new OnClickListenerTest(frl_comment, mList.get(position).getUserName(),adapter,mList.get(position).getCommentsList()));
+		holder.lv_comments.setOnItemClickListener(new OnItemClickListenerTest(holder.lv_comments,frl_comment,adapter,listcomment));
 		
-		holder.comment_content_send.setOnClickListener(new OnClickListener() {
-//			ViewHolder holder=new ViewHolder();
-			User user=null;
-			@Override
-			public void onClick(View v) {
-				//获取输入框内容
-				EditText et_comment_content=(EditText) frl_comment.findViewById(R.id.et_comment_content);	
-//				holder.comment_content_send=(Button) frl_comment.findViewById(R.id.comment_content_send);
-				comment_content=et_comment_content.getText().toString();
-				
-				frl_comment.setVisibility(View.GONE);
-				et_comment_content.setText("");
-				new Thread(new Runnable() {
-					
-					@Override
-					public void run() {						
-						PersonalInfoService perInfoService=PersonalInfoFactory.getInstance();
-						user=perInfoService.getUserByUsername(mList.get(position).getUserName());
-						sharetoid=(int) user.getUserid();
-						Log.d(TAG, "shareid:after:"+shareid);
-						new AddComment().execute(Integer.toString(shareid),Long.toString(sharetoid),comment_content);
-					}
-				}).start();				
-			}
-		});
-		holder.lv_comments.setOnItemClickListener(new OnItemClickListenerTest(holder.lv_comments,frl_comment));
 		
+//		friendsListView.setOnItemClickListener(new OnItemClickListenerFriend(holder.lv_comments,frl_comment,adapter,listcomment));
 		
 		return convertView;
 	}
@@ -172,6 +160,17 @@ public class FriendZoneAdapter extends BaseAdapter{
 	private class AddComment extends AsyncTask<String, Void, Integer>{
 
 		private FriendsZoneService fZoneService;
+		private CommentAdapter commentAdapter;
+		private List<Comment> listComments;
+		private Comment comment;
+		
+		public AddComment(CommentAdapter commentAdapter,
+				List<Comment> listComments,Comment comment) {
+			super();
+			this.commentAdapter = commentAdapter;
+			this.listComments = listComments;
+			this.comment = comment;
+		}
 
 		@Override
 		protected Integer doInBackground(String... params) {
@@ -191,20 +190,105 @@ public class FriendZoneAdapter extends BaseAdapter{
 			if(result!=-1){
 				//添加到list数据中
 				Toast.makeText(context, "comment success", Toast.LENGTH_SHORT).show();
+//				comment.setShareid(result);
+//				listComments.add(comment);
+				Message msg = Message.obtain();
+				msg.what = 2;
+				msg.obj = listComments;
+				
+				//????????????????????????将信息传给handler
+				handler.sendMessage(msg);
 			}else{
 				Toast.makeText(context, "comment failed", Toast.LENGTH_SHORT).show();
 			}
 		}
 	}	
 	
-	class OnItemClickListenerTest implements OnItemClickListener{
+	/**
+	 * 自定义click事件监听
+	 *
+	 */
+	private class OnClickListenerTest implements OnClickListener{
+
+		private RelativeLayout frl_comment;
+		private String userName;
+		private CommentAdapter commentAdapter;
+		private List<Comment> listComments;
+		
+		
+		
+		public OnClickListenerTest(RelativeLayout frl_comment, String userName,
+				CommentAdapter commentAdapter, List<Comment> listComments) {
+			super();
+			this.frl_comment = frl_comment;
+			this.userName = userName;
+			this.commentAdapter = commentAdapter;
+			this.listComments = listComments;
+		}
+		User user=null;
+		@Override
+		public void onClick(View v) {
+			handler = new MyHandler(commentAdapter, listComments);
+			//获取输入框内容
+			EditText et_comment_content=(EditText) frl_comment.findViewById(R.id.et_comment_content);	
+			comment_content=et_comment_content.getText().toString();
+			
+			frl_comment.setVisibility(View.GONE);
+			et_comment_content.setText("");
+			
+			/*if(listComments.size() == 0){
+				listComments = new ArrayList<Comment>();
+			}*/
+			new Thread(new Runnable() {
+				@Override
+				public void run() {				
+					
+					PersonalInfoService perInfoService=PersonalInfoFactory.getInstance();
+					user=perInfoService.getUserByUsername(userName);
+					sharetoid=(int) user.getUserid();
+					
+					Log.d(TAG, "shareid:after:"+shareid);
+					Log.d(TAG, "OnClickListenerTest:listComments:"+listComments.toString());
+					if(!comment_content.equals("")||comment_content!=null){
+						Comment comment_add = new Comment();
+						
+						comment_add.setContent(comment_content);
+						comment_add.setSharefromname(CacheUtil.getUser(CacheUtil.context).getUsername());
+						comment_add.setSharefromid((int)CacheUtil.getUser(CacheUtil.context).getUserid());
+						comment_add.setSharetoid((int)user.getUserid());
+						comment_add.setSharetoname(user.getUsername());
+						comment_add.setShareid(shareid);
+						
+						listComments.add(comment_add);
+						Log.d(TAG, "listComments.toString():"+listComments.toString());
+						new AddComment(commentAdapter,listComments,comment_add).execute(Integer.toString(shareid),Long.toString(sharetoid),comment_content);
+					}
+				}
+			}).start();	
+		}
+	}
+	
+	/**
+	 * 自定义OnItemClickListener事件监听
+	 *
+	 */
+	private class OnItemClickListenerTest implements OnItemClickListener{
 		private CommentListView listView;
 		private RelativeLayout frl_comment;
-		public OnItemClickListenerTest(CommentListView listView,RelativeLayout layout) {
+		private CommentAdapter commentAdapter;
+		private List<Comment> listComments;
+		
+
+		public OnItemClickListenerTest(CommentListView listView,
+				RelativeLayout frl_comment, CommentAdapter commentAdapter,
+				List<Comment> listcComments) {
 			super();
 			this.listView = listView;
-			this.frl_comment = layout;
+			this.frl_comment = frl_comment;
+			this.commentAdapter = commentAdapter;
+			this.listComments = listcComments;
 		}
+
 
 		@Override
 		public void onItemClick(AdapterView<?> parent, View view, final int position,
@@ -228,6 +312,7 @@ public class FriendZoneAdapter extends BaseAdapter{
 				
 				@Override
 				public void onClick(View v) {
+					handler = new MyHandler(commentAdapter, listComments);
 					et_button.setVisibility(View.GONE);
 					et_button_before.setVisibility(View.VISIBLE);
 					frl_comment.setVisibility(View.GONE);
@@ -245,7 +330,16 @@ public class FriendZoneAdapter extends BaseAdapter{
 							sharetoid=(int) user.getUserid();
 							Log.d(TAG, "username-->"+comment_content.toString());
 							if(comment_content.equals("")||comment_content!=null){
-								new AddComment().execute(Integer.toString(comment.getShareid()),Integer.toString(sharetoid),comment_content);
+								Comment comment_add = new Comment();
+								comment_add.setSharefromname(CacheUtil.getUser(CacheUtil.context).getUsername());
+								comment_add.setSharefromid((int)(CacheUtil.getUser(CacheUtil.context).getUserid()));
+								comment_add.setSharetoname(user.getUsername());
+								comment_add.setSharetoid((int)(user.getUserid()));
+								comment_add.setContent(comment_content);
+								comment_add.setShareid(comment.getShareid());
+								listComments.add(comment_add);
+								Log.d(TAG, "listComments.toString():"+listComments.toString());
+								new AddComment(commentAdapter,listComments,comment_add).execute(Integer.toString(comment.getShareid()),Integer.toString(sharetoid),comment_content);
 							}
 						}
 					}).start();
@@ -255,5 +349,40 @@ public class FriendZoneAdapter extends BaseAdapter{
 		
 	}
 	
-	
+	/**
+	 * 自定义Handler
+	 *
+	 */
+	private class MyHandler extends Handler {
+		private CommentAdapter commentAdapter;
+		private List<Comment> listComments;
+		
+		public MyHandler() {
+		}
+
+		public MyHandler(CommentAdapter commentAdapter,
+				List<Comment> listComments) {
+			super();
+			this.commentAdapter = commentAdapter;
+			this.listComments = listComments;
+		}
+
+		public MyHandler(Looper looper) {
+			super(looper);
+		}
+
+		@Override
+		public void handleMessage(Message msg) {
+			switch (msg.what) {
+			case 2:
+				List<Comment> lists = (List<Comment>) msg.obj;
+				Log.d(TAG, "Handler-->lists:"+lists);
+				Log.d(TAG, "commentAdapter.getmList(): "+commentAdapter.getmList());
+				commentAdapter.setData(lists);
+//				commentAdapter.getmList().add(lists.get(lists.size()-1));
+				commentAdapter.notifyDataSetChanged();
+				break;
+			}
+		}
+	}
 }

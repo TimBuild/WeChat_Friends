@@ -4,7 +4,9 @@ import java.util.ArrayList;
 import java.util.List;
 
 import com.matrix.wechat.R;
+import com.matrix.wechat.adapter.CommentAdapter;
 import com.matrix.wechat.adapter.FriendZoneAdapter;
+import com.matrix.wechat.customview.CommentListView;
 import com.matrix.wechat.customview.FriendsListView;
 import com.matrix.wechat.customview.FriendsListView.OnRefreshListener;
 import com.matrix.wechat.customview.FriendsListView.onLoadListener;
@@ -26,6 +28,9 @@ import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Looper;
+import android.os.Message;
 import android.content.Intent;
 import android.util.Log;
 import android.view.MotionEvent;
@@ -69,6 +74,8 @@ public class FriendZoneActivity extends Activity implements OnClickListener,OnRe
 		mfriendZoneAdapter = new FriendZoneAdapter(this);
 		mListView.setonRefreshListener(this);
 		mListView.setOnLoadListener(this);
+		
+		mfriendZoneAdapter.setFriendListView(mListView);
 		mListView.setAdapter(mfriendZoneAdapter);
 		
 		relBack = (RelativeLayout) findViewById(R.id.friend_zone_back);
@@ -79,7 +86,8 @@ public class FriendZoneActivity extends Activity implements OnClickListener,OnRe
 		frl_comment.setVisibility(View.GONE);
 		mfriendZoneAdapter.setFooterView(frl_comment);
 		ed_comment_content=(EditText) findViewById(R.id.et_comment_content);
-		
+//		mListView.setOnItemClickListener(new OnItemClickListenerTest(listView, frl_comment, commentAdapter, listcComments));
+		///..............
 		mListView.setOnItemClickListener(new OnItemClickListener() {
 
 
@@ -108,6 +116,8 @@ public class FriendZoneActivity extends Activity implements OnClickListener,OnRe
 		new FriendsZone().execute(FriendsListView.REFRESH);
 		
 	}
+	
+	
 
 	private List<Moment> getListMoments(Share share) {
 
@@ -241,6 +251,7 @@ public class FriendZoneActivity extends Activity implements OnClickListener,OnRe
 
 			mfriendZoneAdapter.setData(listResult);
 			mfriendZoneAdapter.notifyDataSetChanged();
+			
 		}
 
 	}
