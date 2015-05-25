@@ -2,6 +2,7 @@ package com.matrix.wechat.model;
 
 public class Comment {
 
+	private Integer commentid;
 	private Integer shareid;
 	private String sharetoname;
 	private String sharefromname;
@@ -12,15 +13,25 @@ public class Comment {
 	public Comment() {
 	}
 
-	public Comment(Integer shareid, String sharetoname, String sharefromname,
-			String content, Integer sharetoid, Integer sharefromid) {
+	public Comment(Integer commentid, Integer shareid, String sharetoname,
+			String sharefromname, String content, Integer sharetoid,
+			Integer sharefromid) {
 		super();
+		this.commentid = commentid;
 		this.shareid = shareid;
 		this.sharetoname = sharetoname;
 		this.sharefromname = sharefromname;
 		this.content = content;
 		this.sharetoid = sharetoid;
 		this.sharefromid = sharefromid;
+	}
+
+	public Integer getCommentid() {
+		return commentid;
+	}
+
+	public void setCommentid(Integer commentid) {
+		this.commentid = commentid;
 	}
 
 	public String getSharetoname() {
@@ -73,10 +84,10 @@ public class Comment {
 
 	@Override
 	public String toString() {
-		return "Comment [shareid=" + shareid + ", sharetoname=" + sharetoname
-				+ ", sharefromname=" + sharefromname + ", content=" + content
-				+ ", sharetoid=" + sharetoid + ", sharefromid=" + sharefromid
-				+ "]";
+		return "Comment [commentid=" + commentid + ", shareid=" + shareid
+				+ ", sharetoname=" + sharetoname + ", sharefromname="
+				+ sharefromname + ", content=" + content + ", sharetoid="
+				+ sharetoid + ", sharefromid=" + sharefromid + "]";
 	}
 
 }

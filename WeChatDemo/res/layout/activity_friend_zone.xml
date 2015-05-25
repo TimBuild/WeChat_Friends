@@ -9,6 +9,7 @@
         android:layout_width="fill_parent"
         android:layout_height="45dp"
         android:background="@drawable/title_bar" >
+
         <RelativeLayout
             android:id="@+id/friend_zone_back"
             android:layout_width="60dp"
@@ -42,28 +43,25 @@
             android:textColor="#ffffff"
             android:textSize="20sp" />
     </RelativeLayout>
-    
-    
+
     <com.matrix.wechat.customview.FriendsListView
         android:id="@+id/friend_zone"
         android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="0dp"
+        android:layout_weight="1"
         android:background="#fcfcfc"
         android:cacheColorHint="#00000000"
         android:divider="@null"
         android:footerDividersEnabled="false"
-        android:headerDividersEnabled="false"
-        
-        android:layout_weight="1"
-         >
+        android:headerDividersEnabled="false" >
     </com.matrix.wechat.customview.FriendsListView>
-    
+
     <RelativeLayout
         android:id="@+id/rl_friend_zone_bottom"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
-        android:background="#ffffff">
+        android:background="#ffffff" >
 
         <RelativeLayout
             android:id="@+id/rl_friend_zone_controler"
@@ -71,7 +69,7 @@
             android:layout_height="50dp"
             android:layout_alignParentTop="true" >
 
-           <EditText
+            <EditText
                 android:id="@+id/et_comment_content"
                 android:layout_width="fill_parent"
                 android:layout_height="40dp"
@@ -91,7 +89,7 @@
                 android:layout_centerVertical="true"
                 android:background="@drawable/chat_send_btn"
                 android:text="Send" />
-            
+
             <Button
                 android:id="@+id/comment_content_send_item"
                 android:layout_width="60dp"
@@ -99,12 +97,9 @@
                 android:layout_alignParentRight="true"
                 android:layout_centerVertical="true"
                 android:background="@drawable/chat_send_btn"
-                android:visibility="gone"
-                android:text="Send" />
-
-            
+                android:text="Send"
+                android:visibility="gone" />
         </RelativeLayout>
-
-        
     </RelativeLayout>
+
 </LinearLayout>

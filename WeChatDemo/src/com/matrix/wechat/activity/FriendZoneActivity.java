@@ -26,11 +26,14 @@ import com.matrix.wechat.widget.SquareImageView;
 
 import android.annotation.SuppressLint;
 import android.app.Activity;
+import android.app.AlertDialog;
+import android.app.AlertDialog.Builder;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
 import android.os.Message;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.util.Log;
 import android.view.MotionEvent;
@@ -40,9 +43,11 @@ import android.view.View.OnTouchListener;
 import android.view.WindowManager;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
+import android.widget.AdapterView.OnItemLongClickListener;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.RelativeLayout;
+import android.widget.Toast;
 
 public class FriendZoneActivity extends Activity implements OnClickListener,OnRefreshListener,
 		onLoadListener {
@@ -86,18 +91,9 @@ public class FriendZoneActivity extends Activity implements OnClickListener,OnRe
 		frl_comment.setVisibility(View.GONE);
 		mfriendZoneAdapter.setFooterView(frl_comment);
 		ed_comment_content=(EditText) findViewById(R.id.et_comment_content);
-//		mListView.setOnItemClickListener(new OnItemClickListenerTest(listView, frl_comment, commentAdapter, listcComments));
+		mListView.setOnItemLongClickListener(new OnFriendItemLongClickListener(listResult));
 		///..............
-		mListView.setOnItemClickListener(new OnItemClickListener() {
-
-
-			@Override
-			public void onItemClick(AdapterView<?> parent, View view,
-					int position, long id) {
-				frl_comment.setVisibility(View.GONE);
-				ed_comment_content.setText("");				
-			}
-		});
+		mListView.setOnItemClickListener(new onFriendItemClickListener(listResult));
 
 		mListView.setOnTouchListener(new OnTouchListener() {
 
@@ -114,6 +110,172 @@ public class FriendZoneActivity extends Activity implements OnClickListener,OnRe
 		bt_addMoment.setOnClickListener(this);
 		
 		new FriendsZone().execute(FriendsListView.REFRESH);
+		
+	}
+	
+	private class onFriendItemClickListener implements OnItemClickListener{
+		
+		private List<Moment> listMoments;
+
+		public onFriendItemClickListener(List<Moment> listResult) {
+			this.listMoments = listResult;
+		}
+
+		@Override
+		public void onItemClick(AdapterView<?> parent, View view, int position,
+				final long id) {
+			
+			frl_comment.setVisibility(View.VISIBLE);
+			
+			//获取输入框内容
+			final EditText et_comment_content=(EditText) frl_comment.findViewById(R.id.et_comment_content);	
+			
+			Button but = (Button) frl_comment.findViewById(R.id.comment_content_send);
+			but.setOnClickListener(new OnClickListener() {
+				
+				@Override
+				public void onClick(View v) {
+					// TODO Auto-generated method stub
+					
+					final String comment_content=et_comment_content.getText().toString();
+					final Moment moment = listMoments.get((int)id);
+					
+					frl_comment.setVisibility(View.GONE);
+					et_comment_content.setText("");
+					
+					final List<Comment> listcComments= moment.getCommentsList();
+					Log.d(TAG, "moment.toString():"+moment.toString());
+					new Thread(new Runnable() {
+						
+						@Override
+						public void run() {
+							PersonalInfoService perInfoService=PersonalInfoFactory.getInstance();
+							User user=perInfoService.getUserByUsername(moment.getUserName());
+							
+							if(!comment_content.equals("")||comment_content!=null){
+								Comment comment_add = new Comment();
+								
+								comment_add.setContent(comment_content);
+								comment_add.setSharefromname(CacheUtil.getUser(CacheUtil.context).getUsername());
+								comment_add.setSharefromid((int)CacheUtil.getUser(CacheUtil.context).getUserid());
+								comment_add.setSharetoid((int)user.getUserid());
+								comment_add.setSharetoname(user.getUsername());
+								comment_add.setShareid(moment.getMomentid());
+								
+								listcComments.add(comment_add);
+								
+								new addComment().execute(Integer.toString(moment.getMomentid()),Long.toString(user.getUserid()),comment_content);
+							}
+							
+							
+						}
+					}).start();
+				}
+			});
+			
+		}
+		
+	}
+	
+	private class OnFriendItemLongClickListener implements OnItemLongClickListener{
+		
+		private List<Moment> listMoments;
+
+		public OnFriendItemLongClickListener(List<Moment> listMoments) {
+			this.listMoments = listMoments;
+		}
+
+		@Override
+		public boolean onItemLongClick(AdapterView<?> parent, View view,
+				final int position, long id) {
+			Moment moment = listMoments.get(position-2);
+			final int sharefrom = (int)CacheUtil.getUser(CacheUtil.context).getUserid();
+			final int shareid = moment.getMomentid();
+			
+			AlertDialog.Builder builder = new Builder(FriendZoneActivity.this);
+			builder.setTitle("Delete share");
+			builder.setMessage("You sure to delete?");
+			builder.setPositiveButton("Sure", new DialogInterface.OnClickListener() {
+				
+				@Override
+				public void onClick(DialogInterface dialog, int which) {
+					Log.d(TAG, "position:"+position);
+					new deleteShare(listMoments,position-2).execute(sharefrom,shareid);
+					dialog.dismiss();
+					
+				}
+			});
+			builder.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+				
+				@Override
+				public void onClick(DialogInterface dialog, int which) {
+					dialog.dismiss();
+				}
+			});
+			builder.create().show();
+//			Log.d(TAG,"OnFriendItemClickListener:"+listMoments.get(position-2).toString());
+			return true;
+		}
+		
+	}
+	
+	private class addComment extends AsyncTask<String, Void, Integer>{
+
+		private FriendsZoneService fZoneService;
+		@Override
+		protected Integer doInBackground(String... params) {
+			fZoneService = FriendsZoneFactory.getInstance();
+			
+			int result=fZoneService.comment(Integer.parseInt(params[0]), CacheUtil.getUser(CacheUtil.context).getUserid(),
+					Long.parseLong(params[1]), params[2]);
+			return result;
+		}
+		
+		@Override
+		protected void onPostExecute(Integer result) {
+			if(result!=-1){
+				Toast.makeText(FriendZoneActivity.this, "comment success", Toast.LENGTH_SHORT).show();
+			}
+			else{
+				Toast.makeText(FriendZoneActivity.this, "comment failed", Toast.LENGTH_SHORT).show();
+			}
+		}
+		
+	}
+	
+	private class deleteShare extends AsyncTask<Integer, Void, Boolean>{
+		
+		private FriendsZoneService friendsZoneService;
+		private List<Moment> listMoments;
+		private int position;
+
+		public deleteShare(List<Moment> listMoments2, int position) {
+			this.listMoments = listMoments2;
+			this.position = position;
+		}
+
+		@Override
+		protected Boolean doInBackground(Integer... params) {
+			friendsZoneService = FriendsZoneFactory.getInstance();
+			boolean result = friendsZoneService.deleteShare(params[0], params[1]);
+			return result;
+		}
+		
+		@Override
+		protected void onPostExecute(Boolean result) {
+			if(result){
+				Toast.makeText(FriendZoneActivity.this, "delete success", Toast.LENGTH_SHORT).show();
+				Log.d(TAG, "listResult.toString()"+listResult.toString());
+				Log.d(TAG, "position"+position);
+				
+				listResult.remove(position);
+				mfriendZoneAdapter.setData(listResult);
+				mfriendZoneAdapter.notifyDataSetChanged();
+			}
+			else{
+				Toast.makeText(FriendZoneActivity.this, "you can not delete it!", Toast.LENGTH_SHORT).show();
+			}
+		}
 		
 	}
 	
@@ -142,6 +304,7 @@ public class FriendZoneActivity extends Activity implements OnClickListener,OnRe
 				Log.d(TAG, "shareCommentsLists:"+shareCommentsLists.toString());
 				for(int j=0;j<shareCommentsLists.size()-1;j++){
 					Comment comment=new Comment();
+					comment.setCommentid(shaWithComment.getShareComments().get(j).getCommentid());
 					comment.setShareid(shaWithComment.getShareComments().get(j).getShareid());
 					comment.setSharefromname(shaWithComment.getCommentUsers().get(j).getFrom_userName());
 					comment.setSharetoname(shaWithComment.getCommentUsers().get(j).getTo_userName());
