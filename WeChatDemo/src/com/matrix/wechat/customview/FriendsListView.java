@@ -16,6 +16,8 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import com.matrix.wechat.R;
+import com.matrix.wechat.utils.BitmapUtil;
+import com.matrix.wechat.utils.CacheUtil;
 
 public class FriendsListView extends ListView implements OnScrollListener {
 
@@ -120,6 +122,8 @@ public class FriendsListView extends ListView implements OnScrollListener {
 		addHeaderView(headView);
 		addHeaderView(iconView);
 		
+		ImageView headIcon = (ImageView) iconView.findViewById(R.id.friend_zone_icon);
+		headIcon.setImageBitmap(BitmapUtil.getBitmap(CacheUtil.getUser(CacheUtil.context).getPicture()));
 		addFooterView(footerView, null, false);
 
 		setOnScrollListener(this);

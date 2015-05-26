@@ -114,7 +114,7 @@ public class FriendZoneAdapter extends BaseAdapter{
 		holder.tv_date.setText(mList.get(position).getDate());
 		//shareid=mList.get(position).getMomentid();
 		
-		holder.iv_addComment.setOnClickListener(new OnClickListener() {
+		/*holder.iv_addComment.setOnClickListener(new OnClickListener() {
 
 			@Override
 			public void onClick(View v) {
@@ -124,7 +124,7 @@ public class FriendZoneAdapter extends BaseAdapter{
 				
 				frl_comment.setVisibility(View.VISIBLE);
 			}
-		});
+		});*/
 		
 		//Moment moment = mList.get(position);
 		

@@ -18,6 +18,7 @@ import com.matrix.wechat.web.service.factory.FriendsZoneFactory;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.net.wifi.ScanResult;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.util.Log;
@@ -79,6 +80,7 @@ public class MyMomentActivity extends Activity implements OnRefreshListener,onLo
 
 		return lists;
 	}
+	
 	
 	private class CurrentMomentZone extends AsyncTask<Integer, Void, String>{
 		
