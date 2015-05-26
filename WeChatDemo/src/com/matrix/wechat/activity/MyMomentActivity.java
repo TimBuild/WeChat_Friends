@@ -51,8 +51,8 @@ public class MyMomentActivity extends Activity implements OnRefreshListener,onLo
 			
 			@Override
 			public void onClick(View v) {
-				Intent intent = new Intent(MyMomentActivity.this,FriendZoneActivity.class);
-				startActivity(intent);
+//				Intent intent = new Intent(MyMomentActivity.this,FriendZoneActivity.class);
+//				startActivity(intent);
 				finish();
 			}
 		});

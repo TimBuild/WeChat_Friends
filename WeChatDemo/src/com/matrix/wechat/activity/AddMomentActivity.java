@@ -44,8 +44,8 @@ public class AddMomentActivity extends Activity{
 			
 			@Override
 			public void onClick(View v) {
-				Intent intent = new Intent(AddMomentActivity.this,FriendZoneActivity.class);
-				startActivity(intent);
+//				Intent intent = new Intent(AddMomentActivity.this,FriendZoneActivity.class);
+//				startActivity(intent);
 				finish();
 			}
 		});

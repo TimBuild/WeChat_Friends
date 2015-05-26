@@ -33,6 +33,7 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
 import android.os.Message;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.util.Log;
@@ -41,6 +42,7 @@ import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.View.OnTouchListener;
 import android.view.WindowManager;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.AdapterView.OnItemLongClickListener;
@@ -102,6 +104,11 @@ public class FriendZoneActivity extends Activity implements OnClickListener,OnRe
 			public boolean onTouch(View v, MotionEvent event) {
 				frl_comment.setVisibility(View.GONE);
 				ed_comment_content.setText("");
+				View view = getWindow().peekDecorView();
+		        if (view != null) {
+		            InputMethodManager inputmanger = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
+		            inputmanger.hideSoftInputFromWindow(view.getWindowToken(), 0);
+		        }
 				return false;
 			}
 		});	
@@ -434,8 +441,8 @@ public class FriendZoneActivity extends Activity implements OnClickListener,OnRe
 		Intent intent;
 		switch (v.getId()) {
 		case R.id.friend_zone_back:
-			intent = new Intent(FriendZoneActivity.this, MainWeixin.class);
-			startActivity(intent);
+//			intent = new Intent(FriendZoneActivity.this, MainWeixin.class);
+//			startActivity(intent);
 			finish();
 			break;
 		case R.id.friend_zone_icon:
