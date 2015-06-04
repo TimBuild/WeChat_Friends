@@ -436,6 +436,12 @@ public class FriendZoneActivity extends Activity implements OnClickListener,OnRe
 		new FriendsZone().execute(FriendsListView.REFRESH);
 	}
 
+	
+	@Override
+	protected void onResume() {
+		super.onResume();
+		new FriendsZone().execute(FriendsListView.REFRESH);
+	}
 	@Override
 	public void onClick(View v) {
 		Intent intent;

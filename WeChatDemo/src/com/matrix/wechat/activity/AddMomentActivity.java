@@ -79,7 +79,8 @@ public class AddMomentActivity extends Activity{
 				et_moment_content.setText("");
 				Intent intent=new Intent();
 				intent.setClass(AddMomentActivity.this, FriendZoneActivity.class);
-				startActivity(intent);
+//				startActivity(intent);
+				finish();
 			}
 		}	
 	}

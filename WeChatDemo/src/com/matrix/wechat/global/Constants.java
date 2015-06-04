@@ -4,7 +4,7 @@ import android.graphics.Bitmap;
 
 public class Constants {
 	// API for restful 
-	public final static String API_BASE_URL = "http://192.168.1.80:8090";
+	public final static String API_BASE_URL = "http://192.168.1.73:8090";
 	public final static String API_CONTACTS =  API_BASE_URL + "/api1/user";
 	public final static String API_VOICE = API_BASE_URL + "/api1/upload.php";
 	public final static String API_MESSAGE = API_BASE_URL + "/api1/message";
