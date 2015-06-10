@@ -303,7 +303,15 @@ public class FriendZoneActivity extends Activity implements OnClickListener,OnRe
 			String time = DateUtil.getParseTime(date);
 			moment.setUserName(shaWithComment.getUser().getUsername());
 			moment.setDate(time);
-			moment.setContent_text(shaWithComment.getShareFriend().getContent());
+			moment.setType(shaWithComment.getShareFriend().getType());
+			if(shaWithComment.getShareFriend().getType() == 1){
+				//文字
+				moment.setContent_text(shaWithComment.getShareFriend().getContent());
+			}
+			else{
+				//图片地址
+				moment.setImg_url(shaWithComment.getShareFriend().getImg_url());
+			}
 
 			List<ShareComment> shareCommentsLists=shaWithComment.getShareComments();
 			if(shareCommentsLists!=null){

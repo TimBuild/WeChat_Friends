@@ -41,6 +41,7 @@ import com.matrix.wechat.web.service.FriendsZoneService;
 import com.matrix.wechat.web.service.PersonalInfoService;
 import com.matrix.wechat.web.service.factory.FriendsZoneFactory;
 import com.matrix.wechat.web.service.factory.PersonalInfoFactory;
+import com.squareup.picasso.Picasso;
 
 public class FriendZoneAdapter extends BaseAdapter{
 
@@ -91,6 +92,7 @@ public class FriendZoneAdapter extends BaseAdapter{
 
 	@Override
 	public View getView(final int position, View convertView, ViewGroup parent) {
+		int type = mList.get(position).getType();
 		ViewHolder holder = null;	
 		
 		if(convertView==null){
@@ -99,6 +101,7 @@ public class FriendZoneAdapter extends BaseAdapter{
 			holder.img_icon = (ImageView) convertView.findViewById(R.id.moment_icon);
 			holder.tv_username=(TextView) convertView.findViewById(R.id.moment_username);
 			holder.tv_content_text=(TextView) convertView.findViewById(R.id.moment_content);
+			holder.image_context = (ImageView) convertView.findViewById(R.id.context_icon);
 			holder.tv_date=(TextView) convertView.findViewById(R.id.moment_date);
 			holder.iv_addComment=(ImageView) convertView.findViewById(R.id.add_comment_img);
 			holder.lv_comments=(CommentListView) convertView.findViewById(R.id.lv_comments);
@@ -110,7 +113,17 @@ public class FriendZoneAdapter extends BaseAdapter{
 		}
 		holder.img_icon.setImageBitmap(BitmapUtil.getBitmap(mList.get(position).getPicture()));
 		holder.tv_username.setText(mList.get(position).getUserName());
-		holder.tv_content_text.setText(mList.get(position).getContent_text());
+		if(type == 1){
+			holder.image_context.setVisibility(View.GONE);
+			holder.tv_content_text.setVisibility(View.VISIBLE);
+			holder.tv_content_text.setText(mList.get(position).getContent_text());
+		}else{
+			holder.image_context.setVisibility(View.VISIBLE);
+			holder.tv_content_text.setVisibility(View.GONE);
+//			holder.image_context.setImageResource(R.drawable.group_icon);
+			
+			Picasso.with(context).load(mList.get(position).getImg_url()).into(holder.image_context);
+		}
 		holder.tv_date.setText(mList.get(position).getDate());
 		//shareid=mList.get(position).getMomentid();
 		
@@ -159,6 +172,7 @@ public class FriendZoneAdapter extends BaseAdapter{
 		public CommentListView lv_comments;		
 		public EditText et_comment_content;
 		public Button comment_content_send;
+		public ImageView image_context;
 	}
 	
 	private class AddComment extends AsyncTask<String, Void, Integer>{

@@ -31,4 +31,9 @@ public interface FriendsZoneService {
 	@POST("/deleteShare")
 	@FormUrlEncoded
 	boolean deleteShare(@Field("sharefrom") int sharefrom,@Field("shareid") int shareid);
+	
+	@POST("/shareImage")
+	@FormUrlEncoded
+	Integer sharePicture(@Field("userid") long userid,@Field("image") String image,@Field("content") String content);
+	
 }

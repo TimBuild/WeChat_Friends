@@ -8,6 +8,9 @@ public class Moment {
 	private String picture;// 发布者的头像
 	private String userName; // 发布者的用户名
 	private String content_text;// 发布的内容
+
+	private Integer type;// 1为文字，2为图片
+	private String img_url;// 图片地址
 	private String date; // 发表时间
 	private List<Comment> commentsList; // 该内容的所有评论
 
@@ -15,12 +18,15 @@ public class Moment {
 	}
 
 	public Moment(int momentid, String picture, String userName,
-			String content_text, String date, List<Comment> commentsList) {
+			String content_text, Integer type, String img_url, String date,
+			List<Comment> commentsList) {
 		super();
 		this.momentid = momentid;
 		this.picture = picture;
 		this.userName = userName;
 		this.content_text = content_text;
+		this.type = type;
+		this.img_url = img_url;
 		this.date = date;
 		this.commentsList = commentsList;
 	}
@@ -66,7 +72,7 @@ public class Moment {
 	}
 
 	public List<Comment> getCommentsList() {
-		if(commentsList == null){
+		if (commentsList == null) {
 			commentsList = new ArrayList<Comment>();
 		}
 		return commentsList;
@@ -76,11 +82,28 @@ public class Moment {
 		this.commentsList = commentsList;
 	}
 
+	public Integer getType() {
+		return type;
+	}
+
+	public void setType(Integer type) {
+		this.type = type;
+	}
+
+	public String getImg_url() {
+		return img_url;
+	}
+
+	public void setImg_url(String img_url) {
+		this.img_url = img_url;
+	}
+
 	@Override
 	public String toString() {
 		return "Moment [momentid=" + momentid + ", picture=" + picture
 				+ ", userName=" + userName + ", content_text=" + content_text
-				+ ", date=" + date + ", commentsList=" + commentsList + "]";
+				+ ", type=" + type + ", img_url=" + img_url + ", date=" + date
+				+ ", commentsList=" + commentsList + "]";
 	}
 
 }

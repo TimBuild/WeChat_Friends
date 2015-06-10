@@ -5,6 +5,8 @@ import java.sql.Timestamp;
 public class ShareFriend {
 	private Integer shareid;
 	private Integer sharefrom;
+	private Integer type;// 1是文字，2是图片
+	private String img_url;
 	private String content;
 	private String date;
 
@@ -12,11 +14,13 @@ public class ShareFriend {
 		super();
 	}
 
-	public ShareFriend(Integer shareid, Integer sharefrom, String content,
-			String date) {
+	public ShareFriend(Integer shareid, Integer sharefrom, Integer type,
+			String img_url, String content, String date) {
 		super();
 		this.shareid = shareid;
 		this.sharefrom = sharefrom;
+		this.type = type;
+		this.img_url = img_url;
 		this.content = content;
 		this.date = date;
 	}
@@ -53,10 +57,27 @@ public class ShareFriend {
 		this.date = date;
 	}
 
+	public Integer getType() {
+		return type;
+	}
+
+	public void setType(Integer type) {
+		this.type = type;
+	}
+
+	public String getImg_url() {
+		return img_url;
+	}
+
+	public void setImg_url(String img_url) {
+		this.img_url = img_url;
+	}
+
 	@Override
 	public String toString() {
 		return "ShareFriend [shareid=" + shareid + ", sharefrom=" + sharefrom
-				+ ", content=" + content + ", date=" + date + "]";
+				+ ", type=" + type + ", img_url=" + img_url + ", content="
+				+ content + ", date=" + date + "]";
 	}
 
 }
