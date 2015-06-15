@@ -11,6 +11,7 @@ public class Moment {
 
 	private Integer type;// 1为文字，2为图片
 	private String img_url;// 图片地址
+	private String voice_url;//声音地址
 	private String date; // 发表时间
 	private List<Comment> commentsList; // 该内容的所有评论
 
@@ -18,8 +19,8 @@ public class Moment {
 	}
 
 	public Moment(int momentid, String picture, String userName,
-			String content_text, Integer type, String img_url, String date,
-			List<Comment> commentsList) {
+			String content_text, Integer type, String img_url, String voic_url,
+			String date, List<Comment> commentsList) {
 		super();
 		this.momentid = momentid;
 		this.picture = picture;
@@ -27,6 +28,7 @@ public class Moment {
 		this.content_text = content_text;
 		this.type = type;
 		this.img_url = img_url;
+		this.voice_url = voic_url;
 		this.date = date;
 		this.commentsList = commentsList;
 	}
@@ -98,12 +100,21 @@ public class Moment {
 		this.img_url = img_url;
 	}
 
+	public String getVoic_url() {
+		return voice_url;
+	}
+
+	public void setVoic_url(String voice_url) {
+		this.voice_url = voice_url;
+	}
+
 	@Override
 	public String toString() {
 		return "Moment [momentid=" + momentid + ", picture=" + picture
 				+ ", userName=" + userName + ", content_text=" + content_text
-				+ ", type=" + type + ", img_url=" + img_url + ", date=" + date
-				+ ", commentsList=" + commentsList + "]";
+				+ ", type=" + type + ", img_url=" + img_url + ", voic_url="
+				+ voice_url + ", date=" + date + ", commentsList="
+				+ commentsList + "]";
 	}
 
 }

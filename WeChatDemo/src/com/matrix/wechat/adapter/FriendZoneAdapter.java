@@ -29,6 +29,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.matrix.wechat.R;
+import com.matrix.wechat.activity.ChatActivity;
 import com.matrix.wechat.activity.FriendZoneActivity;
 import com.matrix.wechat.customview.CommentListView;
 import com.matrix.wechat.customview.FriendsListView;
@@ -37,6 +38,8 @@ import com.matrix.wechat.model.Moment;
 import com.matrix.wechat.model.User;
 import com.matrix.wechat.utils.BitmapUtil;
 import com.matrix.wechat.utils.CacheUtil;
+import com.matrix.wechat.utils.NetworkUtil;
+import com.matrix.wechat.utils.voice.PlayVoice;
 import com.matrix.wechat.web.service.FriendsZoneService;
 import com.matrix.wechat.web.service.PersonalInfoService;
 import com.matrix.wechat.web.service.factory.FriendsZoneFactory;
@@ -92,7 +95,8 @@ public class FriendZoneAdapter extends BaseAdapter{
 
 	@Override
 	public View getView(final int position, View convertView, ViewGroup parent) {
-		int type = mList.get(position).getType();
+		Moment moment = mList.get(position);
+		int type = moment.getType();
 		ViewHolder holder = null;	
 		
 		if(convertView==null){
@@ -102,6 +106,7 @@ public class FriendZoneAdapter extends BaseAdapter{
 			holder.tv_username=(TextView) convertView.findViewById(R.id.moment_username);
 			holder.tv_content_text=(TextView) convertView.findViewById(R.id.moment_content);
 			holder.image_context = (ImageView) convertView.findViewById(R.id.context_icon);
+			holder.voice_context = (ImageView) convertView.findViewById(R.id.voice_icon);
 			holder.tv_date=(TextView) convertView.findViewById(R.id.moment_date);
 			holder.iv_addComment=(ImageView) convertView.findViewById(R.id.add_comment_img);
 			holder.lv_comments=(CommentListView) convertView.findViewById(R.id.lv_comments);
@@ -111,20 +116,26 @@ public class FriendZoneAdapter extends BaseAdapter{
 		}else{
 			holder = (ViewHolder) convertView.getTag();
 		}
-		holder.img_icon.setImageBitmap(BitmapUtil.getBitmap(mList.get(position).getPicture()));
-		holder.tv_username.setText(mList.get(position).getUserName());
+		holder.img_icon.setImageBitmap(BitmapUtil.getBitmap(moment.getPicture()));
+		holder.tv_username.setText(moment.getUserName());
 		if(type == 1){
 			holder.image_context.setVisibility(View.GONE);
+			holder.voice_context.setVisibility(View.GONE);
 			holder.tv_content_text.setVisibility(View.VISIBLE);
-			holder.tv_content_text.setText(mList.get(position).getContent_text());
-		}else{
+			holder.tv_content_text.setText(moment.getContent_text());
+		}else if(type == 2){
 			holder.image_context.setVisibility(View.VISIBLE);
 			holder.tv_content_text.setVisibility(View.GONE);
+			holder.voice_context.setVisibility(View.GONE);
 //			holder.image_context.setImageResource(R.drawable.group_icon);
 			
-			Picasso.with(context).load(mList.get(position).getImg_url()).into(holder.image_context);
+			Picasso.with(context).load(moment.getImg_url()).into(holder.image_context);
+		}else if(type == 3){
+			holder.image_context.setVisibility(View.GONE);
+			holder.tv_content_text.setVisibility(View.GONE);
+			holder.voice_context.setVisibility(View.VISIBLE);
 		}
-		holder.tv_date.setText(mList.get(position).getDate());
+		holder.tv_date.setText(moment.getDate());
 		//shareid=mList.get(position).getMomentid();
 		
 		/*holder.iv_addComment.setOnClickListener(new OnClickListener() {
@@ -144,7 +155,7 @@ public class FriendZoneAdapter extends BaseAdapter{
 		List<Comment> listcomment;
 		listcomment = new ArrayList<Comment>();
 //		listcomment=getListComments();		
-		listcomment=mList.get(position).getCommentsList();
+		listcomment=moment.getCommentsList();
 		CommentAdapter adapter = new CommentAdapter(context);
 		adapter.setData(listcomment);
 		
@@ -160,6 +171,8 @@ public class FriendZoneAdapter extends BaseAdapter{
 		
 //		friendsListView.setOnItemLongClickListener(new OnFriendItemClickListener(mList));
 		
+		holder.voice_context.setOnClickListener(new onVoiceClickListener(moment.getVoic_url()));
+		
 		return convertView;
 	}
 	
@@ -173,6 +186,7 @@ public class FriendZoneAdapter extends BaseAdapter{
 		public EditText et_comment_content;
 		public Button comment_content_send;
 		public ImageView image_context;
+		public ImageView voice_context;
 	}
 	
 	private class AddComment extends AsyncTask<String, Void, Integer>{
@@ -275,7 +289,23 @@ public class FriendZoneAdapter extends BaseAdapter{
 		
 	}
 	
-	
+	private class onVoiceClickListener implements OnClickListener{
+
+		String url = null;
+		
+		public onVoiceClickListener(String url){
+			Log.d(TAG, "url: "+url);
+			this.url = url;
+		}
+		
+		@Override
+		public void onClick(View v) {
+			Log.i("info","VoiceOnClickListrner");
+			Log.d(TAG, "url:---> "+url);
+			PlayVoice.startPlaying(url);
+		}
+		
+	}
 	
 	
 	private class OnCommentItemLongListener implements OnItemLongClickListener{

@@ -308,9 +308,11 @@ public class FriendZoneActivity extends Activity implements OnClickListener,OnRe
 				//文字
 				moment.setContent_text(shaWithComment.getShareFriend().getContent());
 			}
-			else{
+			else if(shaWithComment.getShareFriend().getType() == 2){
 				//图片地址
 				moment.setImg_url(shaWithComment.getShareFriend().getImg_url());
+			}else if(shaWithComment.getShareFriend().getType() == 3){
+				moment.setVoic_url(shaWithComment.getShareFriend().getImg_url());
 			}
 
 			List<ShareComment> shareCommentsLists=shaWithComment.getShareComments();

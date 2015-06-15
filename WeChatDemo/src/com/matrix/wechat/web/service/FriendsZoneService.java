@@ -35,5 +35,10 @@ public interface FriendsZoneService {
 	@POST("/shareImage")
 	@FormUrlEncoded
 	Integer sharePicture(@Field("userid") long userid,@Field("image") String image,@Field("content") String content);
+
+	
+	@POST("/shareVoice")
+	@FormUrlEncoded
+	Integer shareVoice(@Field("userid") long userid,@Field("voice") String voice,@Field("content") String content);
 	
 }

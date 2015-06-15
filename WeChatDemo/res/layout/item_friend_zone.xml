@@ -48,7 +48,18 @@
                 android:layout_height="wrap_content"
                 android:adjustViewBounds="true"
                 android:maxHeight="200dp"
+                android:clickable="true"
                 android:visibility="gone" />
+            <ImageView 
+                android:id="@+id/voice_icon"
+                android:layout_width="wrap_content"
+                android:layout_height="50dp"
+                android:adjustViewBounds="true"
+                android:maxHeight="50dp"
+                android:clickable="true"
+                android:visibility="gone"
+                android:background="@drawable/voice"
+                />
         </RelativeLayout>    
 
         <FrameLayout
