@@ -52,13 +52,23 @@
                 android:visibility="gone" />
             <ImageView 
                 android:id="@+id/voice_icon"
-                android:layout_width="wrap_content"
+                android:layout_width="100dp"
                 android:layout_height="50dp"
                 android:adjustViewBounds="true"
                 android:maxHeight="50dp"
                 android:clickable="true"
                 android:visibility="gone"
                 android:background="@drawable/voice"
+                />
+            <TextView 
+                android:id="@+id/voice_length"
+                android:layout_width="wrap_content"
+                android:layout_height="50dp"
+                android:visibility="gone"
+                android:text="12:00"
+                android:textSize="20sp"
+                android:paddingTop="10dp"
+                android:layout_toRightOf="@id/voice_icon"
                 />
         </RelativeLayout>    
 

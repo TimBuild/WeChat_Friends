@@ -14,6 +14,7 @@ public class RecordVoice {
 
 	private static long start = 0;
 	private static long end = 0;
+	private static long endtime = 0;
 
 	public void startRecording() {
 		Log.d("RecordVoice", mFileName);
@@ -50,6 +51,12 @@ public class RecordVoice {
 		mRecorder = null;
 		result = true;
 		return result;
+	}
+	
+	public Long calcuteVoice(){
+		long endtim = System.currentTimeMillis();
+		endtime = endtim - start;
+		return endtime;
 	}
 
 }

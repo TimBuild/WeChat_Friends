@@ -113,9 +113,11 @@ public class AddMomentActivity extends Activity{
 					Toast.makeText(AddMomentActivity.this, "record time is to short", Toast.LENGTH_SHORT).show();
 					return true;	
 				}
+				
+				long time = recordVoice.calcuteVoice();
 				String voicePath = SendVoice.uploadFile(VOICE_PATH, Constants.UPLOAD_Url);
 //				Log.d(TAG, "voicePath:"+voicePath);
-				new SendVoiceServer().execute(voicePath);
+				new SendVoiceServer().execute(voicePath+","+time);
 				FileUtil.deleteFile(VOICE_PATH);
 				break;
 			default:
@@ -203,6 +205,7 @@ public class AddMomentActivity extends Activity{
 			fZoneService = FriendsZoneFactory.getInstance();
 			
 			String moment_content = et_moment_content.getText().toString();
+			Log.d(TAG, "VOICE: "+params[0]);
 			int result = fZoneService.shareVoice(
 					CacheUtil.getUser(CacheUtil.context).getUserid(),
 					params[0], moment_content);

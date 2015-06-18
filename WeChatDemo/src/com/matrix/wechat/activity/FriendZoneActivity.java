@@ -10,6 +10,7 @@ import com.matrix.wechat.customview.CommentListView;
 import com.matrix.wechat.customview.FriendsListView;
 import com.matrix.wechat.customview.FriendsListView.OnRefreshListener;
 import com.matrix.wechat.customview.FriendsListView.onLoadListener;
+import com.matrix.wechat.listener.TouchListener;
 import com.matrix.wechat.model.Comment;
 import com.matrix.wechat.model.Moment;
 import com.matrix.wechat.model.Share;
@@ -48,6 +49,9 @@ import android.widget.AdapterView.OnItemClickListener;
 import android.widget.AdapterView.OnItemLongClickListener;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageView;
+import android.widget.ImageView.ScaleType;
+import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.Toast;
 
@@ -61,6 +65,9 @@ public class FriendZoneActivity extends Activity implements OnClickListener,OnRe
 	private Button bt_addMoment;
 	private EditText ed_comment_content;
 	private RelativeLayout relBack;
+	
+	public static LinearLayout zoomView = null;
+	public static ImageView imageView = null;
 
 	private int friend_start = 0;
 	private int friend_count = FriendsListView.pageSize;
@@ -116,8 +123,22 @@ public class FriendZoneActivity extends Activity implements OnClickListener,OnRe
 		iv_mymoment.setOnClickListener(this);
 		bt_addMoment.setOnClickListener(this);
 		
+		zoomView = (LinearLayout) findViewById(R.id.friend_zoomView);
+		imageView = (ImageView) zoomView.findViewById(R.id.friend_imageView);
+		imageView.setOnTouchListener(new TouchListener(imageView));
+		
 		new FriendsZone().execute(FriendsListView.REFRESH);
 		
+	}
+	
+	@Override
+	public void onBackPressed() {
+		if(zoomView.getVisibility() != View.VISIBLE){
+			super.onBackPressed();
+		}else{
+			zoomView.setVisibility(View.GONE);
+			imageView.setScaleType(ScaleType.CENTER);
+		}
 	}
 	
 	private class onFriendItemClickListener implements OnItemClickListener{

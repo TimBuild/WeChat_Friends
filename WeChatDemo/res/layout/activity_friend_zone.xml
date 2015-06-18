@@ -56,6 +56,23 @@
         android:headerDividersEnabled="false" >
     </com.matrix.wechat.customview.FriendsListView>
 
+    <LinearLayout
+        android:id="@+id/friend_zoomView"
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
+        android:background="@android:color/black"
+        android:clickable="true"
+        android:orientation="vertical"
+        android:visibility="gone" >
+
+        <ImageView
+            android:id="@+id/friend_imageView"
+            android:layout_width="fill_parent"
+            android:layout_height="fill_parent"
+            android:scaleType="center" />
+        <!-- 指定为matrix类型 -->
+    </LinearLayout>
+
     <RelativeLayout
         android:id="@+id/rl_friend_zone_bottom"
         android:layout_width="fill_parent"
