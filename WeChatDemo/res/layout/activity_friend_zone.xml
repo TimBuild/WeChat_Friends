@@ -91,13 +91,13 @@
                 android:layout_width="fill_parent"
                 android:layout_height="40dp"
                 android:layout_centerVertical="true"
-                android:layout_marginLeft="20dp"
+                android:layout_marginLeft="40dp"
                 android:layout_marginRight="10dp"
                 android:layout_toLeftOf="@+id/comment_content_send"
                 android:background="@drawable/login_edit_normal"
                 android:singleLine="true"
                 android:textSize="18sp" />
-
+            
             <Button
                 android:id="@+id/comment_content_send"
                 android:layout_width="60dp"
@@ -116,6 +116,15 @@
                 android:background="@drawable/chat_send_btn"
                 android:text="Send"
                 android:visibility="gone" />
+
+            <ImageButton
+                android:id="@+id/comment_expression"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignBottom="@+id/et_comment_content"
+                android:layout_alignParentLeft="true"
+                android:src="@drawable/chat_icon_smiles" />
+
         </RelativeLayout>
     </RelativeLayout>
 

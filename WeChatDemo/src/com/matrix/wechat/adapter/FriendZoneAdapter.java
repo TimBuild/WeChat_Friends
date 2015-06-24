@@ -1,22 +1,33 @@
 package com.matrix.wechat.adapter;
 
+import java.lang.reflect.Field;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import android.app.AlertDialog;
 import android.app.AlertDialog.Builder;
 import android.app.Dialog;
 import android.content.Context;
 import android.content.DialogInterface;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.graphics.Color;
 import android.os.AsyncTask;
 import android.os.Handler;
 import android.os.Looper;
 import android.os.Message;
+import android.text.Spannable;
+import android.text.SpannableString;
+import android.text.style.ImageSpan;
 import android.util.Log;
+import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
+import android.view.ViewGroup.LayoutParams;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
@@ -24,7 +35,10 @@ import android.widget.AdapterView.OnItemLongClickListener;
 import android.widget.BaseAdapter;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.GridView;
+import android.widget.ImageButton;
 import android.widget.ImageView;
+import android.widget.SimpleAdapter;
 import android.widget.ImageView.ScaleType;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
@@ -63,6 +77,9 @@ public class FriendZoneAdapter extends BaseAdapter{
 	private FriendsListView friendsListView;
 	private final static int SUCCESS = 2;
 	private final static int SUCCESS_DELETESHARE = 1;
+	private Dialog builder;
+	private int[] imageIds = new int[50];
+	private EditText et_comment_content;
 	
 	public FriendZoneAdapter(Context context) {
 		this.mInflater = LayoutInflater.from(context);
@@ -438,9 +455,11 @@ public class FriendZoneAdapter extends BaseAdapter{
 			frl_comment.setVisibility(View.VISIBLE);
 			
 			//获取输入框内容
-			final EditText et_comment_content=(EditText) frl_comment.findViewById(R.id.et_comment_content);	
+			et_comment_content=(EditText) frl_comment.findViewById(R.id.et_comment_content);	
+			final ImageButton et_button_expression=(ImageButton) frl_comment.findViewById(R.id.comment_expression);
 			final Button et_button = (Button) frl_comment.findViewById(R.id.comment_content_send_item);
 			final Button et_button_before = (Button) frl_comment.findViewById(R.id.comment_content_send);
+			et_button_expression.setVisibility(View.VISIBLE);
 			et_button.setVisibility(View.VISIBLE);
 			et_button_before.setVisibility(View.GONE);
 			final Comment comment = (Comment) listView.getAdapter().getItem(position);
@@ -449,7 +468,7 @@ public class FriendZoneAdapter extends BaseAdapter{
 			final String userName = comment.getSharefromname();
 			
 			Log.d(TAG, "username-->1 "+userName);
-		
+			
 			et_button.setOnClickListener(new OnClickListener() {
 				
 				@Override
@@ -487,8 +506,111 @@ public class FriendZoneAdapter extends BaseAdapter{
 					}).start();
 				}
 			});
+			
+			et_button_expression.setOnClickListener(new OnClickListener() {
+				
+				@Override
+				public void onClick(View v) {
+					// TODO Auto-generated method stub
+					createExpressionDialog();
+				}
+			});
 		}
 		
+	}
+	
+	/**
+	 * 创建一个表情选择对话框
+	 */
+	private void createExpressionDialog() {
+		builder = new Dialog(context);
+		GridView gridView = createGridView();
+		builder.setContentView(gridView);
+		builder.setTitle("default expression");
+		builder.show();
+
+		gridView.setOnItemClickListener(new OnItemClickListener() {
+
+			@Override
+			public void onItemClick(AdapterView<?> parent, View view,
+					int position, long id) {
+				Bitmap bitmap = null;
+				bitmap = BitmapFactory.decodeResource(context.getResources(),
+						imageIds[position % imageIds.length]);
+				ImageSpan imageSpan = new ImageSpan(context, bitmap);
+				String str = null;
+				if (position < 10) {
+					str = "f00" + position;
+				} else if (position < 100) {
+					str = "f0" + position;
+				}
+
+				SpannableString spanableString = new SpannableString(str);
+				spanableString.setSpan(imageSpan, 0, 4,
+						Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
+				et_comment_content.append(spanableString);
+				builder.dismiss();
+
+			}
+		});
+	}
+	
+	/**
+	 * 生成一个表情对话框中的gridview
+	 * 
+	 * @return
+	 */
+	private GridView createGridView() {
+		final GridView view = new GridView(context);
+		List<Map<String, Object>> listItems = new ArrayList<Map<String, Object>>();
+		// 生成20个表情的id，封装
+
+		for (int i = 0; i < 50; i++) {
+			try {
+				if (i < 10) {
+					Field field = R.drawable.class.getDeclaredField("f00" + i);
+					int resourceId = Integer.parseInt(field.get(null)
+							.toString());
+					imageIds[i] = resourceId;
+				} else if (i < 100) {
+					Field field = R.drawable.class.getDeclaredField("f0" + i);
+					int resourceId = Integer.parseInt(field.get(null)
+							.toString());
+					imageIds[i] = resourceId;
+				}
+
+			} catch (NoSuchFieldException e) {
+				e.printStackTrace();
+			} catch (NumberFormatException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			} catch (IllegalArgumentException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			} catch (IllegalAccessException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+
+			Map<String, Object> listItem = new HashMap<String, Object>();
+			listItem.put("image", imageIds[i]);
+			listItems.add(listItem);
+		}
+
+		SimpleAdapter simpleAdapter = new SimpleAdapter(context, listItems,
+				R.layout.team_layput_single_expression_cell,
+				new String[] { "image" }, new int[] { R.id.image });
+		view.setAdapter(simpleAdapter);
+		view.setNumColumns(5);
+		view.setBackgroundColor(Color.rgb(214, 211, 214));
+		view.setHorizontalSpacing(1);
+		view.setVerticalSpacing(1);
+		view.setLayoutParams(new LayoutParams(LayoutParams.MATCH_PARENT,
+				LayoutParams.WRAP_CONTENT));
+		view.setGravity(Gravity.CENTER);
+
+		return view;
+
 	}
 	
 	/**
