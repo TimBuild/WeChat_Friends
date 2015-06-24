@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import android.content.Context;
+import android.text.SpannableString;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -16,6 +17,7 @@ import android.widget.TextView;
 
 import com.matrix.wechat.R;
 import com.matrix.wechat.model.Comment;
+import com.matrix.wechat.utils.ExpressionUtil;
 
 public class CommentAdapter extends BaseAdapter {
 
@@ -68,7 +70,13 @@ public class CommentAdapter extends BaseAdapter {
 		
 		holder.tv_comment_from.setText(mList.get(position).getSharefromname());
 		holder.tv_comment_to.setText(mList.get(position).getSharetoname());
-		holder.tv_comment_content.setText(mList.get(position).getContent());
+//		holder.tv_comment_content.setText(mList.get(position).getContent());
+		
+		String zhengze = "f0[0-9]{2}";
+		
+		SpannableString spannableString = ExpressionUtil.getExpressionString(context,mList.get(position).getContent(), zhengze);
+		
+		holder.tv_comment_content.setText(spannableString);
 		
 		
 		return convertView;

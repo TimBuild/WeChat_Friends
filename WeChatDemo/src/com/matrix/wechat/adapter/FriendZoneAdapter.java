@@ -456,7 +456,7 @@ public class FriendZoneAdapter extends BaseAdapter{
 			
 			//获取输入框内容
 			et_comment_content=(EditText) frl_comment.findViewById(R.id.et_comment_content);	
-			final ImageButton et_button_expression=(ImageButton) frl_comment.findViewById(R.id.comment_expression);
+			final ImageView et_button_expression=(ImageView) frl_comment.findViewById(R.id.comment_expression);
 			final Button et_button = (Button) frl_comment.findViewById(R.id.comment_content_send_item);
 			final Button et_button_before = (Button) frl_comment.findViewById(R.id.comment_content_send);
 			et_button_expression.setVisibility(View.VISIBLE);
