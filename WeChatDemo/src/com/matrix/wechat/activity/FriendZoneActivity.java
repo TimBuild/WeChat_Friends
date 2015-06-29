@@ -1,7 +1,12 @@
 package com.matrix.wechat.activity;
 
+import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.lang.reflect.Field;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import com.matrix.wechat.R;
 import com.matrix.wechat.adapter.CommentAdapter;
@@ -10,6 +15,8 @@ import com.matrix.wechat.customview.CommentListView;
 import com.matrix.wechat.customview.FriendsListView;
 import com.matrix.wechat.customview.FriendsListView.OnRefreshListener;
 import com.matrix.wechat.customview.FriendsListView.onLoadListener;
+import com.matrix.wechat.customview.RoundImageView;
+import com.matrix.wechat.global.Constants;
 import com.matrix.wechat.listener.TouchListener;
 import com.matrix.wechat.model.Comment;
 import com.matrix.wechat.model.Moment;
@@ -17,8 +24,10 @@ import com.matrix.wechat.model.Share;
 import com.matrix.wechat.model.ShareComment;
 import com.matrix.wechat.model.ShareWithComment;
 import com.matrix.wechat.model.User;
+import com.matrix.wechat.utils.BitmapUtil;
 import com.matrix.wechat.utils.CacheUtil;
 import com.matrix.wechat.utils.DateUtil;
+import com.matrix.wechat.utils.FileUtil;
 import com.matrix.wechat.web.service.FriendsZoneService;
 import com.matrix.wechat.web.service.PersonalInfoService;
 import com.matrix.wechat.web.service.factory.FriendsZoneFactory;
@@ -28,20 +37,32 @@ import com.matrix.wechat.widget.SquareImageView;
 import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.app.AlertDialog;
+import android.app.Dialog;
 import android.app.AlertDialog.Builder;
+import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.os.Environment;
 import android.os.Handler;
 import android.os.Looper;
 import android.os.Message;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.graphics.Color;
+import android.text.Spannable;
+import android.text.SpannableString;
+import android.text.style.ImageSpan;
 import android.util.Log;
+import android.view.Display;
+import android.view.Gravity;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.View.OnTouchListener;
+import android.view.ViewGroup.LayoutParams;
 import android.view.WindowManager;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.AdapterView;
@@ -49,7 +70,9 @@ import android.widget.AdapterView.OnItemClickListener;
 import android.widget.AdapterView.OnItemLongClickListener;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.GridView;
 import android.widget.ImageView;
+import android.widget.SimpleAdapter;
 import android.widget.ImageView.ScaleType;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
@@ -68,6 +91,11 @@ public class FriendZoneActivity extends Activity implements OnClickListener,OnRe
 	
 	public static LinearLayout zoomView = null;
 	public static ImageView imageView = null;
+	
+//	private RoundImageView comment_pic;
+//	private static int PIC_REQUEST_CODE = 3;
+	private static final String IMAGE_PATH = Environment
+			.getExternalStorageDirectory().getPath() + "/imgs";
 
 	private int friend_start = 0;
 	private int friend_count = FriendsListView.pageSize;
@@ -75,6 +103,13 @@ public class FriendZoneActivity extends Activity implements OnClickListener,OnRe
 	private List<Moment> listMoments = new ArrayList<Moment>();
 	private List<Moment> listResult = new ArrayList<Moment>();
 	private static final String TAG = "FriendZoneActivity";
+	
+	private String imagePath;
+	private int[] imageIds = new int[50];
+	private EditText et_comment_content;
+	private Dialog builder;
+	
+	private static int PIC_SUCCESS_CODE = 4;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -100,6 +135,8 @@ public class FriendZoneActivity extends Activity implements OnClickListener,OnRe
 		frl_comment.setVisibility(View.GONE);
 		mfriendZoneAdapter.setFooterView(frl_comment);
 		ed_comment_content=(EditText) findViewById(R.id.et_comment_content);
+//		comment_pic = (RoundImageView) findViewById(R.id.comment_bt_pic);
+		
 		mListView.setOnItemLongClickListener(new OnFriendItemLongClickListener(listResult));
 		///..............
 		mListView.setOnItemClickListener(new onFriendItemClickListener(listResult));
@@ -127,10 +164,95 @@ public class FriendZoneActivity extends Activity implements OnClickListener,OnRe
 		imageView = (ImageView) zoomView.findViewById(R.id.friend_imageView);
 		imageView.setOnTouchListener(new TouchListener(imageView));
 		
+	/*	comment_pic.setOnClickListener(new OnClickListener() {
+			
+			@Override
+			public void onClick(View v) {
+				Intent intent = new Intent(Intent.ACTION_PICK);
+				intent.setType("image/*");
+				startActivityForResult(intent, PIC_REQUEST_CODE);				
+			}
+		});*/
+		
 		new FriendsZone().execute(FriendsListView.REFRESH);
 		
 	}
 	
+	
+	//////////////////////////////////////////////////
+	//适配器中调用startActivityForResult(),这边解决
+	//////////////////////////////////////////////////
+	@Override
+	protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+		super.onActivityResult(requestCode, resultCode, data);
+		if (requestCode == FriendZoneAdapter.PIC_REQUEST_CODE && resultCode == RESULT_OK) {
+			Uri uri = data.getData();
+			try {
+				WindowManager manager = getWindowManager();
+				Display display = manager.getDefaultDisplay();
+				Bitmap bmp = BitmapUtil.getBitmapFromContentProviderUri(this,
+						display.getWidth(), display.getHeight(), uri);
+				
+				String path = BitmapUtil.copyImageToCard(bmp, IMAGE_PATH,
+						"1.png");
+				
+				if (path == null) {
+					throw new FileNotFoundException();
+				}
+
+				String filePathOnServer = FileUtil.uploadFile(this, path,
+						Constants.UPLOAD_Url);
+
+				if (filePathOnServer == null) {
+					throw new IOException();
+				}
+
+				/**
+				 * 发送图片
+				 */
+				sendPicture(filePathOnServer);
+				FileUtil.deleteFile(path);
+			} catch (FileNotFoundException e) {
+				e.printStackTrace();
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
+
+		}else if(requestCode == PIC_SUCCESS_CODE&&resultCode == RESULT_OK){
+			Uri uri = data.getData();
+			try {
+				WindowManager manager = getWindowManager();
+				Display display = manager.getDefaultDisplay();
+				Bitmap bmp = BitmapUtil.getBitmapFromContentProviderUri(this,
+						display.getWidth(), display.getHeight(), uri);
+				
+				String path = BitmapUtil.copyImageToCard(bmp, IMAGE_PATH,
+						"1.png");
+				
+				if (path == null) {
+					throw new FileNotFoundException();
+				}
+
+				String filePathOnServer = FileUtil.uploadFile(this, path,
+						Constants.UPLOAD_Url);
+
+				if (filePathOnServer == null) {
+					throw new IOException();
+				}
+				this.imagePath = filePathOnServer;
+				FileUtil.deleteFile(path);
+			} catch (FileNotFoundException e) {
+				e.printStackTrace();
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
+		}
+	}
+	
+	private void sendPicture(String filePathOnServer) {
+		mfriendZoneAdapter.setImagePath(filePathOnServer);
+	}
+
 	@Override
 	public void onBackPressed() {
 		if(zoomView.getVisibility() != View.VISIBLE){
@@ -156,10 +278,13 @@ public class FriendZoneActivity extends Activity implements OnClickListener,OnRe
 			frl_comment.setVisibility(View.VISIBLE);
 			
 			//获取输入框内容
-			final EditText et_comment_content=(EditText) frl_comment.findViewById(R.id.et_comment_content);	
+			et_comment_content =(EditText) frl_comment.findViewById(R.id.et_comment_content);
+			ImageView comment_expression = (ImageView) frl_comment.findViewById(R.id.comment_expression);
+			RoundImageView comment_pic = (RoundImageView) frl_comment.findViewById(R.id.comment_bt_pic);
 			
 			Button but = (Button) frl_comment.findViewById(R.id.comment_content_send);
 			but.setOnClickListener(new OnClickListener() {
+
 				
 				@Override
 				public void onClick(View v) {
@@ -180,10 +305,14 @@ public class FriendZoneActivity extends Activity implements OnClickListener,OnRe
 							PersonalInfoService perInfoService=PersonalInfoFactory.getInstance();
 							User user=perInfoService.getUserByUsername(moment.getUserName());
 							
-							if(!comment_content.equals("")||comment_content!=null){
+							if((!comment_content.equals("")&&comment_content!=null)||imagePath!=null){
 								Comment comment_add = new Comment();
-								
-								comment_add.setContent(comment_content);
+								String comment = comment_content;
+								if(imagePath!=null){
+									comment = comment+",[Image],"+imagePath;
+								}
+								Log.d(TAG, "图片地址："+comment);
+								comment_add.setContent(comment);
 								comment_add.setSharefromname(CacheUtil.getUser(CacheUtil.context).getUsername());
 								comment_add.setSharefromid((int)CacheUtil.getUser(CacheUtil.context).getUserid());
 								comment_add.setSharetoid((int)user.getUserid());
@@ -192,7 +321,7 @@ public class FriendZoneActivity extends Activity implements OnClickListener,OnRe
 								
 								listcComments.add(comment_add);
 								
-								new addComment().execute(Integer.toString(moment.getMomentid()),Long.toString(user.getUserid()),comment_content);
+								new addComment().execute(Integer.toString(moment.getMomentid()),Long.toString(user.getUserid()),comment);
 							}
 							
 							
@@ -200,9 +329,120 @@ public class FriendZoneActivity extends Activity implements OnClickListener,OnRe
 					}).start();
 				}
 			});
+
+			comment_expression.setOnClickListener(new OnClickListener() {
+				
+				@Override
+				public void onClick(View v) {
+					createExpressionDialog();					
+				}
+
+			});
 			
+			comment_pic.setOnClickListener(new OnClickListener() {
+				
+				@Override
+				public void onClick(View v) {
+					Intent intent = new Intent(Intent.ACTION_GET_CONTENT);
+					intent.setType("image/*");
+					startActivityForResult(intent, PIC_SUCCESS_CODE);
+				}
+			});
 		}
 		
+	}
+	/**
+	 * 创建一个表情选择对话框
+	 */
+	private void createExpressionDialog() {
+		builder = new Dialog(this);
+		GridView gridView = createGridView();
+		builder.setContentView(gridView);
+		builder.setTitle("default expression");
+		builder.show();
+
+		gridView.setOnItemClickListener(new OnItemClickListener() {
+
+			@Override
+			public void onItemClick(AdapterView<?> parent, View view,
+					int position, long id) {
+				Bitmap bitmap = null;
+				bitmap = BitmapFactory.decodeResource(getResources(),
+						imageIds[position % imageIds.length]);
+				ImageSpan imageSpan = new ImageSpan(getApplicationContext(), bitmap);
+				String str = null;
+				if (position < 10) {
+					str = "f00" + position;
+				} else if (position < 100) {
+					str = "f0" + position;
+				}
+
+				SpannableString spanableString = new SpannableString(str);
+				spanableString.setSpan(imageSpan, 0, 4,
+						Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
+				et_comment_content.append(spanableString);
+				builder.dismiss();
+
+			}
+		});
+	}
+	
+	/**
+	 * 生成一个表情对话框中的gridview
+	 * 
+	 * @return
+	 */
+	private GridView createGridView() {
+		final GridView view = new GridView(this);
+		List<Map<String, Object>> listItems = new ArrayList<Map<String, Object>>();
+		// 生成20个表情的id，封装
+
+		for (int i = 0; i < 50; i++) {
+			try {
+				if (i < 10) {
+					Field field = R.drawable.class.getDeclaredField("f00" + i);
+					int resourceId = Integer.parseInt(field.get(null)
+							.toString());
+					imageIds[i] = resourceId;
+				} else if (i < 100) {
+					Field field = R.drawable.class.getDeclaredField("f0" + i);
+					int resourceId = Integer.parseInt(field.get(null)
+							.toString());
+					imageIds[i] = resourceId;
+				}
+
+			} catch (NoSuchFieldException e) {
+				e.printStackTrace();
+			} catch (NumberFormatException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			} catch (IllegalArgumentException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			} catch (IllegalAccessException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+
+			Map<String, Object> listItem = new HashMap<String, Object>();
+			listItem.put("image", imageIds[i]);
+			listItems.add(listItem);
+		}
+
+		SimpleAdapter simpleAdapter = new SimpleAdapter(this, listItems,
+				R.layout.team_layput_single_expression_cell,
+				new String[] { "image" }, new int[] { R.id.image });
+		view.setAdapter(simpleAdapter);
+		view.setNumColumns(5);
+		view.setBackgroundColor(Color.rgb(214, 211, 214));
+		view.setHorizontalSpacing(1);
+		view.setVerticalSpacing(1);
+		view.setLayoutParams(new LayoutParams(LayoutParams.MATCH_PARENT,
+				LayoutParams.WRAP_CONTENT));
+		view.setGravity(Gravity.CENTER);
+
+		return view;
+
 	}
 	
 	private class OnFriendItemLongClickListener implements OnItemLongClickListener{
@@ -261,6 +501,7 @@ public class FriendZoneActivity extends Activity implements OnClickListener,OnRe
 		
 		@Override
 		protected void onPostExecute(Integer result) {
+			imagePath = null;
 			if(result!=-1){
 				Toast.makeText(FriendZoneActivity.this, "comment success", Toast.LENGTH_SHORT).show();
 			}

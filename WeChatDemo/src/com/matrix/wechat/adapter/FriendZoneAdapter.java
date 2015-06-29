@@ -7,11 +7,13 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.AlertDialog.Builder;
 import android.app.Dialog;
 import android.content.Context;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Color;
@@ -49,6 +51,7 @@ import com.matrix.wechat.activity.ChatActivity;
 import com.matrix.wechat.activity.FriendZoneActivity;
 import com.matrix.wechat.customview.CommentListView;
 import com.matrix.wechat.customview.FriendsListView;
+import com.matrix.wechat.customview.RoundImageView;
 import com.matrix.wechat.model.Comment;
 import com.matrix.wechat.model.Moment;
 import com.matrix.wechat.model.User;
@@ -81,6 +84,10 @@ public class FriendZoneAdapter extends BaseAdapter{
 	private int[] imageIds = new int[50];
 	private EditText et_comment_content;
 	
+	public static int PIC_REQUEST_CODE = 3;
+	
+	private String imagePath;
+	
 	public FriendZoneAdapter(Context context) {
 		this.mInflater = LayoutInflater.from(context);
 		this.context=context;
@@ -111,6 +118,10 @@ public class FriendZoneAdapter extends BaseAdapter{
 	
 	public void setFooterView(RelativeLayout layout){
 		this.frl_comment = layout;
+	}
+	
+	public void setImagePath(String imagePath){
+		this.imagePath = imagePath;
 	}
 
 	@Override
@@ -197,7 +208,7 @@ public class FriendZoneAdapter extends BaseAdapter{
 //		handler = new MyHandler(adapter, listcomment);
 		//.....................
 //		holder.comment_content_send.setOnClickListener(new OnSendClickListener(frl_comment, mList.get(position).getUserName(),adapter,mList.get(position).getCommentsList()));
-		holder.lv_comments.setOnItemClickListener(new OnCommentItemClickListener(holder.lv_comments,frl_comment,adapter,listcomment));
+		holder.lv_comments.setOnItemClickListener(new OnCommentItemClickListener(holder.lv_comments,frl_comment,adapter,listcomment,context));
 		
 		//长按删除评论
 		holder.lv_comments.setOnItemLongClickListener(new OnCommentItemLongListener(holder.lv_comments,frl_comment,adapter,listcomment));
@@ -270,6 +281,7 @@ public class FriendZoneAdapter extends BaseAdapter{
 		@Override
 		protected void onPostExecute(Integer result) {
 			super.onPostExecute(result);
+			imagePath = null;
 			if(result!=-1){
 				//添加到list数据中
 				Toast.makeText(context, "comment success", Toast.LENGTH_SHORT).show();
@@ -436,16 +448,18 @@ public class FriendZoneAdapter extends BaseAdapter{
 		private RelativeLayout frl_comment;
 		private CommentAdapter commentAdapter;
 		private List<Comment> listComments;
+		private Context context;
 		
 
 		public OnCommentItemClickListener(CommentListView listView,
 				RelativeLayout frl_comment, CommentAdapter commentAdapter,
-				List<Comment> listcComments) {
+				List<Comment> listcComments,Context context) {
 			super();
 			this.listView = listView;
 			this.frl_comment = frl_comment;
 			this.commentAdapter = commentAdapter;
 			this.listComments = listcComments;
+			this.context = context;
 		}
 
 
@@ -457,9 +471,11 @@ public class FriendZoneAdapter extends BaseAdapter{
 			//获取输入框内容
 			et_comment_content=(EditText) frl_comment.findViewById(R.id.et_comment_content);	
 			final ImageView et_button_expression=(ImageView) frl_comment.findViewById(R.id.comment_expression);
+			final RoundImageView comment_pic = (RoundImageView) frl_comment.findViewById(R.id.comment_bt_pic);
 			final Button et_button = (Button) frl_comment.findViewById(R.id.comment_content_send_item);
 			final Button et_button_before = (Button) frl_comment.findViewById(R.id.comment_content_send);
 			et_button_expression.setVisibility(View.VISIBLE);
+//			comment_pic.setVisibility(View.VISIBLE);
 			et_button.setVisibility(View.VISIBLE);
 			et_button_before.setVisibility(View.GONE);
 			final Comment comment = (Comment) listView.getAdapter().getItem(position);
@@ -490,7 +506,11 @@ public class FriendZoneAdapter extends BaseAdapter{
 							User user=perInfoService.getUserByUsername(userName);
 							sharetoid=(int) user.getUserid();
 							Log.d(TAG, "username-->"+comment_content.toString());
-							if(comment_content.equals("")||comment_content!=null){
+//							Log.d(TAG, "图片地址：<---"+imagePath);
+							if((!comment_content.equals("")&&comment_content!=null)||imagePath!=null){
+								if(imagePath!=null){
+									comment_content = comment_content+",[Image],"+imagePath;
+								}
 								Comment comment_add = new Comment();
 								comment_add.setSharefromname(CacheUtil.getUser(CacheUtil.context).getUsername());
 								comment_add.setSharefromid((int)(CacheUtil.getUser(CacheUtil.context).getUserid()));
@@ -515,9 +535,23 @@ public class FriendZoneAdapter extends BaseAdapter{
 					createExpressionDialog();
 				}
 			});
+			
+			comment_pic.setOnClickListener(new OnClickListener() {
+				
+				@Override
+				public void onClick(View v) {
+					Intent intent = new Intent(Intent.ACTION_GET_CONTENT);
+					intent.setType("image/*");
+					((FriendZoneActivity) context).startActivityForResult(intent, PIC_REQUEST_CODE);
+					
+				}
+			});
+			
+			
 		}
-		
 	}
+	
+	
 	
 	/**
 	 * 创建一个表情选择对话框
