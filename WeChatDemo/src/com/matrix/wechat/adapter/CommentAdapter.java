@@ -10,14 +10,13 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup;
-import android.webkit.WebView.FindListener;
-import android.widget.AdapterView;
-import android.widget.AdapterView.OnItemClickListener;
 import android.widget.BaseAdapter;
 import android.widget.ImageView;
+import android.widget.ImageView.ScaleType;
 import android.widget.TextView;
 
 import com.matrix.wechat.R;
+import com.matrix.wechat.activity.FriendZoneActivity;
 import com.matrix.wechat.model.Comment;
 import com.matrix.wechat.utils.ExpressionUtil;
 import com.squareup.picasso.Picasso;
@@ -83,7 +82,7 @@ public class CommentAdapter extends BaseAdapter {
 		holder.tv_comment_content.setText(spannableString);
 		String imageFlag = ",[Image],";
 		String imgUrl = mList.get(position).getContent();
-		
+		Log.d(TAG, "position:"+position+"--图片：--->"+imgUrl);
 		if(imgUrl.indexOf(imageFlag)!=-1){
 			holder.tv_comment_pic.setVisibility(View.VISIBLE);
 			String comment = imgUrl.substring(0, imgUrl.indexOf(imageFlag));
@@ -95,15 +94,32 @@ public class CommentAdapter extends BaseAdapter {
 				holder.tv_comment_content.setText(comment);
 			}
 			Picasso.with(context).load(imagePath).into(holder.tv_comment_pic);
-//			Log.d(TAG, "图片："+comment+"<--->"+imagePath);
-			
+
+			holder.tv_comment_pic.setOnClickListener(new onImgClickListener(imagePath));
 			
 		}else{
 			holder.tv_comment_pic.setVisibility(View.GONE);
+			holder.tv_comment_content.setVisibility(View.VISIBLE);
 		}
 		
 		
 		return convertView;
+	}
+	
+	private class onImgClickListener implements OnClickListener{
+		
+		String url = null;
+		public onImgClickListener(String url){
+			this.url = url;
+		}
+
+		@Override
+		public void onClick(View v) {
+			FriendZoneActivity.zoomView.setVisibility(View.VISIBLE);
+			Picasso.with(context).load(url).into(FriendZoneActivity.imageView);
+			FriendZoneActivity.imageView.setScaleType(ScaleType.MATRIX);			
+		}
+		
 	}
 	
 	public List<Comment> getmList() {
