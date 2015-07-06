@@ -8,10 +8,50 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import android.annotation.SuppressLint;
+import android.app.Activity;
+import android.app.AlertDialog;
+import android.app.AlertDialog.Builder;
+import android.app.Dialog;
+import android.content.Context;
+import android.content.DialogInterface;
+import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.graphics.Color;
+import android.net.Uri;
+import android.os.AsyncTask;
+import android.os.Bundle;
+import android.os.Environment;
+import android.text.Spannable;
+import android.text.SpannableString;
+import android.text.style.ImageSpan;
+import android.util.Log;
+import android.view.Display;
+import android.view.Gravity;
+import android.view.MotionEvent;
+import android.view.View;
+import android.view.View.OnClickListener;
+import android.view.View.OnLongClickListener;
+import android.view.View.OnTouchListener;
+import android.view.ViewGroup.LayoutParams;
+import android.view.WindowManager;
+import android.view.inputmethod.InputMethodManager;
+import android.widget.AdapterView;
+import android.widget.AdapterView.OnItemClickListener;
+import android.widget.AdapterView.OnItemLongClickListener;
+import android.widget.Button;
+import android.widget.EditText;
+import android.widget.GridView;
+import android.widget.ImageView;
+import android.widget.ImageView.ScaleType;
+import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
+import android.widget.SimpleAdapter;
+import android.widget.Toast;
+
 import com.matrix.wechat.R;
-import com.matrix.wechat.adapter.CommentAdapter;
 import com.matrix.wechat.adapter.FriendZoneAdapter;
-import com.matrix.wechat.customview.CommentListView;
 import com.matrix.wechat.customview.FriendsListView;
 import com.matrix.wechat.customview.FriendsListView.OnRefreshListener;
 import com.matrix.wechat.customview.FriendsListView.onLoadListener;
@@ -28,55 +68,13 @@ import com.matrix.wechat.utils.BitmapUtil;
 import com.matrix.wechat.utils.CacheUtil;
 import com.matrix.wechat.utils.DateUtil;
 import com.matrix.wechat.utils.FileUtil;
+import com.matrix.wechat.utils.voice.RecordVoice;
+import com.matrix.wechat.utils.voice.SendVoice;
 import com.matrix.wechat.web.service.FriendsZoneService;
 import com.matrix.wechat.web.service.PersonalInfoService;
 import com.matrix.wechat.web.service.factory.FriendsZoneFactory;
 import com.matrix.wechat.web.service.factory.PersonalInfoFactory;
 import com.matrix.wechat.widget.SquareImageView;
-
-import android.annotation.SuppressLint;
-import android.app.Activity;
-import android.app.AlertDialog;
-import android.app.Dialog;
-import android.app.AlertDialog.Builder;
-import android.net.Uri;
-import android.os.AsyncTask;
-import android.os.Bundle;
-import android.os.Environment;
-import android.os.Handler;
-import android.os.Looper;
-import android.os.Message;
-import android.content.Context;
-import android.content.DialogInterface;
-import android.content.Intent;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
-import android.graphics.Color;
-import android.text.Spannable;
-import android.text.SpannableString;
-import android.text.style.ImageSpan;
-import android.util.Log;
-import android.view.Display;
-import android.view.Gravity;
-import android.view.MotionEvent;
-import android.view.View;
-import android.view.View.OnClickListener;
-import android.view.View.OnTouchListener;
-import android.view.ViewGroup.LayoutParams;
-import android.view.WindowManager;
-import android.view.inputmethod.InputMethodManager;
-import android.widget.AdapterView;
-import android.widget.AdapterView.OnItemClickListener;
-import android.widget.AdapterView.OnItemLongClickListener;
-import android.widget.Button;
-import android.widget.EditText;
-import android.widget.GridView;
-import android.widget.ImageView;
-import android.widget.SimpleAdapter;
-import android.widget.ImageView.ScaleType;
-import android.widget.LinearLayout;
-import android.widget.RelativeLayout;
-import android.widget.Toast;
 
 public class FriendZoneActivity extends Activity implements OnClickListener,OnRefreshListener,
 		onLoadListener {
@@ -110,6 +108,11 @@ public class FriendZoneActivity extends Activity implements OnClickListener,OnRe
 	private Dialog builder;
 	
 	private static int PIC_SUCCESS_CODE = 4;
+	private static RecordVoice recordVoice = new RecordVoice();
+	public static final String VOICE_PATH = Environment
+			.getExternalStorageDirectory().getAbsolutePath() + "/test.3gp";
+	
+	private RelativeLayout rl_voice;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -272,7 +275,7 @@ public class FriendZoneActivity extends Activity implements OnClickListener,OnRe
 		}
 
 		@Override
-		public void onItemClick(AdapterView<?> parent, View view, int position,
+		public void onItemClick(AdapterView<?> parent, View view, final int position,
 				final long id) {
 			
 			frl_comment.setVisibility(View.VISIBLE);
@@ -321,7 +324,7 @@ public class FriendZoneActivity extends Activity implements OnClickListener,OnRe
 								
 								listcComments.add(comment_add);
 								
-								new addComment().execute(Integer.toString(moment.getMomentid()),Long.toString(user.getUserid()),comment);
+								new addComment(listMoments.get(position-2)).execute(Integer.toString(moment.getMomentid()),Long.toString(user.getUserid()),comment);
 							}
 							
 							
@@ -329,6 +332,58 @@ public class FriendZoneActivity extends Activity implements OnClickListener,OnRe
 					}).start();
 				}
 			});
+			
+			rl_voice = (RelativeLayout) frl_comment.findViewById(R.id.rl_friend_zone_voice);
+			final ImageView iv_voice = (ImageView) frl_comment.findViewById(R.id.comment_voice);
+			but.setOnLongClickListener(new OnLongClickListener() {
+				//长按将声音按钮显示出来
+				@Override
+				public boolean onLongClick(View v) {
+					
+					rl_voice.setVisibility(View.VISIBLE);
+					final Moment moment = listMoments.get((int)id);
+					rl_voice.setOnTouchListener(new OnTouchListener() {
+						
+						@Override
+						public boolean onTouch(View v, MotionEvent event) {
+							switch (event.getActionMasked()) {
+							case MotionEvent.ACTION_DOWN:
+								recordVoice.startRecording();
+//						iv_voice.setBackgroundResource(R.drawable.microphone_press);
+								break;
+							case MotionEvent.ACTION_UP:
+								boolean result = recordVoice.stopRecording();
+//						iv_voice.setBackgroundResource(R.drawable.microphone);
+								if(!result){
+									Toast.makeText(FriendZoneActivity.this, "record time is to short", Toast.LENGTH_SHORT).show();
+									return true;	
+								}
+								
+								final long time = recordVoice.calcuteVoice();
+								final String voicePath = SendVoice.uploadFile(VOICE_PATH, Constants.UPLOAD_Url);
+//								Log.d(TAG, "voicePath:"+voicePath);
+								new Thread(new Runnable() {
+									
+									@Override
+									public void run() {
+										
+										PersonalInfoService perInfoService=PersonalInfoFactory.getInstance();
+										User user=perInfoService.getUserByUsername(moment.getUserName());
+										String voice = "[Voice],"+voicePath+","+time;
+										new addComment(listMoments.get((int) id)).execute(Integer.toString(moment.getMomentid()),Long.toString(user.getUserid()),voice);
+										FileUtil.deleteFile(VOICE_PATH);
+									}
+								}).start();
+								break;
+							}
+//					rl_voice.setVisibility(View.GONE);
+							return true;
+						}
+					});
+					return true;
+				}
+			});
+			
 
 			comment_expression.setOnClickListener(new OnClickListener() {
 				
@@ -490,6 +545,11 @@ public class FriendZoneActivity extends Activity implements OnClickListener,OnRe
 	private class addComment extends AsyncTask<String, Void, Integer>{
 
 		private FriendsZoneService fZoneService;
+		private Moment moment;
+		public addComment(Moment moment){
+			this.moment = moment;
+//			Log.d(TAG, "this.moment:"+this.moment.getCommentsList().toString());
+		}
 		@Override
 		protected Integer doInBackground(String... params) {
 			fZoneService = FriendsZoneFactory.getInstance();
@@ -502,8 +562,13 @@ public class FriendZoneActivity extends Activity implements OnClickListener,OnRe
 		@Override
 		protected void onPostExecute(Integer result) {
 			imagePath = null;
+			rl_voice.setVisibility(View.GONE);
 			if(result!=-1){
+				frl_comment.setVisibility(View.GONE);
 				Toast.makeText(FriendZoneActivity.this, "comment success", Toast.LENGTH_SHORT).show();
+				listResult.add(moment);
+				mfriendZoneAdapter.setData(listResult);
+				mfriendZoneAdapter.notifyDataSetChanged();
 			}
 			else{
 				Toast.makeText(FriendZoneActivity.this, "comment failed", Toast.LENGTH_SHORT).show();

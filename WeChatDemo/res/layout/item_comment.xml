@@ -29,6 +29,31 @@
         android:layout_height="wrap_content"
         android:orientation="vertical" >
 
+        <RelativeLayout
+            android:id="@+id/rl_voice"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:visibility="gone" >
+
+            <ImageView
+                android:id="@+id/iv_voice_image"
+                android:layout_width="80dp"
+                android:layout_height="30dp"
+                android:adjustViewBounds="true"
+                android:background="@drawable/voice"
+                android:clickable="true"
+                android:maxHeight="30dp" />
+
+            <TextView
+                android:id="@+id/tv_voice_length"
+                android:layout_width="wrap_content"
+                android:layout_height="50dp"
+                android:layout_toRightOf="@id/iv_voice_image"
+                android:paddingTop="10dp"
+                android:text="12:00"
+                android:textSize="20sp" />
+        </RelativeLayout>
+
         <ImageView
             android:id="@+id/tv_comment_image"
             android:layout_width="wrap_content"

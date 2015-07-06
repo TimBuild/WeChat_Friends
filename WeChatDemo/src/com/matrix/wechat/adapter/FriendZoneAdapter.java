@@ -27,8 +27,11 @@ import android.text.style.ImageSpan;
 import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.View.OnClickListener;
+import android.view.View.OnLongClickListener;
+import android.view.View.OnTouchListener;
 import android.view.ViewGroup.LayoutParams;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
@@ -52,14 +55,18 @@ import com.matrix.wechat.activity.FriendZoneActivity;
 import com.matrix.wechat.customview.CommentListView;
 import com.matrix.wechat.customview.FriendsListView;
 import com.matrix.wechat.customview.RoundImageView;
+import com.matrix.wechat.global.Constants;
 import com.matrix.wechat.model.Comment;
 import com.matrix.wechat.model.Moment;
 import com.matrix.wechat.model.User;
 import com.matrix.wechat.utils.BitmapUtil;
 import com.matrix.wechat.utils.CacheUtil;
+import com.matrix.wechat.utils.FileUtil;
 import com.matrix.wechat.utils.NetworkUtil;
 import com.matrix.wechat.utils.TimeUtil;
 import com.matrix.wechat.utils.voice.PlayVoice;
+import com.matrix.wechat.utils.voice.RecordVoice;
+import com.matrix.wechat.utils.voice.SendVoice;
 import com.matrix.wechat.web.service.FriendsZoneService;
 import com.matrix.wechat.web.service.PersonalInfoService;
 import com.matrix.wechat.web.service.factory.FriendsZoneFactory;
@@ -87,6 +94,8 @@ public class FriendZoneAdapter extends BaseAdapter{
 	public static int PIC_REQUEST_CODE = 3;
 	
 	private String imagePath;
+	private RelativeLayout rl_voice;
+	private static RecordVoice recordVoice = new RecordVoice();
 	
 	public FriendZoneAdapter(Context context) {
 		this.mInflater = LayoutInflater.from(context);
@@ -474,6 +483,7 @@ public class FriendZoneAdapter extends BaseAdapter{
 			final RoundImageView comment_pic = (RoundImageView) frl_comment.findViewById(R.id.comment_bt_pic);
 			final Button et_button = (Button) frl_comment.findViewById(R.id.comment_content_send_item);
 			final Button et_button_before = (Button) frl_comment.findViewById(R.id.comment_content_send);
+			
 			et_button_expression.setVisibility(View.VISIBLE);
 //			comment_pic.setVisibility(View.VISIBLE);
 			et_button.setVisibility(View.VISIBLE);
@@ -527,6 +537,57 @@ public class FriendZoneAdapter extends BaseAdapter{
 				}
 			});
 			
+			rl_voice = (RelativeLayout) frl_comment.findViewById(R.id.rl_friend_zone_voice);
+			et_button.setOnLongClickListener(new OnLongClickListener() {
+				
+				@Override
+				public boolean onLongClick(View v) {
+					handler = new MyHandler(commentAdapter, listComments);
+					rl_voice.setVisibility(View.VISIBLE);
+					
+					rl_voice.setOnTouchListener(new OnTouchListener() {
+						
+						@Override
+						public boolean onTouch(View v, MotionEvent event) {
+							switch (event.getActionMasked()) {
+							case MotionEvent.ACTION_DOWN:
+								recordVoice.startRecording();
+								break;
+							case MotionEvent.ACTION_UP:
+								boolean result = recordVoice.stopRecording();
+								if(!result){
+									Toast.makeText(context, "record time is to short", Toast.LENGTH_SHORT).show();
+									return true;	
+								}
+								
+								final long time = recordVoice.calcuteVoice();
+								final String voicePath = SendVoice.uploadFile(FriendZoneActivity.VOICE_PATH, Constants.UPLOAD_Url);
+//								Log.d(TAG, "voicePath:"+voicePath);
+										
+										PersonalInfoService perInfoService=PersonalInfoFactory.getInstance();
+										User user=perInfoService.getUserByUsername(userName);
+										sharetoid = (int) user.getUserid();
+										String voice = "[Voice],"+voicePath+","+time;
+										Comment comment_add = new Comment();
+										comment_add.setSharefromname(CacheUtil.getUser(CacheUtil.context).getUsername());
+										comment_add.setSharefromid((int)(CacheUtil.getUser(CacheUtil.context).getUserid()));
+										comment_add.setSharetoname(user.getUsername());
+										comment_add.setSharetoid((int)(user.getUserid()));
+										comment_add.setContent(voice);
+										comment_add.setShareid(comment.getShareid());
+										new AddComment(commentAdapter,listComments,comment_add).execute(Integer.toString(comment.getShareid()),Integer.toString(sharetoid),voice);
+										FileUtil.deleteFile(FriendZoneActivity.VOICE_PATH);
+//										frl_comment.setVisibility(View.GONE);
+										rl_voice.setVisibility(View.GONE);
+								break;
+							}
+//					rl_voice.setVisibility(View.GONE);
+							return true;
+						}
+					});
+					return true;
+				}
+			});
 			et_button_expression.setOnClickListener(new OnClickListener() {
 				
 				@Override

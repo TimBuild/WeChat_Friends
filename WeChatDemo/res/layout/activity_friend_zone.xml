@@ -85,7 +85,7 @@
             android:layout_width="fill_parent"
             android:layout_height="50dp"
             android:layout_alignParentTop="true" >
-            
+
             <ImageView
                 android:id="@+id/comment_expression"
                 android:layout_width="wrap_content"
@@ -93,7 +93,7 @@
                 android:layout_alignBottom="@+id/et_comment_content"
                 android:layout_alignParentLeft="true"
                 android:src="@drawable/chat_icon_smiles" />
-            
+
             <com.matrix.wechat.customview.RoundImageView
                 android:id="@+id/comment_bt_pic"
                 android:layout_width="26dp"
@@ -103,18 +103,18 @@
                 android:layout_toRightOf="@+id/comment_expression"
                 android:src="@drawable/send_picture" >
             </com.matrix.wechat.customview.RoundImageView>
-            
+
             <EditText
                 android:id="@+id/et_comment_content"
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
                 android:layout_centerVertical="true"
-                android:layout_toRightOf="@+id/comment_bt_pic"
                 android:layout_toLeftOf="@+id/comment_content_send"
+                android:layout_toRightOf="@+id/comment_bt_pic"
                 android:background="@drawable/login_edit_normal"
                 android:singleLine="true"
                 android:textSize="18sp" />
-            
+
             <Button
                 android:id="@+id/comment_content_send"
                 android:layout_width="60dp"
@@ -133,7 +133,22 @@
                 android:background="@drawable/chat_send_btn"
                 android:text="Send"
                 android:visibility="gone" />
+        </RelativeLayout>
 
+        <RelativeLayout
+            android:id="@+id/rl_friend_zone_voice"
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:gravity="center"
+            android:layout_below="@id/rl_friend_zone_controler"
+            android:visibility="gone"
+             >
+
+            <ImageView
+                android:id="@+id/comment_voice"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@drawable/microphone" />
         </RelativeLayout>
     </RelativeLayout>
 

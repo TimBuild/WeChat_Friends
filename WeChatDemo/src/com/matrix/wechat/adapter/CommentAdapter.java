@@ -13,12 +13,15 @@ import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.ImageView;
 import android.widget.ImageView.ScaleType;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.matrix.wechat.R;
 import com.matrix.wechat.activity.FriendZoneActivity;
 import com.matrix.wechat.model.Comment;
 import com.matrix.wechat.utils.ExpressionUtil;
+import com.matrix.wechat.utils.TimeUtil;
+import com.matrix.wechat.utils.voice.PlayVoice;
 import com.squareup.picasso.Picasso;
 
 public class CommentAdapter extends BaseAdapter {
@@ -64,7 +67,9 @@ public class CommentAdapter extends BaseAdapter {
 			holder.tv_comment_to = (TextView) convertView.findViewById(R.id.tv_comment_to);
 			holder.tv_comment_content=(TextView) convertView.findViewById(R.id.tv_comment_content);
 			holder.tv_comment_pic = (ImageView) convertView.findViewById(R.id.tv_comment_image);
-						
+			holder.rl_voice = (RelativeLayout) convertView.findViewById(R.id.rl_voice);			
+			holder.iv_voice = (ImageView) convertView.findViewById(R.id.iv_voice_image);
+			holder.tv_voice = (TextView) convertView.findViewById(R.id.tv_voice_length);
 			convertView.setTag(holder);
 		}else{
 			holder = (ViewHolder) convertView.getTag();
@@ -81,10 +86,13 @@ public class CommentAdapter extends BaseAdapter {
 		
 		holder.tv_comment_content.setText(spannableString);
 		String imageFlag = ",[Image],";
+		String voiceFlag = "[Voice],";
 		String imgUrl = mList.get(position).getContent();
 		Log.d(TAG, "position:"+position+"--图片：--->"+imgUrl);
 		if(imgUrl.indexOf(imageFlag)!=-1){
+			//是图片
 			holder.tv_comment_pic.setVisibility(View.VISIBLE);
+			holder.rl_voice.setVisibility(View.GONE);
 			String comment = imgUrl.substring(0, imgUrl.indexOf(imageFlag));
 			String imagePath = imgUrl.substring(imgUrl.indexOf(imageFlag)+9);
 			if(comment.equals("")||comment==null){
@@ -97,8 +105,18 @@ public class CommentAdapter extends BaseAdapter {
 
 			holder.tv_comment_pic.setOnClickListener(new onImgClickListener(imagePath));
 			
+		}else if(imgUrl.indexOf(voiceFlag)!=-1){
+			//是声音
+			holder.rl_voice.setVisibility(View.VISIBLE);
+			holder.tv_comment_pic.setVisibility(View.GONE);
+			holder.tv_comment_content.setVisibility(View.GONE);
+			String voice_path_url = imgUrl.substring(imgUrl.indexOf("http://"));
+			String[] voice = voice_path_url.split(",");
+			holder.tv_voice.setText(TimeUtil.parseTime(voice[1]));
+			holder.iv_voice.setOnClickListener(new onVoiceClickListener(voice[0]));
 		}else{
 			holder.tv_comment_pic.setVisibility(View.GONE);
+			holder.rl_voice.setVisibility(View.GONE);
 			holder.tv_comment_content.setVisibility(View.VISIBLE);
 		}
 		
@@ -106,6 +124,19 @@ public class CommentAdapter extends BaseAdapter {
 		return convertView;
 	}
 	
+	private class onVoiceClickListener implements OnClickListener{
+		private String voice;
+		
+		public onVoiceClickListener(String voice){
+			this.voice = voice;
+		}
+
+		@Override
+		public void onClick(View v) {
+			PlayVoice.startPlaying(voice);
+		}
+	}
+
 	private class onImgClickListener implements OnClickListener{
 		
 		String url = null;
@@ -137,6 +168,9 @@ public class CommentAdapter extends BaseAdapter {
 		public TextView tv_comment_to;
 		public TextView tv_comment_content;	
 		public ImageView tv_comment_pic;
+		public RelativeLayout rl_voice;
+		public ImageView iv_voice;
+		public TextView tv_voice;
 
 	}
 
