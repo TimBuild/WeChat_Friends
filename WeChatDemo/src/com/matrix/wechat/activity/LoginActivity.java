@@ -9,6 +9,7 @@ import com.baidu.android.pushservice.PushConstants;
 import com.baidu.android.pushservice.PushManager;
 import com.matrix.wechat.R;
 import com.matrix.wechat.model.User;
+import com.matrix.wechat.utils.BitmapUtil;
 import com.matrix.wechat.utils.CacheUtil;
 import com.matrix.wechat.utils.NetworkUtil;
 import com.matrix.wechat.web.service.PersonalInfoService;
@@ -30,6 +31,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 import static com.matrix.wechat.global.Variables.*;
+import static com.matrix.wechat.global.Constants.OWN_HEAD_IMAGE;
 
 public class LoginActivity extends Activity{
 
@@ -50,6 +52,7 @@ public class LoginActivity extends Activity{
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_login);
+		System.out.println("onCreateonCreateonCreateonCreateonCreate");
 /*		
 		if(!NetworkUtil.isNetworkConnected(Login.this)) {
 			Toast.makeText(Login.this, "Please open your net!", Toast.LENGTH_LONG).show();
@@ -62,7 +65,9 @@ public class LoginActivity extends Activity{
 		
 		loadVariables(CacheUtil.context);
 		if(getIsLogined()){
-			CacheUtil.updateCachedUser(getUser(), CacheUtil.context);
+			User user = getUser();
+			CacheUtil.updateCachedUser(user, CacheUtil.context);
+			OWN_HEAD_IMAGE = BitmapUtil.getBitmap(user.getPicture());
 			Intent intent = new Intent();
 			intent.setClass(LoginActivity.this, MainWeixin.class);
 			startActivity(intent);
@@ -170,6 +175,7 @@ public class LoginActivity extends Activity{
 					JPushInterface.onResume(getApplicationContext());
 
 					setIsLogined(true);
+					user.setStatus(1);
 					setUser(user);
 					saveVariables(CacheUtil.context);
 					

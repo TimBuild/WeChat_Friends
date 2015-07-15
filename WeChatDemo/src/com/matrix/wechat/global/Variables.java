@@ -74,6 +74,6 @@ public abstract class Variables {
 		picture = sharedPreferences.getString(USER_PICTURE, "");
 		status = sharedPreferences.getInt(USER_STATUS, 0);
 		
-		user = new User(userid, userName, nickName, password, picture, status);
+		user = new User(userid, userName, nickName, picture, password, status);
 	}
 }
