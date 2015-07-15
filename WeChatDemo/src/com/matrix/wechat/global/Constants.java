@@ -3,6 +3,18 @@ package com.matrix.wechat.global;
 import android.graphics.Bitmap;
 
 public class Constants {
+	/**
+     * preferences flag
+     */
+    public static final String SHARED_PREFERENCES               = "preferences";
+    public static final String LOGIN_STATUS = "login static";
+	public static final String USER_ID_FLAG = "userid";
+	public static final String USER_NAME = "username";
+	public static final String USER_NICK_NAME = "nickname";
+	public static final String USER_PASSWORD = "password";
+	public static final String USER_PICTURE = "picture";
+	public static final String USER_STATUS = "status";
+	
 	// API for restful 
 	public final static String API_BASE_URL = "http://192.168.1.73:8090";
 	public final static String API_CONTACTS =  API_BASE_URL + "/api1/user";

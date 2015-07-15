@@ -10,8 +10,11 @@ import android.view.View.OnClickListener;
 import android.widget.LinearLayout;
 
 import com.matrix.wechat.R;
+import com.matrix.wechat.logic.LoginAction;
 import com.matrix.wechat.web.service.PersonalInfoService;
 import com.matrix.wechat.web.service.factory.PersonalInfoFactory;
+
+import static com.matrix.wechat.global.Variables.*;
 
 public class ExitActivity extends Activity {
 	// private MyDialog dialog;
@@ -68,7 +71,9 @@ public class ExitActivity extends Activity {
 				}
 			}
 		}).start();
-
+		
+		setIsLogined(false);
+		LoginAction.logout();
 		this.finish();
 		MainWeixin.instance.finish();// 关闭Main 这个Activity
 

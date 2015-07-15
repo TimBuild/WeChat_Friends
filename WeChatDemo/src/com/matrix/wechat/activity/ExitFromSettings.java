@@ -1,5 +1,10 @@
 package com.matrix.wechat.activity;
 
+import static com.matrix.wechat.global.Variables.getUser;
+import static com.matrix.wechat.global.Variables.saveVariables;
+import static com.matrix.wechat.global.Variables.setIsLogined;
+import static com.matrix.wechat.global.Variables.setStatus;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -14,6 +19,7 @@ import android.widget.Toast;
 
 import com.baidu.android.pushservice.PushManager;
 import com.matrix.wechat.R;
+import com.matrix.wechat.logic.LoginAction;
 import com.matrix.wechat.model.User;
 import com.matrix.wechat.utils.CacheUtil;
 import com.matrix.wechat.web.service.factory.PersonalInfoFactory;
@@ -57,9 +63,10 @@ public class ExitFromSettings extends Activity {
 				boolean result = PersonalInfoFactory.getInstance().logout(
 						CacheUtil.getUser(ExitFromSettings.this).getUserid(),
 						"OUT");
-				User user = CacheUtil.getUser(ExitFromSettings.this);
-				user.setStatus(0);
-				CacheUtil.updateCachedUser(user, ExitFromSettings.this);
+				setIsLogined(false);
+				setStatus(0);
+				saveVariables(CacheUtil.context);
+				CacheUtil.updateCachedUser(getUser(), CacheUtil.context);
 				return result;
 			}
 

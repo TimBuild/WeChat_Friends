@@ -3,14 +3,6 @@ package com.matrix.wechat.activity;
 import java.util.ArrayList;
 import java.util.List;
 
-
-
-
-
-
-
-
-
 import cn.jpush.android.api.JPushInterface;
 
 import com.baidu.android.pushservice.PushConstants;
@@ -37,6 +29,7 @@ import android.view.View.OnClickListener;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
+import static com.matrix.wechat.global.Variables.*;
 
 public class LoginActivity extends Activity{
 
@@ -66,6 +59,14 @@ public class LoginActivity extends Activity{
 		}*/
 
 		CacheUtil.context = getApplicationContext();
+		
+		loadVariables(CacheUtil.context);
+		if(getIsLogined()){
+			CacheUtil.updateCachedUser(getUser(), CacheUtil.context);
+			Intent intent = new Intent();
+			intent.setClass(LoginActivity.this, MainWeixin.class);
+			startActivity(intent);
+		}
 		
 		mUser = (EditText) findViewById(R.id.login_user_edit);
 		mPassword = (EditText) findViewById(R.id.login_passwd_edit);
@@ -130,6 +131,7 @@ public class LoginActivity extends Activity{
 					Message msg = new Message();
 					msg.what = 4;
 					mHandler.sendMessage(msg);
+					return;
 				}
 
 				if (username.equals(mUser.getText().toString())
@@ -151,6 +153,7 @@ public class LoginActivity extends Activity{
 					editor.putString("password", password);
 					editor.putString("picture", picture);
 					editor.putInt("Status", 1);
+					
 					// 提交当前数据
 					editor.commit();
 					List<String> tags = new ArrayList<String>();
@@ -166,10 +169,14 @@ public class LoginActivity extends Activity{
 					
 					JPushInterface.onResume(getApplicationContext());
 
+					setIsLogined(true);
+					setUser(user);
+					saveVariables(CacheUtil.context);
 					
 					Intent intent = new Intent();
 					intent.setClass(LoginActivity.this, MainWeixin.class);
 					startActivity(intent);
+					
 				}
 
 				else {
@@ -232,23 +239,23 @@ public class LoginActivity extends Activity{
 		super.onResume();
 //		JPushInterface.onResume(getApplicationContext());
 
-			new AsyncTask<Void, Void, Boolean>() {
-
-			@Override
-			protected Boolean doInBackground(Void... params) {
-				boolean result = PersonalInfoFactory.getInstance().logout(
-						CacheUtil.getUser(LoginActivity.this).getUserid(), "OUT");
-				User user = CacheUtil.getUser(LoginActivity.this);
-				user.setStatus(0);
-				CacheUtil.updateCachedUser(user, LoginActivity.this);
-				return result;
-			}
-
-			@Override
-			protected void onPostExecute(Boolean result) {
-				super.onPostExecute(result);
-			}
-		}.execute();
+//			new AsyncTask<Void, Void, Boolean>() {
+//
+//			@Override
+//			protected Boolean doInBackground(Void... params) {
+//				boolean result = PersonalInfoFactory.getInstance().logout(
+//						CacheUtil.getUser(LoginActivity.this).getUserid(), "OUT");
+//				User user = CacheUtil.getUser(LoginActivity.this);
+//				user.setStatus(0);
+//				CacheUtil.updateCachedUser(user, LoginActivity.this);
+//				return result;
+//			}
+//
+//			@Override
+//			protected void onPostExecute(Boolean result) {
+//				super.onPostExecute(result);
+//			}
+//		}.execute();
 		if (mWorking)
 			PushManager.stopWork(LoginActivity.this);
 	};
@@ -262,23 +269,25 @@ public class LoginActivity extends Activity{
 	@Override
 	protected void onDestroy() {
 		super.onDestroy();
-		new AsyncTask<Void, Void, Boolean>() {
-
-			@Override
-			protected Boolean doInBackground(Void... params) {
-				boolean result = PersonalInfoFactory.getInstance().logout(
-						CacheUtil.getUser(LoginActivity.this).getUserid(), "OUT");
-				User user = CacheUtil.getUser(LoginActivity.this);
-				user.setStatus(0);
-				CacheUtil.updateCachedUser(user, LoginActivity.this);
-				return result;
-			}
-
-			@Override
-			protected void onPostExecute(Boolean result) {
-				super.onPostExecute(result);
-			}
-		}.execute();
+//		new AsyncTask<Void, Void, Boolean>() {
+//
+//			@Override
+//			protected Boolean doInBackground(Void... params) {
+//				if(!getIsLogined()){
+//					PersonalInfoFactory.getInstance().logout(
+//							CacheUtil.getUser(LoginActivity.this).getUserid(), "OUT");
+//					setStatus(0);
+//					saveVariables(CacheUtil.context);
+//					CacheUtil.updateCachedUser(getUser(), LoginActivity.this);
+//				}
+//				return true;
+//			}
+//
+//			@Override
+//			protected void onPostExecute(Boolean result) {
+//				super.onPostExecute(result);
+//			}
+//		}.execute();
 		if (mWorking) {
 			PushManager.stopWork(LoginActivity.this);
 			mWorking = false;
